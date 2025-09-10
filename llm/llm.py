@@ -10,7 +10,7 @@ from llm.llm_client import LLM
 from llm.llm_router import Router
 
 
-class LLM_main:
+class Llm_Agent:
     def __init__(
         self,
         llm_model_path: Optional[str] = None,
@@ -20,7 +20,7 @@ class LLM_main:
         on_output: Optional[Callable[[str], None]] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> None:
-
+        
         self.log = logging.getLogger("LLM")     
         self.kb = KB(os.path.expanduser(PATH_KB)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
@@ -119,7 +119,7 @@ class LLM_main:
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    app = LLM_main()
+    app = Llm_Agent()
     last_pose=app.set_pose(x=1.0, y=2.0, yaw=90.0),
     last_batt=app.set_battery(percentage=0.67),
 
