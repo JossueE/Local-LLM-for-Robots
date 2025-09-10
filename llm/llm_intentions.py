@@ -1,8 +1,9 @@
 import re
 import unicodedata
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional, Iterable
 from .llm_patterns import (COURTESY_RE, MOV_VERB_RE, BATTERY_WORDS_RE,POSE_WORDS_RE,
-                           BEST_CONNECTOR_RE, NEXOS_RE, SPLIT_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, ARTICLE_PREFIX_RE)
+                           BEST_CONNECTOR_RE, NEXOS_RE, SPLIT_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, 
+                           ARTICLE_PREFIX_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING)
 
 def norm_text(s: str) -> str:
     """ Normalize text for matching:
@@ -16,21 +17,6 @@ def norm_text(s: str) -> str:
     s = re.sub(r'[^a-z0-9 ]+',' ', s.lower())
     s = COURTESY_RE.sub(' ', s)
     return re.sub(r'\s+',' ', s).strip()
-
-def is_battery(t: str) -> bool:
-    """ Detect words related to the Battery"""
-    t = norm_text(t)
-    return bool(BATTERY_WORDS_RE.search(t))
-
-def is_pose(t: str) -> bool:
-    """ Detect words related to the Pose of the Robot"""
-    t = norm_text(t)
-    return bool(POSE_WORDS_RE.search(t))
-
-def is_nav(t: str) -> bool:
-    """ Detect words related to Navigation"""
-    t = norm_text(t)
-    return bool(MOV_VERB_RE.search(t))
 
 def extract_place_query(t: str) -> str:
     """ From a text with a navigation intent, extract the place name or description.
@@ -51,12 +37,19 @@ def extract_place_query(t: str) -> str:
 
     return place
 
-
 def best_hit(res) -> Dict[str, Any]:
     """ From the result of kb.loockup (dict or list of dicts), return the best one (highest score)"""
     if isinstance(res, list) and res:
         return max((x for x in res if isinstance(x, dict)), key=lambda x: x.get('score', 0.0), default={})
     return res if isinstance(res, dict) else {}
+
+def detect_intent(t: str, order: Optional[Iterable[str]] = None, normalizer=None) -> Optional[str]:
+    nt = normalizer(t) if normalizer else t
+    for name in (order or INTENT_PRIORITY):
+        rex = INTENT_RES.get(name)
+        if rex and rex.search(nt):
+            return name
+    return None
 
 def split_and_prioritize(text: str, kb) -> List[Dict[str, Any]]:
     """
@@ -81,15 +74,14 @@ def split_and_prioritize(text: str, kb) -> List[Dict[str, Any]]:
         if var.get('answer') and var.get('score', 0.0) >= 0.75:
             accions.append(("corto", "rag", {"data": var['answer'].strip()}))
             continue
-        # 2) Clasificación básica
-        if is_battery(c):
-            accions.append(("corto","battery",{}))
-        elif is_pose(c):
-            accions.append(("corto","pose",{}))
-        elif is_nav(c):
-            accions.append(("largo","navigate",{"data": c}))
+        intent = detect_intent(c, order=INTENT_PRIORITY, normalizer=norm_text)
+        spec = INTENT_ROUTING.get(intent)
+        
+        if spec:
+            params = {"data": c} if spec.get("needs_clause") else {}
+            accions.append((spec["kind_group"], spec["kind"], params))
         else:
-            accions.append(("largo","general",{"data": c}))
+            accions.append(("largo", "general", {"data": c}))
 
     # Primero cortas, luego largas (orden estable preservado)
     accions.sort(key=lambda x: 0 if x[0] == "corto" else 1)

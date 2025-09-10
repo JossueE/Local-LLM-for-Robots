@@ -38,7 +38,8 @@ COURTESY_RE = re.compile(
     r")\b"
 )
 
-#------------------------ Movement verbs ------------------------#
+#------------------------ Movement verbs - Navigation  ------------------------#
+
 ORIENT_INTENT_RE = re.compile(r"""
 (?xi)
 \b(
@@ -88,7 +89,7 @@ SPLIT_RE = re.compile(rf"""
 )\b
 """)
 
-#------------------------ Baterry verbs ------------------------#
+#------------------------ Baterry verbs - Battery ------------------------#
 
 BATTERY_WORDS_RE = re.compile(r"""
 (?xi)
@@ -104,7 +105,7 @@ BATTERY_WORDS_RE = re.compile(r"""
 )\b
 """)
 
-#------------------------ Pose verbs ------------------------#
+#------------------------ Pose verbs - Pose ------------------------#
 POSE_WORDS_RE = re.compile(r"""
 (?xi)
 \b(
@@ -117,3 +118,27 @@ POSE_WORDS_RE = re.compile(r"""
     odom(?:etria|etry)? | odom\b | amcl | tf\b | frame\b | base[_\s-]?link | map\b
 )\b
 """)
+#------------------------ New Patterns  ------------------------#
+
+"""Here you can define new patterns using regex."""
+
+# ______________________Cases that we want to execute_________________________________
+
+#Here we define the functions, with the corresponding patterns, that we want to execute
+INTENT_RES = {
+    "battery":   BATTERY_WORDS_RE,
+    "pose":      POSE_WORDS_RE,
+    "navigate":  MOV_VERB_RE,
+}
+
+#Here we define the priority of the functions to be executed
+INTENT_PRIORITY = ("battery", "pose", "navigate")
+
+# kind_group: "corto" (short) == first or "largo" (long) == second determine wich works are executed first
+# needs_clause: True == needs the query to process the action, False == does not need it
+
+INTENT_ROUTING = {
+    "battery":  {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
+    "pose":     {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
+    "navigate": {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
+}
