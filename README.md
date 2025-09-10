@@ -1,6 +1,5 @@
 # Local LLM for Robots 🤖🦾
 
-[![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue.svg)](https://docs.ros.org/en/humble/)
 [![Python](https://img.shields.io/badge/Python-3.10+-yellow.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -40,12 +39,9 @@
 
 ### Prerequisites
 - Ubuntu 22.04
-- [ROS2 Humble](https://docs.ros.org/en/humble/Installation.html)
 - Python 3.10.12 
 - Git, CMake, colcon
 - (Optional) NVIDIA CUDA for GPU acceleration
-- (Suggestion) Use Virtual Enfoment
-
 
 ### Setup
 ```bash

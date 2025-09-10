@@ -1,8 +1,7 @@
 import re
 import unicodedata
 from typing import List, Dict, Any, Optional, Iterable
-from .llm_patterns import (COURTESY_RE, MOV_VERB_RE, BATTERY_WORDS_RE,POSE_WORDS_RE,
-                           BEST_CONNECTOR_RE, NEXOS_RE, SPLIT_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, 
+from .llm_patterns import (COURTESY_RE, BEST_CONNECTOR_RE, NEXOS_RE, SPLIT_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, 
                            ARTICLE_PREFIX_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING)
 
 def norm_text(s: str) -> str:
@@ -44,6 +43,10 @@ def best_hit(res) -> Dict[str, Any]:
     return res if isinstance(res, dict) else {}
 
 def detect_intent(t: str, order: Optional[Iterable[str]] = None, normalizer=None) -> Optional[str]:
+    """ From a text, detect the intent by matching regexes in order.
+    If 'order' is given, use that order (otherwise use INTENT_PRIORITY).
+    If 'normalizer' is given, use it to normalize the text before matching (otherwise use norm_text).
+    Return the name of the first matching intent, or None if no match. """
     nt = normalizer(t) if normalizer else t
     for name in (order or INTENT_PRIORITY):
         rex = INTENT_RES.get(name)
@@ -76,7 +79,7 @@ def split_and_prioritize(text: str, kb) -> List[Dict[str, Any]]:
             continue
         intent = detect_intent(c, order=INTENT_PRIORITY, normalizer=norm_text)
         spec = INTENT_ROUTING.get(intent)
-        
+
         if spec:
             params = {"data": c} if spec.get("needs_clause") else {}
             accions.append((spec["kind_group"], spec["kind"], params))
