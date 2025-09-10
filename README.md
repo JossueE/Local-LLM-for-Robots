@@ -168,37 +168,34 @@ TIME_WORDS_RE = re.compile(r"""
 )\b
 """)
 ```
----
-
-##### 2) Detect the intent in `llm_intentions.py` 
-Create a small checker and plug it into `split_and_prioritize`
-(choose `corto` for quick single replies; `largo` for actions/workflows):
-
+Add to the pattern executor
 ```python
+# ______________________Cases that we want to execute_________________________________
 
-# llm_intentions.py
-from .llm_patterns import TIME_WORDS_RE
+#Here we define the functions, with the corresponding patterns, that we want to execute
+INTENT_RES = {
+    "battery":   BATTERY_WORDS_RE,
+    "pose":      POSE_WORDS_RE,
+    "navigate":  MOV_VERB_RE,
+    "time":      TIME_WORDS_RE,             #<- NEW
+}
 
-def is_time(t: str) -> bool:
-    t = norm_text(t)
-    return bool(TIME_WORDS_RE.search(t))
-  
-def split_and_prioritize(text: str, kb) -> list[dict]:
-    . . .
-    if is_battery(c):
-      actions.append(("corto", "battery", {}))
-    elif is_pose(c):
-      actions.append(("corto", "pose", {}))
-    elif is_time(c):                        # ← NEW
-      actions.append(("corto", "time", {})) # ← NEW
-    elif is_nav(c):
-      actions.append(("largo", "navigate", {"data": c}))
-    . . .
+#Here we define the priority of the functions to be executed
+INTENT_PRIORITY = ("time", "battery", "pose", "navigate") #<- NEW
 
+# kind_group: "corto" (short) == first or "largo" (long) == second determine wich works are executed first
+# needs_clause: True == needs the query to process the action, False == does not need it
+
+INTENT_ROUTING = {
+    "time":     {"kind_group": "corto", "kind": "time",     "needs_clause": False},
+    "battery":  {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
+    "pose":     {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
+    "navigate": {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
+}
 ```
 ---
 
-##### 3) Implement the tool in `llm.py` (class LLM_main)
+##### 2) Implement the tool in `llm.py` (class LLM_main)
 Tools that should be spoken by **TTS should return a string**
 (if you return a dict, your loop will JSON-dump it).
 
@@ -217,7 +214,7 @@ def tool_get_time(self) -> str:
 
 ---
 
-##### 4) Wire it into the router
+##### 3) Wire it into the router
 Pass the tool to the `Router` constructor and handle it in `llm_router.py`.
 
 ```python
@@ -239,7 +236,7 @@ class Router:
                 tool_battery, tool_pose, tool_nav, tool_natural_move,
                 tool_time):                      # ← NEW
     . . .
-    
+
     self.tool_time = tool_time               # ← NEW
 
   def handle(self, data: str | None, kind: str):
