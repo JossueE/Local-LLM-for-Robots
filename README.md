@@ -56,7 +56,9 @@ sudo snap install yq
 
 ```bash
 # Clone the repository
-git clone https://github.com/JossueE/Local-LLM-for-Robots.git && cd Local-LLM-for-Robots && bash utils/download_models.sh
+git clone https://github.com/JossueE/Local-LLM-for-Robots.git 
+cd Local-LLM-for-Robots
+bash utils/download_models.sh
 
 ```
 ```bash
