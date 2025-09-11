@@ -6,7 +6,7 @@ import os
 LANGUAGE = "es" #The code is actually not prepared to work with other languages, but for future improvements
 
 """Audio Listener is the node to hear something from the MIC"""
-AUDIO_LISTENER_DEVICE_ID = -1 #This is the default input 
+AUDIO_LISTENER_DEVICE_ID: int | None = None #The system is prepared to detect the best device, but if you want to force a device, put the id here
 AUDIO_LISTENER_CHANNELS = 1 # "mono" or "stereo"
 AUDIO_LISTENER_SAMPLE_RATE = 16000
 AUDIO_LISTENER_FRAMES_PER_BUFFER = 1000
@@ -48,7 +48,7 @@ SAMPLE_RATE_STT = 16000 #Silero works at this sample_rate doesn't change unless 
 CHANNELS_INPUT_STT = 1 #mono or stereo, silero use mono
 DEVICE_SELECTOR_STT = "cpu" # "cpu" or "cuda"
 #IMPORTANT the system is prepare to work without this variable, but we have it for noisy enviroments, as a protection method
-LISTEN_SECONDS_STT = 10.0 #The time of the phrase that the tts is going to be active after de wake_word detection
+LISTEN_SECONDS_STT = 5.0 #The time of the phrase that the tts is going to be active after de wake_word detection
 
 """Wake-Word Node"""
 DEFAULT_MODEL_FILENAME_WAKE_WORD= "vosk-model-small-es-0.42" #The model

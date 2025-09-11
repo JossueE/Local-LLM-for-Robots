@@ -10,27 +10,27 @@ from llm.llm_client import LLM
 from llm.llm_router import Router
 
 
-class Llm_Agent:
+class LlmAgent:
     def __init__(
         self,
-        llm_model_path: Optional[str] = None,
         last_pose: Optional[Pose] = None,
         last_batt: Optional[Battery] = None,
         on_say: Optional[Callable[[str], None]] = None,
         on_output: Optional[Callable[[str], None]] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
+
     ) -> None:
         
         self.log = logging.getLogger("LLM")     
         self.kb = KB(os.path.expanduser(PATH_KB)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
-        self.llm = LLM(model_path=None) or LLM(model_path=llm_model_path)
+        self.llm = LLM(model_path=None)
         self.router = Router(self.kb, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
 
         self.last_pose: Optional[Pose] = None or last_pose
         self.last_batt: Optional[Battery] = None or last_batt
 
-        self.on_say = on_say or (lambda s: print(f"[say] {s}"))
+        self.on_say = on_say or (lambda s: print(f"[state_machine] {s}"))
         self.on_output = on_output or (lambda s: print(f"[out] {s}"))
         self.on_nav_cmd = on_nav_cmd or (lambda payload: print(f"[nav_cmd] {json.dumps(payload, ensure_ascii=False)}"))
 
@@ -119,7 +119,7 @@ class Llm_Agent:
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    app = Llm_Agent()
+    app = LlmAgent()
     last_pose=app.set_pose(x=1.0, y=2.0, yaw=90.0),
     last_batt=app.set_battery(percentage=0.67),
 

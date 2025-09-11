@@ -115,14 +115,23 @@ Now say `ok robot` — the system will start listening and run the pipeline.
 
 ### Run a Single Module’s Tests
 
+```bash
+cd Local-LLM-for-Robots 
+```
+
 LLM Module
 ```bash
-cd Local-LLM-for-Robots && python -m llm.llm
+python -m llm.llm
 ```
 
 Speech to Text Module
 ```bash
-pending...
+#To test the Audio Listener 
+python -m stt.AudioListener
+
+#To test the Wake Word Detector
+python -m stt.wake_word
+
 ```
 
 Text to Speech Module
