@@ -22,7 +22,6 @@ CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recomended to change unless you
 
 #The model that you want to implement
 DEFAULT_MODEL_FILENAME = "qwen2.5-3b-instruct-q4_k_m.gguf"
-DEFAULT_MODEL_URL = "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf?download=true"
 
 """Information - data"""
 FUZZY_LOGIC_ACCURACY_KB = 0.75 
@@ -49,6 +48,7 @@ CHANNELS_INPUT_STT = 1 #mono or stereo, silero use mono
 DEVICE_SELECTOR_STT = "cpu" # "cpu" or "cuda"
 #IMPORTANT the system is prepare to work without this variable, but we have it for noisy enviroments, as a protection method
 LISTEN_SECONDS_STT = 5.0 #The time of the phrase that the tts is going to be active after de wake_word detection
+MIN_SILENCE_MS_TO_DRAIN_STT = 50 # 500 ms of time required to drain the buffer, if you want 1 second, put 100
 
 """Wake-Word Node"""
 DEFAULT_MODEL_FILENAME_WAKE_WORD= "vosk-model-small-es-0.42" #The model

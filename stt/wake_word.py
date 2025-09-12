@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Optional,List, Callable
 import logging, json, os
 import webrtcvad
 import vosk
@@ -7,31 +6,30 @@ import vosk
 import threading
 from collections import deque
 
-from stt.audio_listener import AudioListener
-from config.settings import  ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, VARIANTS_WAKE_WORD, DEFAULT_MODEL_FILENAME_WAKE_WORD, AUDIO_LISTENER_CHANNELS
 from utils.utils import ensure_model
+from stt.audio_listener import AudioListener
+from config.settings import  (MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, 
+                              VARIANTS_WAKE_WORD, DEFAULT_MODEL_FILENAME_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
+
 
 class WakeWord:
     def __init__(
         self,
         audio_listener: AudioListener,
-        wake_word: Optional[str] = None,
-        listen_seconds: Optional[int] = None,
-        variants: Optional[List[str]] = None,
-        on_say: Optional[Callable[[str], None]] = None,
     ) -> None:
 
         self.log = logging.getLogger("Wake_Word")     
-        self.wake_word = wake_word or ACTIVATION_PHRASE_WAKE_WORD
-        self.listen_seconds = listen_seconds or LISTEN_SECONDS_STT
+        self.wake_word = ACTIVATION_PHRASE_WAKE_WORD
+        self.listen_seconds = LISTEN_SECONDS_STT
         self.sample_rate = AUDIO_LISTENER_SAMPLE_RATE
-        self.variants = variants or VARIANTS_WAKE_WORD
+        self.variants = VARIANTS_WAKE_WORD
         
         #State Machine 
-        self.on_say = on_say or (lambda s: print(f"[state_machine] {s}"))
+        self.on_say = (lambda s: print(f"[Wake_word] {s}"))
 
         #Audio input
         self.audio_listener = audio_listener
+
         grammar = json.dumps(self.variants, ensure_ascii=False)
         model_path = ensure_model(os.path.expanduser(DEFAULT_MODEL_FILENAME_WAKE_WORD))
         self.model = vosk.Model(model_path)
@@ -43,7 +41,8 @@ class WakeWord:
 
         #Debounce parameters 
         self.partial_hits = 0
-        self.required_hits = 15
+        self.required_hits = 10
+        self.silence_frames_to_drain = MIN_SILENCE_MS_TO_DRAIN_STT
 
         #VAD parameters
         # 10 ms → less latency (160 samples - 16 kHz)
@@ -73,27 +72,23 @@ class WakeWord:
         or `deactivate_whisper()`.
         - Requires: `self.sample_rate`, `self.vad`, `self.rec`, `self.matches_wake()`.
         """
-
-        if not self.vad.is_speech(frame, self.sample_rate):
-            if self.partial_hits > -self.required_hits:
-                self.partial_hits -= 1
-
-            self.rec.AcceptWaveform(frame)
-            
-            if (self.listening or self.listening_confirm) and self.partial_hits <= -self.required_hits:
-                if self.listening_confirm and self.size > 0:
-                    return self.buffer_drain()  
-                else:
-                    self.on_say("Hubo una detección pero no se confirmó, limpiando buffer")
-                    self.buffer_clear()
-                return
-        
-        if self.listening or self.listening_confirm:
+        if self.listening or self.listening_confirm: #If I'm listening or If I got a confirmation i save the info
             drained = self.buffer_add(frame)  
             if drained is not None:
                 return drained
         
-        if self.rec.AcceptWaveform(frame):
+        if not self.vad.is_speech(frame, self.sample_rate): # If I hear silence
+            if self.partial_hits > -self.silence_frames_to_drain:  # I count how much silence I have
+                self.partial_hits -= 1         
+            if (self.listening or self.listening_confirm) and self.partial_hits <= -self.silence_frames_to_drain: #If I'm listening and I pass my umbral of silence
+                self.partial_hits = 0
+                if self.listening_confirm and self.size > 0: # If I have the wake_word comfirm and I have something
+                    return self.buffer_drain()
+                self.on_say("Hubo una detección pero no se confirmó, limpiando buffer")
+                self.buffer_clear()
+                return
+        
+        if self.rec.AcceptWaveform(frame): 
             result = json.loads(self.rec.Result() or "{}")
             text = (result.get("text") or "").lower().strip()
             if text and self.matches_wake(text):
@@ -101,9 +96,6 @@ class WakeWord:
                 if not self.listening_confirm:           
                     self.listening_confirm = True
                     self.listening = True   
-                    drained = self.buffer_add(frame)  
-                    if drained is not None:
-                        return drained
                     print("Confirmo Grabación")
                 self.partial_hits = 0
                 return
@@ -112,29 +104,32 @@ class WakeWord:
         else:
             partial = json.loads(self.rec.PartialResult() or "{}").get("partial", "").lower().strip()
             if partial:
-                if self.matches_wake(partial):
+                if self.matches_wake(partial): #If I got something that looks like partial 
+                    
+                    if not self.listening: 
+                        self.listening = True
+                        print("Empiezo a Grabar (primer partial)")
+                        drained = self.buffer_add(frame)
+                        if drained is not None:
+                            return drained
                     self.partial_hits += 1
                     if self.partial_hits >= self.required_hits:
                         self.log.info(f"[PARTIAL] Wake word: {partial!r}")
-                        if not self.listening:
-                            self.listening = True
-                            print("Empiezo a Grabar")
-                            drained = self.buffer_add(frame)  
-                            if drained is not None:
-                                return drained
                         self.partial_hits = 0
                         return
                 else:
                     self.partial_hits = 0
+
     
     def buffer_add(self, frame: bytes) -> None | bytes:
-        """ Add a frame to the audio buffer."""
+        need_drain = False
         with self.lock:
             self.buffer.append(frame)
             self.size += len(frame)
-            # Si sobrepasamos límite y ya hay confirmación, drenamos
-            if self.size > self.max and self.buffer and self.listening_confirm:
-                return self.buffer_drain(True)
+            if self.size > self.max and self.listening_confirm:
+                need_drain = True  
+        if need_drain:
+            return self.buffer_drain()
         return None
 
     def buffer_clear(self) -> None:
@@ -146,22 +141,16 @@ class WakeWord:
             self.buffer.clear()
             self.size = 0
     
-    def buffer_drain(self, lock:bool = False) -> bytes:
+    def buffer_drain(self) -> bytes:
         """
         Return all buffered audio (as a single bytes object) and clear the buffer.
         Operates atomically under `self.lock`.
         """
         self.on_say("Envío Información a STT")
-        if lock:
-            data = b"".join(self.buffer)
-            self.buffer.clear()
-            self.size = 0
-        else:
-            with self.lock:
-                data = b"".join(self.buffer)
-                self.buffer.clear()
-                self.size = 0
-        # Reset de flags FUERA del lock para no bloquear
+        data = b"".join(self.buffer)
+        self.buffer.clear()
+        print("Limpio el Buffer")
+        self.size = 0
         self.listening = False
         self.listening_confirm = False
         return data

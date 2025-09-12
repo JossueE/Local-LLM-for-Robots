@@ -132,12 +132,17 @@ python -m stt.AudioListener
 #To test the Wake Word Detector
 python -m stt.wake_word
 
+#To test the Speech To Text
+python -m stt.speech_to_text
 ```
 
 Text to Speech Module
 ```bash
 pending...
 ```
+
+> [!TIP]
+> If you have some problems to launch modules, you should try to run with the `venv` as `./.venv/bin/python -m stt.speech_to_text`
 
 <h2 id="usage">🧪 Usage</h2>
 
