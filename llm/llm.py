@@ -24,7 +24,7 @@ class LlmAgent:
         self.log = logging.getLogger("LLM")     
         self.kb = KB(os.path.expanduser(PATH_KB)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
-        self.llm = LLM(model_path=None)
+        self.llm = LLM()
         self.router = Router(self.kb, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
 
         self.last_pose: Optional[Pose] = None or last_pose

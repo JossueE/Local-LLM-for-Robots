@@ -1,5 +1,5 @@
 from __future__ import annotations
-import logging, json, os
+import logging, json
 import webrtcvad
 import vosk
 
@@ -9,7 +9,7 @@ from collections import deque
 from utils.utils import ensure_model
 from stt.audio_listener import AudioListener
 from config.settings import  (MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, 
-                              VARIANTS_WAKE_WORD, DEFAULT_MODEL_FILENAME_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
+                              VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
 
 
 class WakeWord:
@@ -31,7 +31,7 @@ class WakeWord:
         self.audio_listener = audio_listener
 
         grammar = json.dumps(self.variants, ensure_ascii=False)
-        model_path = ensure_model(os.path.expanduser(DEFAULT_MODEL_FILENAME_WAKE_WORD))
+        model_path = str(ensure_model("wake_word")[0])
         self.model = vosk.Model(model_path)
         self.rec = vosk.KaldiRecognizer(self.model, self.sample_rate, grammar)
 

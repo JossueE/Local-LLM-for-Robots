@@ -1,4 +1,6 @@
 # Catalog that supports Octybot
+#WARNING: The name that your are going to asign, needs to be the same as the file that you want to call.
+# The download file is in utils folder as download_models.sh and the ensure_model or validation is in utils.py
 
 llm:
 #Qwen Models
@@ -8,7 +10,6 @@ llm:
 stt:
 #Silero models
   - name: stt-silero-es_v1.onnx
-    sample_rate: 16000
     url: "https://models.silero.ai/models/es/es_v1.onnx"
 
 tts:
@@ -22,5 +23,4 @@ tts:
 wake_word:
 #Vosk Models
   - name: vosk-model-small-es-0.42
-    sample_rate: 16000
     url: https://alphacephei.com/vosk/models/vosk-model-small-es-0.42.zip

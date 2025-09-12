@@ -6,19 +6,19 @@ from typing import Optional, Dict, Any
 from typing import Any
 from llama_cpp import Llama
 
-from config.settings import CONTEXT_LLM,THREADS_LLM,N_BACH_LLM,GPU_LAYERS_LLM,CHAT_FORMAT_LLM,DEFAULT_MODEL_FILENAME
+from config.settings import CONTEXT_LLM,THREADS_LLM,N_BACH_LLM,GPU_LAYERS_LLM,CHAT_FORMAT_LLM
 from config.llm_system_prompt_def import NAVIGATE_SYSTEM_PROMPT, GENERAL_SYSTEM_PROMPT
 from utils.utils import ensure_model
 
 
 class LLM:
-    def __init__(self, model_path: str, system_prompt: str | None = None):
+    def __init__(self, system_prompt: str | None = None):
         self.system = system_prompt or GENERAL_SYSTEM_PROMPT
         self._llm = None
         self._lock = threading.Lock()
 
         # Defaults sensatos (CPU-only). Ajusta por env si quieres.
-        self.model_path = model_path or ensure_model(DEFAULT_MODEL_FILENAME)
+        self.model_path = str(ensure_model("llm")[0])
         self.ctx = CONTEXT_LLM         # contexto razonable
         self.threads = THREADS_LLM
         self.n_batch = N_BACH_LLM   # 256–512 bien en CPU

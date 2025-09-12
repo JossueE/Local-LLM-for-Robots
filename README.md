@@ -91,10 +91,7 @@ You’re done when you see:
 All runtime settings live in **`config/config.py`**. They are plain Python constants—edit the file and restart your nodes to apply changes.
 
 ### 📦 Model catalog (`config/models.yml`)
-
 Define which models Octybot uses (LLM, STT, TTS, wake-word) along with their URLs and sample rates.
-
-> ⚠️ **Important:** The **`name`** of every model in `models.yml` must match **exactly** the name you use in `config.py` **and** the name documented in this README (same text and file extension).
 
 ### 🔗 Sytem Prompt Definition with `config/llm_system_prompt_def.py`
 To re-write or define a new **LLM - System Prompt**  
@@ -138,7 +135,7 @@ python -m stt.speech_to_text
 
 Text to Speech Module
 ```bash
-pending...
+python -m tts.text_to_speech
 ```
 
 > [!TIP]

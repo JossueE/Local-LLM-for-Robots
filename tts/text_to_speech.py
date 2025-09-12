@@ -7,14 +7,14 @@ import pyaudio
 import logging
 from piper.voice import PiperVoice
 from utils.utils import ensure_model
-from config.settings import SPEAKER_TTS, SAMPLE_RATE_TTS
+from config.settings import  SAMPLE_RATE_TTS
 
 class SileroTTS:
     def __init__(self):
         print("-> Loading Silero TTS model...")
         self.log = logging.getLogger("[Text-to-Speech]")    
-        model_path = ensure_model(SPEAKER_TTS)
-        encoder = ensure_model(SPEAKER_TTS + ".json")
+        model_path = str(ensure_model("tts")[0])
+        encoder = str(ensure_model("tts")[1])
 
         self.voice = PiperVoice.load(model_path = model_path,config_path=encoder)
         self.sample_rate = SAMPLE_RATE_TTS

@@ -9,7 +9,7 @@ import torch
 from pathlib import Path
 from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
-from config.settings  import SAMPLE_RATE_STT, CHANNELS_INPUT_STT, DEVICE_SELECTOR_STT, LANGUAGE, LISTENER_STT
+from config.settings  import SAMPLE_RATE_STT, CHANNELS_INPUT_STT, DEVICE_SELECTOR_STT, LANGUAGE
 from utils.utils import ensure_model
 
 class SpeechToText:
@@ -35,7 +35,7 @@ class SpeechToText:
             device="cpu" if self.device not in ("cuda", "cpu") else self.device,
         )
 
-        onnx_model_path = ensure_model(LISTENER_STT)
+        onnx_model_path = str(ensure_model("stt")[0])
         onnx_model = onnx.load(str(onnx_model_path))
         onnx.checker.check_model(onnx_model)
         self.ort_session = onnxruntime.InferenceSession(onnx_model_path)
