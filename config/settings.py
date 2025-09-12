@@ -38,8 +38,7 @@ AUDIO_PUBLISHER_DEBUG = True #Show in terminal the debug process
 """Text-to-Speech Node"""
 SAMPLE_RATE_TTS = 24000
 DEVICE_SELECTOR_TTS = "cpu" # "cpu" or "cuda"
-SPEAKER_TTS = "v3_es.pt" #Check other models in Silero TTS
-VOICE_TTS = "es_2" #voices are: es_0, es_1, es_2
+SPEAKER_TTS = "es_MX-claude-high.onnx" #Check other models in Silero TTS
 
 """Speech-to-Text Node"""
 LISTENER_STT = "stt-silero-es_v1.onnx"

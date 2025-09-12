@@ -1,20 +1,26 @@
 # Catalog that supports Octybot
 
 llm:
+#Qwen Models
   - name: qwen2.5-3b-instruct-q4_k_m.gguf
     url: https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf?download=true
 
 stt:
+#Silero models
   - name: stt-silero-es_v1.onnx
     sample_rate: 16000
     url: "https://models.silero.ai/models/es/es_v1.onnx"
 
 tts:
-  - name: v3_es.pt
-    sample_rate: 24000
-    url: https://models.silero.ai/models/tts/es/v3_es.pt
-
+#Piper Models
+  - name: es_MX-claude-high.onnx
+    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx?download=true
+    
+  - name: es_MX-claude-high.onnx.json
+    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json?download=true
+    
 wake_word:
+#Vosk Models
   - name: vosk-model-small-es-0.42
     sample_rate: 16000
     url: https://alphacephei.com/vosk/models/vosk-model-small-es-0.42.zip
