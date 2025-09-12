@@ -276,6 +276,7 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 <h2 id="acknowledgements">🙏 Acknowledgements</h2>
+
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [Vosk](https://alphacephei.com/vosk/)
 - [Silero Models](https://github.com/snakers4/silero-models)
