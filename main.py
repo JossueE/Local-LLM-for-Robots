@@ -27,6 +27,14 @@ class OctybotAgent:
     
 
     def main(self):
+        """" This is the state machine logic to work with the system.
+            - First you start the Audio Listener Process 
+            - Then check if wake_word is detected
+            - If is detected you make the stt process
+            - Pass this info to the llm
+            - The llm split the answers 
+            - Publish the answer as tts"""
+        
         self.audio_listener.start_stream()
         text_transcribed = None
 
