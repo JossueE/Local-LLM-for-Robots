@@ -6,17 +6,14 @@ import vosk
 import threading
 from collections import deque
 
-from utils.utils import ensure_model
+from utils.utils import EnsureModel
 from stt.audio_listener import AudioListener
 from config.settings import  (MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, 
                               VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
 
 
 class WakeWord:
-    def __init__(
-        self,
-        audio_listener: AudioListener,
-    ) -> None:
+    def __init__(self, model_path:str) -> None:
 
         self.log = logging.getLogger("Wake_Word")     
         self.wake_word = ACTIVATION_PHRASE_WAKE_WORD
@@ -27,11 +24,8 @@ class WakeWord:
         #State Machine 
         self.on_say = (lambda s: print(f"[Wake_word] {s}"))
 
-        #Audio input
-        self.audio_listener = audio_listener
-
         grammar = json.dumps(self.variants, ensure_ascii=False)
-        model_path = str(ensure_model("wake_word")[0])
+        model_path = model_path
         self.model = vosk.Model(model_path)
         self.rec = vosk.KaldiRecognizer(self.model, self.sample_rate, grammar)
 
@@ -122,13 +116,10 @@ class WakeWord:
 
     
     def buffer_add(self, frame: bytes) -> None | bytes:
-        need_drain = False
         with self.lock:
             self.buffer.append(frame)
             self.size += len(frame)
-            if self.size > self.max and self.listening_confirm:
-                need_drain = True  
-        if need_drain:
+        if self.size > self.max and self.listening_confirm:
             return self.buffer_drain()
         return None
 
@@ -147,8 +138,10 @@ class WakeWord:
         Operates atomically under `self.lock`.
         """
         self.on_say("Envío Información a STT")
-        data = b"".join(self.buffer)
-        self.buffer.clear()
+        with self.lock:
+            data = b"".join(self.buffer)
+            self.buffer.clear()
+
         print("Limpio el Buffer")
         self.size = 0
         self.listening = False
@@ -173,9 +166,9 @@ class WakeWord:
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    
+    model = EnsureModel()
     audio_listener = AudioListener()
-    ww = WakeWord(audio_listener)
+    ww = WakeWord(str(model.ensure_model("wake_word")[0]))
     audio_listener.start_stream()
 
     try: 

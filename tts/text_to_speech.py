@@ -6,15 +6,15 @@ import numpy as np
 import pyaudio
 import logging
 from piper.voice import PiperVoice
-from utils.utils import ensure_model
+from utils.utils import EnsureModel
 from config.settings import  SAMPLE_RATE_TTS
 
 class SileroTTS:
-    def __init__(self):
+    def __init__(self, model_path:str, model_path_conf:str):
         print("-> Loading Silero TTS model...")
         self.log = logging.getLogger("[Text-to-Speech]")    
-        model_path = str(ensure_model("tts")[0])
-        encoder = str(ensure_model("tts")[1])
+        model_path = model_path 
+        encoder = model_path_conf 
 
         self.voice = PiperVoice.load(model_path = model_path,config_path=encoder)
         self.sample_rate = SAMPLE_RATE_TTS
@@ -99,8 +99,8 @@ class SileroTTS:
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
     
-    tts = SileroTTS()
-    
+    model = EnsureModel()
+    tts = SileroTTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
 
     try: 
         print("Este es el nodo de prueba del Text to Speech 🔊 - Presione Ctrl+C para salir\n")

@@ -10,14 +10,10 @@ from pathlib import Path
 from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
 from config.settings  import SAMPLE_RATE_STT, CHANNELS_INPUT_STT, DEVICE_SELECTOR_STT, LANGUAGE
-from utils.utils import ensure_model
+from utils.utils import EnsureModel
 
 class SpeechToText:
-    def __init__(
-        self,
-        audio_listener: AudioListener,
-        wake_word: WakeWord,
-    ) -> None:
+    def __init__(self, model_path:str) -> None:
         
         self.log = logging.getLogger("Speech_To_Text")    
         self.sample_rate = SAMPLE_RATE_STT
@@ -25,17 +21,14 @@ class SpeechToText:
         self.device =  DEVICE_SELECTOR_STT
         self.language =  LANGUAGE
 
-        self.wake_word = wake_word
-        self.audio_listener = audio_listener
-
         model, self.decoder, utils = torch.hub.load(
             repo_or_dir="snakers4/silero-models",
-            model="silero_stt",          # stt
+            model="silero_stt",# stt
             language=self.language,      # depende del modelo disponible
             device="cpu" if self.device not in ("cuda", "cpu") else self.device,
         )
 
-        onnx_model_path = str(ensure_model("stt")[0])
+        onnx_model_path = model_path
         onnx_model = onnx.load(str(onnx_model_path))
         onnx.checker.check_model(onnx_model)
         self.ort_session = onnxruntime.InferenceSession(onnx_model_path)
@@ -83,10 +76,10 @@ class SpeechToText:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    
+    model = EnsureModel()
     audio_listener = AudioListener()
-    ww = WakeWord(audio_listener)
-    stt = SpeechToText(audio_listener, ww)
+    ww = WakeWord(str(model.ensure_model("wake_word")[0]))
+    stt = SpeechToText(str(model.ensure_model("stt")[0]))
 
     audio_listener.start_stream()
 

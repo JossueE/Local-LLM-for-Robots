@@ -8,23 +8,24 @@ from llm.llm_intentions import split_and_prioritize, norm_text, extract_place_qu
 from llm.llm_data import KB, PosesIndex, Pose, Battery
 from llm.llm_client import LLM
 from llm.llm_router import Router
+from utils.utils import EnsureModel
 
 
 class LlmAgent:
     def __init__(
         self,
+        model_path: str,
         last_pose: Optional[Pose] = None,
         last_batt: Optional[Battery] = None,
         on_say: Optional[Callable[[str], None]] = None,
         on_output: Optional[Callable[[str], None]] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
-
     ) -> None:
         
         self.log = logging.getLogger("LLM")     
         self.kb = KB(os.path.expanduser(PATH_KB)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
-        self.llm = LLM()
+        self.llm = LLM(model_path =  model_path)
         self.router = Router(self.kb, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
 
         self.last_pose: Optional[Pose] = None or last_pose
@@ -119,7 +120,8 @@ class LlmAgent:
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    app = LlmAgent()
+    model =  EnsureModel()
+    app = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
     last_pose=app.set_pose(x=1.0, y=2.0, yaw=90.0),
     last_batt=app.set_battery(percentage=0.67),
 

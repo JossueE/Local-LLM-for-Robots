@@ -4,10 +4,6 @@ import yaml
 from typing import Any, Dict, List, TypedDict, Optional
 from config.settings import MODELS_PATH
 
-class ModelSpec(TypedDict, total=False):
-    name: str
-    url: str
-
 def load_yaml() -> Dict[str, Any]:
     """Is for load yaml files, but we use it just for models"""
     p = Path(MODELS_PATH)
@@ -17,37 +13,46 @@ def load_yaml() -> Dict[str, Any]:
         data = yaml.safe_load(f)
     return data or {}
 
-def extract_section_models(section: str, data:Dict[str, Any]) -> List[ModelSpec]:
-    "We take the values for the yaml file"
-    items = data.get(section, [])
-    if not isinstance(items, list):
-        raise ValueError(f"La sección '{section}' no es una lista")
-    
-    out: List[ModelSpec] = []
-    for i, item in enumerate(items):
-        if not isinstance(item, dict):
-            continue
-        out.append({
-            "name": item.get("name", ""),
-            "url": item.get("url", "")
-        })
-    return out
+class ModelSpec(TypedDict, total=False):
+    name: str
+    url: str
 
-def ensure_model(section: str, data:Optional[Dict[str, Any]] = None) -> List[Path]:
-    """ Ensure the model directory exists, return a List of paths or an error message """
-    data = data or load_yaml()
-    models = []
-    values = extract_section_models(section, data)
-    for value in values:     
-        base_dir = Path(os.environ.get("OCTOPY_CACHE", os.environ.get("XDG_CACHE_HOME", str(Path.home() / ".cache")))) / "octopy"
-        model_dir = base_dir / value.get('name')
-        if not model_dir.exists():
-            raise FileNotFoundError( f"[LLM_LOADER] Ruta directa no existe: {model_dir}\n")
-        models.append(Path(model_dir))
-    return(models)
+
+class EnsureModel:
+    def __init__(self):
+        self.data = load_yaml()
+
+    def extract_section_models(self, section: str) -> List[ModelSpec]:
+        "We take the values for the yaml file"
+        items = self.data.get(section, [])
+        if not isinstance(items, list):
+            raise ValueError(f"La sección '{section}' no es una lista")
+        
+        out: List[ModelSpec] = []
+        for i, item in enumerate(items):
+            if not isinstance(item, dict):
+                continue
+            out.append({
+                "name": item.get("name", ""),
+                "url": item.get("url", "")
+            })
+        return out
+
+    def ensure_model(self, section: str) -> List[Path]:
+        """ Ensure the model directory exists, return a List of paths or an error message """
+        models = []
+        values = self.extract_section_models(section)
+        for value in values:     
+            base_dir = Path(os.environ.get("OCTOPY_CACHE", os.environ.get("XDG_CACHE_HOME", str(Path.home() / ".cache")))) / "octopy"
+            model_dir = base_dir / value.get('name')
+            if not model_dir.exists():
+                raise FileNotFoundError( f"[LLM_LOADER] Ruta directa no existe: {model_dir}\n")
+            models.append(Path(model_dir))
+        return(models)
 
 
 if "__main__" == __name__:
 
-    vaca = ensure_model("stt")
+    ensure_model = EnsureModel()
+    vaca = ensure_model.ensure_model("stt")
     print(vaca[0])
