@@ -106,7 +106,7 @@ All general questions live in `config/kb.json`. Define the **New Question** in `
 Start everything with:
 
 ```bash
-pending...
+python -m main
 ```
 Now say `ok robot` — the system will start listening and run the pipeline.
 
