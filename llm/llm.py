@@ -17,8 +17,6 @@ class LlmAgent:
         model_path: str,
         last_pose: Optional[Pose] = None,
         last_batt: Optional[Battery] = None,
-        on_say: Optional[Callable[[str], None]] = None,
-        on_output: Optional[Callable[[str], None]] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> None:
         
@@ -31,8 +29,6 @@ class LlmAgent:
         self.last_pose: Optional[Pose] = None or last_pose
         self.last_batt: Optional[Battery] = None or last_batt
 
-        self.on_say = on_say or (lambda s: print(f"[state_machine] {s}"))
-        self.on_output = on_output or (lambda s: print(f"[out] {s}"))
         self.on_nav_cmd = on_nav_cmd or (lambda payload: print(f"[nav_cmd] {json.dumps(payload, ensure_ascii=False)}"))
 
         self.log.info("LLM initialized - Octybot listo ✅ ")
@@ -44,7 +40,6 @@ class LlmAgent:
         outs: List[str] = []
         if not isinstance(text, str) or not text.strip():
             text = "No tengo mensaje para procesar."
-            self.on_output(text)
             return [text]
         
         try:
@@ -55,16 +50,12 @@ class LlmAgent:
                 ans = self.router.handle(data, kind)
                 if not isinstance(ans, str):
                     ans = json.dumps(ans, ensure_ascii=False)
-                self.on_say("text_to_speech")
-                self.on_output(ans)
                 self.log.info(ans)
                 outs.append(ans)
 
         except Exception as e:
             self.log.exception("Error procesando ask()")
             ans = json.dumps({"error": type(e).__name__, "msg": str(e)}, ensure_ascii=False)
-        self.on_output(ans)
-        self.on_say("text_to_speech")
         return outs
 
     # ---- Setters for Baterry and Pose ----
@@ -85,7 +76,7 @@ class LlmAgent:
 
     def tool_get_current_pose(self) -> Dict[str, Any]:
         """ Return the current pose as dict with 'x', 'y', 'yaw_deg', 'frame', or error if no data """
-        if self.last_amcl is None:
+        if self.last_pose is None:
             return {"error":"sin_datos_amcl","x":None,"y":None,"yaw_deg":None,"frame":"map"}
         p = self.last_pose
         return {"x": round(p.x,3), "y": round(p.y,3), "yaw_deg": round(p.yaw,1), "frame": "map"}
@@ -113,7 +104,6 @@ class LlmAgent:
     def publish_natural_move(self, yaw:float , dist:float) -> str:
         """ Emit a natural_move command via callback """
         payload = {"yaw":yaw, "distance":dist}
-        self.log.info(str(data=json.dumps(payload, ensure_ascii=False)))
         self.on_nav_cmd({"type": "natural_move", **payload})
         return "Avanzando"
     

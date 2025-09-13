@@ -29,7 +29,7 @@ class Router:
         elif tipo == "pose": 
             r = self.tool_get_pose() 
             if any(r.get(k) is None for k in ('x','y','yaw_deg')): 
-                return "Aún no tengo pose de AMCL." 
+                return "Aún no tengo lectura de odometría" 
             return json.dumps({k:r.get(k) for k in ('x','y','yaw_deg','frame')}, ensure_ascii=False) 
         
         elif tipo == "navigate":
@@ -42,7 +42,7 @@ class Router:
                 if plan: 
                     yaw, dist = clamp_motion(plan.get("yaw", 0.0), plan.get("distance", 0.0)) 
                     m = self.natural_move_llm(yaw, dist)
-                    return m, json.dumps({"yaw": yaw, "distance": dist}, ensure_ascii=False) 
+                    return m
                 return "No encontré ese destino ni entiendo la orden."
         else:
             return "Tu retorno no machea con nada, revisa split_and_prioritize en intentions"

@@ -113,8 +113,8 @@ POSE_WORDS_RE = re.compile(r"""
     posicion(?:\s+actual)? | ubicacion(?:\s+actual)? |
     where\s+are\s+you | donde\s+estas | donde\s+te\s+encuentras |
     orientacion(?:\s+actual)? | angulo | theta | rumbo | heading | bearing |
-    yaw | roll | pitch |
-    coordenadas? | coordinates? |
+    yaw | roll | pitch | posee | poseen |
+    coordenadas? | coordenades? |
     odom(?:etria|etry)? | odom\b | amcl | tf\b | frame\b | base[_\s-]?link | map\b
 )\b
 """)

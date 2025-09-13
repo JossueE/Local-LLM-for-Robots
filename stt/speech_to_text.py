@@ -35,7 +35,8 @@ class SpeechToText:
 
         self.ort_in_name = self.ort_session.get_inputs()[0].name 
     
-    def worker_lopp(self, audio_bytes: bytes) -> Optional[str]:
+    def worker_lopp(self, audio_bytes: bytes) -> Optional[str | None]:
+        """With this we can see if we recieve text or none"""
         if audio_bytes is None:
             return None
         try:
@@ -45,6 +46,7 @@ class SpeechToText:
                 return text
             else:
                 self.log.info(f"📝 (vacío)")
+                return None
             
         except Exception as e:
             self.log.info(f"Error en STT: {e}")
@@ -90,8 +92,6 @@ if __name__ == "__main__":
             stt.worker_lopp(n_result)
     except KeyboardInterrupt:
         audio_listener.deleate()
-        ww.stop()
-        ww.deleate()  
         print("Saliendo")
         exit(0)
 

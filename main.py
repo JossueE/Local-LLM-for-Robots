@@ -1,37 +1,64 @@
+import logging
+from utils.utils import EnsureModel
 from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
 from stt.speech_to_text import SpeechToText
+from llm.llm import LlmAgent
+from tts.text_to_speech import SileroTTS
     
 
-class Main:
+class OctybotAgent:
     def __init__(self):
-        audio_listener = AudioListener()
-        wake_word = WakeWord(audio_listener)
-        stt = SpeechToText(audio_listener, wake_word)
+        self.log = logging.getLogger("Octybot")
+        model = EnsureModel()
+        
+        #Speech-to-Text
+        self.audio_listener = AudioListener()
+        self.wake_word = WakeWord(str(model.ensure_model("wake_word")[0]))
+        self.stt = SpeechToText(str(model.ensure_model("stt")[0]))
 
+        #LLM
+        self.llm = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
+
+        #Text-to-Speech
+        self.tts = SileroTTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
+        
+        self.log.info("Octybot Agent Listo ✅")
+    
+
+    def main(self):
+        self.audio_listener.start_stream()
+        text_transcribed = None
+
+        while text_transcribed == None:
+            audio_capture = self.audio_listener.read_frame(self.wake_word.frame_samples)
+            wake_word_buffer =  self.wake_word.wake_word_detector(audio_capture)
+            text_transcribed = self.stt.worker_lopp(wake_word_buffer)
+        
+        for out in self.llm.ask(text_transcribed):
+            get_audio = self.tts.synthesize(out)
+            self.tts.play_audio_with_amplitude(get_audio)
+    
+    def stop(self):
+        self.audio_listener.deleate()
+        self.tts.stop_tts()
 
     
 
-    def main():
-        #cosas que tengo que implementar
-
-        #jalar de utils el cargador de yaml, a todas las clases habilitarles la opción de pasarles la data para no gastar recursos a lo pendejo.
+            
 
 if "__main__" == __name__:
-
-    
-
-
-    audio_listener.start_stream()
+    logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
     try:
+        llm = OctybotAgent()
+        print("Hola soy tu Agente vistual Octybot:")
+        print("Prueba a decir 'ok robot' y darme una instrucción - Presiona (Ctrl+C para salir):")
+        print("(Ejemplos: '¿Dónde estoy?', '¿Cuál es tu batería?', 'Ve a la enfermería', '¿Cuándo fue la Independencia de México y cuál es mi batería?')")
         while True:
-            result = audio_listener.read_frame(ww.frame_samples)
-            n_result = ww.wake_word_detector(result)
-            stt.worker_lopp(n_result)
+            print("> Quieres preguntar algo: ")
+            llm.main() 
     except KeyboardInterrupt:
-        audio_listener.deleate()
-        ww.stop()
-        ww.deleate()  
+        llm.stop()
         print("Saliendo")
         exit(0)
