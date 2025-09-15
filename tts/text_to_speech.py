@@ -6,9 +6,9 @@ import numpy as np
 import pyaudio
 import logging
 from pathlib import Path
-from piper.voice import PiperVoice
+from piper.voice import PiperVoice, SynthesisConfig
 from utils.utils import EnsureModel
-from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NAME_OF_OUTS_TTS
+from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NAME_OF_OUTS_TTS, VOLUME_TTS, SPEED_TTS
 
 class SileroTTS:
     def __init__(self, model_path:str, model_path_conf:str):
@@ -21,6 +21,15 @@ class SileroTTS:
         self.sample_rate = SAMPLE_RATE_TTS
         self.count_of_audios = 0
         self.out_path = Path(PATH_TO_SAVE_TTS) / Path(NAME_OF_OUTS_TTS) / Path(f"{NAME_OF_OUTS_TTS}_{self.count_of_audios}.wav")
+        
+        self.syn_config = SynthesisConfig(
+            volume = VOLUME_TTS,  # half as loud
+            length_scale = SPEED_TTS,  # twice as slow
+            noise_scale = 1.0,  # more audio variation
+            noise_w_scale = 1.0,  # more speaking variation
+            normalize_audio=False, # use raw audio from voice
+        )
+
 
         self.pa = None
         self.stream = None
@@ -36,14 +45,14 @@ class SileroTTS:
         if SAVE_WAV_TTS:
             self.out_path.parent.mkdir(parents=True, exist_ok=True)
             with wave.open(str(self.out_path), "wb") as wav_file:
-                self.voice.synthesize_wav(text, wav_file)
+                self.voice.synthesize_wav(text, wav_file, syn_config=self.syn_config)
                 self.count_of_audios += 1
                 self.out_path = Path(PATH_TO_SAVE_TTS) / Path(NAME_OF_OUTS_TTS) / Path(f"{NAME_OF_OUTS_TTS}_{self.count_of_audios}.wav")
 
         mem = io.BytesIO()
         with wave.open(mem, "wb") as w:
             # Piper setea params internamente; solo pásale el writer
-            self.voice.synthesize_wav(text,w)
+            self.voice.synthesize_wav(text,w, syn_config=self.syn_config)
 
         # Lee el WAV del buffer y devuélvelo como float32 normalizado
         mem.seek(0)
