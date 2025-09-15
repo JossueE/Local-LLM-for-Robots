@@ -54,7 +54,6 @@ log/
 **/models/
 **/weights/
 **/checkpoints/
-**/data/
 **/assets/raw/
 
 # Generated media
