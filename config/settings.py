@@ -35,6 +35,9 @@ AUDIO_PUBLISHER_DEBUG = True #Show in terminal the debug process
 """Text-to-Speech Node"""
 SAMPLE_RATE_TTS = 24000
 DEVICE_SELECTOR_TTS = "cpu" # "cpu" or "cuda"
+PATH_TO_SAVE_TTS = "tts/audios" #Especify the PATH where we are going to save the Info
+NAME_OF_OUTS_TTS = "test" #This is the name that your file is going to revive Ex: test_0.wav -> A subfolder /test is gonna be created
+SAVE_WAV_TTS = False
 
 """Speech-to-Text Node"""
 SAMPLE_RATE_STT = 16000 #Silero works at this sample_rate doesn't change unless it is necesarry

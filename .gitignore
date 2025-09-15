@@ -51,7 +51,6 @@ log/
 *.pt
 *.bin
 *.ckpt
-**/models/
 **/weights/
 **/checkpoints/
 **/assets/raw/
@@ -70,3 +69,4 @@ log/
 *.local
 model.onnx
 *.onnx
+**/tts/audios

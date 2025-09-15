@@ -5,9 +5,10 @@ import wave
 import numpy as np
 import pyaudio
 import logging
+from pathlib import Path
 from piper.voice import PiperVoice
 from utils.utils import EnsureModel
-from config.settings import  SAMPLE_RATE_TTS
+from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NAME_OF_OUTS_TTS
 
 class SileroTTS:
     def __init__(self, model_path:str, model_path_conf:str):
@@ -18,9 +19,13 @@ class SileroTTS:
 
         self.voice = PiperVoice.load(model_path = model_path,config_path=encoder)
         self.sample_rate = SAMPLE_RATE_TTS
+        self.count_of_audios = 0
+        self.out_path = Path(PATH_TO_SAVE_TTS) / Path(NAME_OF_OUTS_TTS) / Path(f"{NAME_OF_OUTS_TTS}_{self.count_of_audios}.wav")
 
         self.pa = None
         self.stream = None
+        
+
         self.log.info("Text-To-Speech Inicializado")
 
     def synthesize(self, text: str):
@@ -28,6 +33,13 @@ class SileroTTS:
         if not text:
             return None
         
+        if SAVE_WAV_TTS:
+            self.out_path.parent.mkdir(parents=True, exist_ok=True)
+            with wave.open(str(self.out_path), "wb") as wav_file:
+                self.voice.synthesize_wav(text, wav_file)
+                self.count_of_audios += 1
+                self.out_path = Path(PATH_TO_SAVE_TTS) / Path(NAME_OF_OUTS_TTS) / Path(f"{NAME_OF_OUTS_TTS}_{self.count_of_audios}.wav")
+
         mem = io.BytesIO()
         with wave.open(mem, "wb") as w:
             # Piper setea params internamente; solo pásale el writer
