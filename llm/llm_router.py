@@ -44,6 +44,10 @@ class Router:
                     m = self.natural_move_llm(yaw, dist)
                     return m
                 return "No encontré ese destino ni entiendo la orden."
+        
+        elif tipo == "cancel_navigate":
+            return "Cancelando Navegación"
+        
         else:
             return "Tu retorno no machea con nada, revisa split_and_prioritize en intentions"
 

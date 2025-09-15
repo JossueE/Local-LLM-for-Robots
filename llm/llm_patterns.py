@@ -89,6 +89,44 @@ SPLIT_RE = re.compile(rf"""
 )\b
 """)
 
+#------------------------ Cancel Navigation -----------------------------#
+
+CANCEL_NAVIGATION_RE = re.compile(r"""
+(?xi)
+\b(
+    # Español — formas directas
+    cancela(?:r)?(?:\s+(?:la\s+)?
+        (?:navegaci[oó]n|ruta|misi[oó]n|trayecto|viaje|objetivo|destino)
+    )?
+  | cancelar(?:\s+(?:la\s+)?
+        (?:navegaci[oó]n|ruta|misi[oó]n|trayecto|viaje|objetivo|destino)
+    )
+  | aborta(?:r)?(?:\s+(?:la\s+)?
+        (?:navegaci[oó]n|ruta|misi[oó]n|objetivo|destino)
+    )?
+  | det[eé]n(?:te)?(?:\s+ya)?        # detén / detente / detente ya
+  | det[eé]ngase
+  | detener(?:\s+(?:la\s+)?
+        (?:navegaci[oó]n|ruta|trayecto|viaje)
+    )?
+  | para(?:te)?(?:\s+ya)?            # para / párate / párate ya
+  | alto
+  | quiet[oa]                         # quieto / quieta
+  | qu[eé]date\s+quiet[oa]
+  | espera(?:\s+(?:tantito|un\s+momento))?
+
+    # Negaciones de movimiento
+  | no\s+te\s+(?:muevas|vayas)
+  | no\s+vayas
+  | ya\s+no\s+(?:vayas|sigas|contin[uú]es|avances|camines|te\s+muevas)
+  | deja\s+de\s+(?:navegar|moverte|avanzar|caminar|seguir)
+
+    # “Objetivo/destino”
+  | (?:borra|quita|elimina)\s+(?:el\s+)?(?:objetivo|goal|destino)
+  | (?:cancela|cancelar)\s+(?:el\s+)?(?:objetivo|goal|destino)
+)\b
+""")
+
 #------------------------ Baterry verbs - Battery ------------------------#
 
 BATTERY_WORDS_RE = re.compile(r"""
@@ -129,16 +167,18 @@ INTENT_RES = {
     "battery":   BATTERY_WORDS_RE,
     "pose":      POSE_WORDS_RE,
     "navigate":  MOV_VERB_RE,
+    "cancel_navigate": CANCEL_NAVIGATION_RE,
 }
 
 #Here we define the priority of the functions to be executed
-INTENT_PRIORITY = ("battery", "pose", "navigate")
+INTENT_PRIORITY = ("battery", "pose", "navigate", "cancel_navigate")
 
 # kind_group: "corto" (short) == first or "largo" (long) == second determine wich works are executed first
 # needs_clause: True == needs the query to process the action, False == does not need it
 
 INTENT_ROUTING = {
-    "battery":  {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
-    "pose":     {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
-    "navigate": {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
+    "battery":         {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
+    "pose":            {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
+    "navigate":        {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
+    "cancel_navigate": {"kind_group": "corto", "kind": "cancel_navigate", "needs_clause": False},
 }
