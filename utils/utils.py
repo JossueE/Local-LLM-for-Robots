@@ -18,7 +18,7 @@ class ModelSpec(TypedDict, total=False):
     url: str
 
 
-class EnsureModel:
+class LoadModel:
     def __init__(self):
         self.data = load_yaml()
 
@@ -40,19 +40,19 @@ class EnsureModel:
 
     def ensure_model(self, section: str) -> List[Path]:
         """ Ensure the model directory exists, return a List of paths or an error message """
+        base_dir = Path(os.environ.get("OCTOPY_CACHE", os.environ.get("XDG_CACHE_HOME", str(Path.home() / ".cache")))) / "Local-LLM-for-Robots"
         models = []
         values = self.extract_section_models(section)
         for value in values:     
-            base_dir = Path(os.environ.get("OCTOPY_CACHE", os.environ.get("XDG_CACHE_HOME", str(Path.home() / ".cache")))) / "octopy"
-            model_dir = base_dir / value.get('name')
+            model_dir = base_dir/section/ value.get('name')
             if not model_dir.exists():
                 raise FileNotFoundError( f"[LLM_LOADER] Ruta directa no existe: {model_dir}\n")
             models.append(Path(model_dir))
         return(models)
 
-
+ #———— Example Usage ————
 if "__main__" == __name__:
 
-    ensure_model = EnsureModel()
-    vaca = ensure_model.ensure_model("stt")
-    print(vaca[0])
+    ensure_model = LoadModel()
+    model = ensure_model.ensure_model("stt")
+    print(model[0])

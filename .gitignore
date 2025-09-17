@@ -27,16 +27,6 @@ env/
 .idea/
 *.iml
 
-# ROS 2 colcon / ament build artifacts
-build/
-install/
-log/
-.colcon/
-.ament/
-**/CMakeFiles/
-**/CMakeCache.txt
-**/cmake_install.cmake
-
 # C++/CMake artifacts
 *.o
 *.obj
@@ -67,6 +57,5 @@ log/
 *.env
 .env.*
 *.local
-model.onnx
 *.onnx
 **/tts/audios

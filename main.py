@@ -1,5 +1,5 @@
 import logging
-from utils.utils import EnsureModel
+from utils.utils import LoadModel
 from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
 from stt.speech_to_text import SpeechToText
@@ -10,7 +10,7 @@ from tts.text_to_speech import SileroTTS
 class OctybotAgent:
     def __init__(self):
         self.log = logging.getLogger("Octybot")
-        model = EnsureModel()
+        model = LoadModel()
         
         #Speech-to-Text
         self.audio_listener = AudioListener()
@@ -54,7 +54,7 @@ class OctybotAgent:
     
 
             
-
+ #———— Example Usage ————-
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 

@@ -6,11 +6,8 @@ import onnx
 import onnxruntime
 import numpy as np
 import torch
-from pathlib import Path
-from stt.wake_word import WakeWord
-from stt.audio_listener import AudioListener
+
 from config.settings  import SAMPLE_RATE_STT, CHANNELS_INPUT_STT, DEVICE_SELECTOR_STT, LANGUAGE
-from utils.utils import EnsureModel
 
 class SpeechToText:
     def __init__(self, model_path:str) -> None:
@@ -74,18 +71,24 @@ class SpeechToText:
         #text = text.strip()
         return text or None
     
-    
+ #———— Example Usage ————
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    model = EnsureModel()
+    from stt.wake_word import WakeWord
+    from stt.audio_listener import AudioListener
+    from utils.utils import LoadModel
+
+    model = LoadModel()
     audio_listener = AudioListener()
     ww = WakeWord(str(model.ensure_model("wake_word")[0]))
     stt = SpeechToText(str(model.ensure_model("stt")[0]))
 
     audio_listener.start_stream()
-
+    
     try:
+        print("Este es el nodo de prueba del Speech to Text con Audio Listener y Wake Word 🔊\n" \
+        "Debes decir La Palabara de activación, es 'ok Robot' - Presione Ctrl+C para salir\n")
         while True:
             result = audio_listener.read_frame(ww.frame_samples)
             n_result = ww.wake_word_detector(result)

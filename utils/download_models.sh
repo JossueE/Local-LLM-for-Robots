@@ -4,7 +4,7 @@ set -euo pipefail
 # ====== rutas fijas (relativas al propio script) ======
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 MODELS_FILE="$SCRIPT_DIR/../config/models.yml"   # => src/LLM/config/models.yml
-CACHE_DIR="${OCTOPY_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/octopy}"
+CACHE_DIR="${OCTOPY_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/Local-LLM-for-Robots}"
 LANG="${OCTOPY_LANG:-es}"   # es|en|ru...
 
 # ====== helpers ======
@@ -59,7 +59,7 @@ download_file_or_zip(){
 
 # ====== prerequisitos ======
 [[ -f "$MODELS_FILE" ]] || die "No se encontró $MODELS_FILE (esperado en src/LLM/config/models.yml)."
-have_cmd yq || die "Falta 'yq'. Instálalo con: sudo apt-get install -y yq"
+have_cmd yq || die "Falta 'yq'. sudo snap install yq"
 mkdir -p "$CACHE_DIR"
 echo "[*] Usando catálogo: $MODELS_FILE"
 echo "[*] Caché: $CACHE_DIR"
@@ -72,7 +72,7 @@ if [[ -n "$STT_LEN" && "$STT_LEN" != "0" ]]; then
     NAME="$(yq -r ".stt[$i].name // \"\"" "$MODELS_FILE")"
     URL="$(yq -r  ".stt[$i].url  // \"\"" "$MODELS_FILE")"
     [[ -n "$URL" && "$URL" != "null" ]] || continue
-    download_file_or_zip "$URL" "$CACHE_DIR" "$NAME"
+    download_file_or_zip "$URL" "$CACHE_DIR/stt" "$NAME"
   done
 fi
 
@@ -85,7 +85,7 @@ if [[ -n "$LLM_LEN" && "$LLM_LEN" != "0" ]]; then
     NAME="$(yq -r ".llm[$i].name // \"\"" "$MODELS_FILE")"
     URL="$(yq -r  ".llm[$i].url  // \"\"" "$MODELS_FILE")"
     [[ -n "$URL" && "$URL" != "null" ]] || continue
-    download_file_or_zip "$URL" "$CACHE_DIR" "$NAME"
+    download_file_or_zip "$URL" "$CACHE_DIR/llm" "$NAME"
   done
 fi
 
@@ -97,7 +97,7 @@ if [[ -n "$VOSK_LEN" && "$VOSK_LEN" != "0" ]]; then
     NAME="$(yq -r ".wake_word[$i].name // \"\"" "$MODELS_FILE")"
     URL="$(yq -r  ".wake_word[$i].url  // \"\"" "$MODELS_FILE")"
     [[ -n "$URL" && "$URL" != "null" ]] || continue
-    download_file_or_zip "$URL" "$CACHE_DIR" "$NAME"
+    download_file_or_zip "$URL" "$CACHE_DIR/wake_word" "$NAME"
   done
 fi
 
@@ -109,7 +109,7 @@ if [[ -n "$TTS_LEN" && "$TTS_LEN" != "0" ]]; then
     NAME="$(yq -r ".tts[$i].name // \"\"" "$MODELS_FILE")"
     URL="$(yq -r  ".tts[$i].url  // \"\"" "$MODELS_FILE")"
     [[ -n "$URL" && "$URL" != "null" ]] || continue
-    download_file_or_zip "$URL" "$CACHE_DIR" "$NAME"
+    download_file_or_zip "$URL" "$CACHE_DIR/tts" "$NAME"
   done
 fi
 

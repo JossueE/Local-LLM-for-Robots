@@ -1,6 +1,6 @@
 from __future__ import annotations
 import json
-from config.settings import MAX_MOVE_DISTANCE_LLM
+from config.settings import MAX_MOVE_DISTANCE_LLM, USE_GENERAL_RESPONSES_LLM
 
 
 class Router:
@@ -18,7 +18,7 @@ class Router:
         if tipo == "rag":
             return data
         
-        elif tipo == "general": 
+        elif tipo == "general" and USE_GENERAL_RESPONSES_LLM: 
             return self.llm.answer_general(data) 
             
         elif tipo == "battery": 

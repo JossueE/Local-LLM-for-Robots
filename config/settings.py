@@ -13,12 +13,13 @@ AUDIO_LISTENER_SAMPLE_RATE = 16000
 AUDIO_LISTENER_FRAMES_PER_BUFFER = 1000
 
 """LLM node"""
-CONTEXT_LLM = 1024 #The size of the context that your model is going to recieve
+USE_GENERAL_RESPONSES_LLM = True #If you disable this flag, and the question is not in the Categories we don't call the general knowledge.
+CONTEXT_LLM = 1024 #The size of the context that your model is going to receive
 THREADS_LLM = os.cpu_count() or 8 #Threads that has available your model 
 N_BACH_LLM = 512 #The size of the info that gpu or cpu is going to process
 GPU_LAYERS_LLM = 0 #How many layers your model is going to use in GPU, for CPU use "0"
 MAX_MOVE_DISTANCE_LLM = 10.0 #Max distance in meters of the robot movement
-CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recomended to change unless you change the model
+CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recommended to change unless you change the model
 
 """Information - data"""
 FUZZY_LOGIC_ACCURACY_KB = 0.75 
@@ -37,18 +38,18 @@ SAMPLE_RATE_TTS = 24000
 DEVICE_SELECTOR_TTS = "cpu" # "cpu" or "cuda"
 VOLUME_TTS = 2.0 #Volume  of the TTS
 SPEED_TTS = 1.0 # 1.0 = Fast and 2.0 = slow
-PATH_TO_SAVE_TTS = "tts/audios" #Especify the PATH where we are going to save the Info
+PATH_TO_SAVE_TTS = "tts/audios" #Specify the PATH where we are going to save the Info
 NAME_OF_OUTS_TTS = "test" #This is the name that your file is going to revive Ex: test_0.wav -> A subfolder /test is gonna be created
 SAVE_WAV_TTS = False
 
 """Speech-to-Text Node"""
-SAMPLE_RATE_STT = 16000 #Silero works at this sample_rate doesn't change unless it is necesarry
+SAMPLE_RATE_STT = 16000 #Silero works at this sample_rate doesn't change unless it is necessary
 CHANNELS_INPUT_STT = 1 #mono or stereo, silero use mono
 DEVICE_SELECTOR_STT = "cpu" # "cpu" or "cuda"
-#IMPORTANT the system is prepare to work without this variable, but we have it for noisy enviroments, as a protection method
+#IMPORTANT the system is prepare to work without this variable, but we have it for noisy environments, as a protection method
 LISTEN_SECONDS_STT = 5.0 #The time of the phrase that the tts is going to be active after de wake_word detection
 MIN_SILENCE_MS_TO_DRAIN_STT = 50 # 500 ms of time required to drain the buffer, if you want 1 second, put 100
 
 """Wake-Word Node"""
 ACTIVATION_PHRASE_WAKE_WORD = "ok robot" #The Activation Word that the model is going to detect
-VARIANTS_WAKE_WORD =  ["ok robot", "okay robot", "hey robot"] #variatons
+VARIANTS_WAKE_WORD =  ["ok robot", "okay robot", "hey robot"] #variations

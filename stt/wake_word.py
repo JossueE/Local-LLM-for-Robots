@@ -6,8 +6,6 @@ import vosk
 import threading
 from collections import deque
 
-from utils.utils import EnsureModel
-from stt.audio_listener import AudioListener
 from config.settings import  (MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, 
                               VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
 
@@ -162,11 +160,14 @@ class WakeWord:
                 return True
         return False
         
-
+ #———— Example Usage ————
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
-    model = EnsureModel()
+    from utils.utils import LoadModel
+    from stt.audio_listener import AudioListener
+
+    model = LoadModel()
     audio_listener = AudioListener()
     ww = WakeWord(str(model.ensure_model("wake_word")[0]))
     audio_listener.start_stream()

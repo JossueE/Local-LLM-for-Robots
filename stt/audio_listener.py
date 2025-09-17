@@ -66,6 +66,7 @@ class AudioListener:
             self.stop_stream()
         self.audio_interface.terminate()
 
+ #———— Example Usage ————
 if "__main__" == __name__:
     al = AudioListener()
     time_test = 3

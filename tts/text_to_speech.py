@@ -7,17 +7,13 @@ import pyaudio
 import logging
 from pathlib import Path
 from piper.voice import PiperVoice, SynthesisConfig
-from utils.utils import EnsureModel
 from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NAME_OF_OUTS_TTS, VOLUME_TTS, SPEED_TTS
 
 class SileroTTS:
     def __init__(self, model_path:str, model_path_conf:str):
         print("-> Loading Silero TTS model...")
         self.log = logging.getLogger("[Text-to-Speech]")    
-        model_path = model_path 
-        encoder = model_path_conf 
-
-        self.voice = PiperVoice.load(model_path = model_path,config_path=encoder)
+        self.voice = PiperVoice.load(model_path = model_path,config_path = model_path_conf )
         self.sample_rate = SAMPLE_RATE_TTS
         self.count_of_audios = 0
         self.out_path = Path(PATH_TO_SAVE_TTS) / Path(NAME_OF_OUTS_TTS) / Path(f"{NAME_OF_OUTS_TTS}_{self.count_of_audios}.wav")
@@ -116,11 +112,13 @@ class SileroTTS:
         self.stream.close()
         self.pa.terminate()
         
-
+ #———— Example Usage ————
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
+
+    from utils.utils import LoadModel
     
-    model = EnsureModel()
+    model = LoadModel()
     tts = SileroTTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
 
     try: 
