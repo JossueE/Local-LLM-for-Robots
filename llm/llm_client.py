@@ -73,15 +73,15 @@ class LLM:
             "type": "function",
             "function": {
                 "name": "plan_motion",
-                "description": "Devuelve yaw (rad) y distance (m) parseados de la orden.",
+                "description": "Devuelve yaw, distance y flag",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "yaw":      {"type": "number", "description": "Rotación en rad, izquierda negativa."},
-                        "distance": {"type": "number", "minimum": 0, "description": "Distancia en m."},
-                        "reason":   {"type": "string"}
+                        "yaw":      {"type": "number", "description": "Rotación, izquierda negativa, derecha positiva."},
+                        "distance": {"type": "number", "description": "Distancia en m."},
+                        "flag":     {"type": "bool", "description": "Si yaw es radianes return False, si yaw es grados return True"}
                     },
-                    "required": ["yaw", "distance"]
+                    "required": ["yaw", "distance", "flag"]
                 }
             }
         }]

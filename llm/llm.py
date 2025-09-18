@@ -1,9 +1,10 @@
 from __future__ import annotations
 from typing import Optional, Dict, Any, Callable, List
-import logging, json, os
+import logging, json, os, math
+
 
 from .llm_patterns import ORIENT_INTENT_RE
-from config.settings import PATH_GENERAL_RAG, PATH_POSES
+from config.settings import PATH_GENERAL_RAG, PATH_POSES, MAX_MOVE_DISTANCE_LLM
 from llm.llm_intentions import split_and_prioritize, norm_text, extract_place_query
 from llm.llm_data import GENERAL_RAG, PosesIndex, Pose, Battery
 from llm.llm_client import LLM
@@ -100,11 +101,18 @@ class LlmAgent:
         self.publish_nav_cmd(pose, simulate)
         return {"ok": True, "simulate": simulate, "name": pose.get("name"), "target": pose}
     
-    def publish_natural_move(self, yaw:float , dist:float) -> str:
+    def publish_natural_move(self, yaw:float , dist:float, flag:bool, max_dist_m: float = MAX_MOVE_DISTANCE_LLM) -> str:
         """ Emit a natural_move command via callback """
-        payload = {"yaw":yaw, "distance":dist}
+        adjusted_dist = max(-max_dist_m, min(max_dist_m, float(dist)))
+        if flag:
+            yaw = math.radians(yaw)
+        payload = {"yaw":yaw, "distance":adjusted_dist, "flag":flag}
         self.on_nav_cmd({"type": "natural_move", **payload})
-        return "Avanzando"
+        if dist > max_dist_m:
+            return f"Estoy avanzando, pero recuerda que no puedo avanzar más de {max_dist_m} metros"
+        elif yaw != 0 or adjusted_dist != 0:
+            return "Avanzando"
+        return "No encontré destino, ni instucción de movimiento."
 
  #———— Example Usage ————
 if "__main__" == __name__:

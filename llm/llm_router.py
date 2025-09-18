@@ -1,6 +1,6 @@
 from __future__ import annotations
 import json
-from config.settings import MAX_MOVE_DISTANCE_LLM, USE_GENERAL_RESPONSES_LLM
+from config.settings import USE_GENERAL_RESPONSES_LLM
 
 
 class Router:
@@ -40,8 +40,8 @@ class Router:
             else: 
                 plan = self.llm.plan_motion(data) 
                 if plan: 
-                    yaw, dist = clamp_motion(plan.get("yaw", 0.0), plan.get("distance", 0.0)) 
-                    m = self.natural_move_llm(yaw, dist)
+                    yaw, dist, flag = plan.get("yaw", 0.0), plan.get("distance", 0.0), plan.get("flag", False)
+                    m = self.natural_move_llm(yaw, dist, flag)
                     return m
                 return "No encontré ese destino ni entiendo la orden."
         
@@ -53,8 +53,3 @@ class Router:
 
             
 
-def clamp_motion(yaw: float, dist: float,
-    max_dist_m: float = MAX_MOVE_DISTANCE_LLM) -> tuple[float, float]:
-    """ Limit the max distance to max_dist_m, and yaw to [-pi,pi] """
-    d = max(0.0, min(max_dist_m, float(dist)))
-    return yaw, d
