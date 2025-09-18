@@ -184,13 +184,12 @@ Add to the pattern executor
 #Here we define the functions, with the corresponding patterns, that we want to execute
 INTENT_RES = {
     "battery":   BATTERY_WORDS_RE,
-    "pose":      POSE_WORDS_RE,
     "navigate":  MOV_VERB_RE,
     "time":      TIME_WORDS_RE,             #<- NEW
 }
 
 #Here we define the priority of the functions to be executed
-INTENT_PRIORITY = ("time", "battery", "pose", "navigate") #<- NEW
+INTENT_PRIORITY = ("time", "battery", "navigate") #<- NEW
 
 # kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
 # need_user_input: True == needs the query to process the action, False == does not need it
@@ -198,28 +197,23 @@ INTENT_PRIORITY = ("time", "battery", "pose", "navigate") #<- NEW
 INTENT_ROUTING = {
     "time":     {"kind_group": "first", "kind": "time",     "need_user_input": False},
     "battery":  {"kind_group": "first", "kind": "battery",  "need_user_input": False},
-    "pose":     {"kind_group": "first", "kind": "pose",     "need_user_input": False},
     "navigate": {"kind_group": "second", "kind": "navigate", "need_user_input": True},
 }
 ```
 ---
 
-##### 2) Implement the tool in `llm.py` (class LLM_main)
+##### 2) Implement the tool in `llm_publishers.py` (class PublishInfo)
 Tools that should be spoken by **TTS should return a string**
 (if you return a dict, your loop will JSON-dump it).
 
 ```python
-
-# llm.py (inside LLM_main)
 def tool_get_time(self) -> str:
     from datetime import datetime
     now = datetime.now()
     return f"Son las {now.hour:02d}:{now.minute:02d}"
-
 ```
 
 - Add the new function to the `handle` in `llm_router.py`
-- Define the helper variables to send information `llm.py`
 
 ---
 
@@ -228,38 +222,19 @@ Pass the tool to the `Router` constructor and handle it in `llm_router.py`.
 
 ```python
 
-# llm.py (LLM_main.__init__)
-self.router = Router(
-    self.general_rag, self.poses, self.llm,
-    self.tool_get_battery, self.tool_get_current_pose,
-    self.tool_nav_to_place, self.publish_natural_move,
-    self.tool_get_time,  # ← NEW
-)
-
-```
-```python
-
 # llm_router.py
 class Router:
-  def __init__(self, general_rag, poses, llm,
-                tool_battery, tool_pose, tool_nav, tool_natural_move,
-                tool_time):                      # ← NEW
     . . .
-
-    self.tool_time = tool_time               # ← NEW
 
   def handle(self, data: str | None, kind: str):
     if kind == "battery":
-        return self.tool_battery()
-    if kind == "pose":
-        return self.tool_pose()
+        return self.publish_info.tool_battery()
     if kind == "time":                       # ← NEW
-        return self.tool_time()
+        return self.publish_info.tool_get_time()
     if kind == "navigate":
-        return self.tool_nav(data)
+        return self.tool_get_time.tool_nav(data)
     return self.llm.reply(data or "")
 ```
-
 
 
 <h2 id="contributing">🤝 Contributing</h2>
