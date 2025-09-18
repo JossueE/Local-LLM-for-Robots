@@ -1,35 +1,27 @@
 from __future__ import annotations
-from typing import Optional, Dict, Any, Callable, List
-import logging, json, os, math
+from typing import List
+import logging, json, os
 
-
-from .llm_patterns import ORIENT_INTENT_RE
-from config.settings import PATH_GENERAL_RAG, PATH_POSES, MAX_MOVE_DISTANCE_LLM
-from llm.llm_intentions import split_and_prioritize, norm_text, extract_place_query
-from llm.llm_data import GENERAL_RAG, PosesIndex, Pose, Battery
+from config.settings import PATH_GENERAL_RAG, PATH_POSES
+from llm.llm_intentions import split_and_prioritize
+from llm.llm_data import GENERAL_RAG, PosesIndex
 from llm.llm_client import LLM
 from llm.llm_router import Router
+from llm.llm_publishers import PublishInfo
 
 
 class LlmAgent:
     def __init__(
         self,
         model_path: str,
-        last_pose: Optional[Pose] = None,
-        last_batt: Optional[Battery] = None,
-        on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> None:
         
         self.log = logging.getLogger("LLM")     
         self.general_rag = GENERAL_RAG(os.path.expanduser(PATH_GENERAL_RAG)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.llm = LLM(model_path =  model_path)
-        self.router = Router(self.general_rag, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
-
-        self.last_pose: Optional[Pose] = None or last_pose
-        self.last_batt: Optional[Battery] = None or last_batt
-
-        self.on_nav_cmd = on_nav_cmd or (lambda payload: print(f"[nav_cmd] {json.dumps(payload, ensure_ascii=False)}"))
+        self.publish_info = PublishInfo(self.poses)
+        self.router = Router(self.general_rag, self.poses, self.llm, self.publish_info)
 
         self.log.info("LLM initialized - Octybot listo ✅ ")
 
@@ -58,62 +50,6 @@ class LlmAgent:
             ans = json.dumps({"error": type(e).__name__, "msg": str(e)}, ensure_ascii=False)
         return outs
 
-    # ---- Setters for Baterry and Pose ----
-    def set_battery(self, percentage: Optional[float]) -> None:
-        self.last_batt = Battery(percentage=percentage)
-
-    def set_pose(self, x: float, y: float, yaw: float, frame_id: str = "map", name: str = "") -> None:
-        self.last_pose = Pose(x=x, y=y, yaw=yaw, frame_id=frame_id, name=name)
-    
-    # ---- tools ----
-    def tool_get_battery(self) -> Dict[str, Any]:
-        """ Return the battery percentage as dict with 'percentage' (0.0-100.0), or error if no data """
-        if self.last_batt is None or self.last_batt.percentage is None:
-            return {"error":"sin_datos_bateria","percentage": None}
-        pct = float(self.last_batt.percentage)
-        if pct > 1.5: pct /= 100.0
-        return {"percentage": round(pct*100.0,1)}
-
-    def tool_get_current_pose(self) -> Dict[str, Any]:
-        """ Return the current pose as dict with 'x', 'y', 'yaw_deg', 'frame', or error if no data """
-        if self.last_pose is None:
-            return {"error":"sin_datos_amcl","x":None,"y":None,"yaw_deg":None,"frame":"map"}
-        p = self.last_pose
-        return {"x": round(p.x,3), "y": round(p.y,3), "yaw_deg": round(p.yaw,1), "frame": "map"}
-
-    def publish_nav_cmd(self, pose: Dict[str,Any], simulate: bool):
-        """ Emit a nav command via callback """
-        payload = {"type":"goto","simulate": bool(simulate), "target": {k: pose.get(k) for k in ("x","y","yaw","frame_id","name")}}
-        self.log.info(f"[nav_cmd] simulate={simulate} target={payload['target']}")
-        self.on_nav_cmd(payload)
-
-    def tool_nav_to_place(self, text: str, simulate: bool=False) -> Dict[str,Any]:
-        """ Navigate to a place by name, 
-            If simulate=True, only simulate the navigation (no movement commands)
-            If simulate=False, emit a nav command via callback"""
-        key = extract_place_query(text)
-        pose = self.poses.loockup(key)
-        if 'error' in pose: return {"error":"destino_no_encontrado","q": key}
-        # auto simulate por intención
-        t = norm_text(text)
-        is_orient = any(w in t for w in ORIENT_INTENT_RE.findall(t)) 
-        simulate = True if is_orient else False
-        self.publish_nav_cmd(pose, simulate)
-        return {"ok": True, "simulate": simulate, "name": pose.get("name"), "target": pose}
-    
-    def publish_natural_move(self, yaw:float , dist:float, flag:bool, max_dist_m: float = MAX_MOVE_DISTANCE_LLM) -> str:
-        """ Emit a natural_move command via callback """
-        adjusted_dist = max(-max_dist_m, min(max_dist_m, float(dist)))
-        if flag:
-            yaw = math.radians(yaw)
-        payload = {"yaw":yaw, "distance":adjusted_dist, "flag":flag}
-        self.on_nav_cmd({"type": "natural_move", **payload})
-        if dist > max_dist_m:
-            return f"Estoy avanzando, pero recuerda que no puedo avanzar más de {max_dist_m} metros"
-        elif yaw != 0 or adjusted_dist != 0:
-            return "Avanzando"
-        return "No encontré destino, ni instucción de movimiento."
-
  #———— Example Usage ————
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
@@ -122,8 +58,7 @@ if "__main__" == __name__:
 
     model =  LoadModel()
     app = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
-    last_pose=app.set_pose(x=1.0, y=2.0, yaw=90.0),
-    last_batt=app.set_battery(percentage=0.67),
+    last_batt=app.publish_info.set_battery(percentage=0.67),
 
     print("Prueba de LLM 🤖:")
     print("Escribe una orden - Presiona (Ctrl+C para salir):")

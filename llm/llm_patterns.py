@@ -191,19 +191,6 @@ BATTERY_WORDS_RE = re.compile(r"""
 )\b
 """)
 
-#------------------------ Pose verbs - Pose ------------------------#
-POSE_WORDS_RE = re.compile(r"""
-(?xi)
-\b(
-    pose(?:2d|3d)? |
-    posicion(?:\s+actual)? | ubicacion(?:\s+actual)? |
-    where\s+are\s+you | donde\s+estas | donde\s+te\s+encuentras |
-    orientacion(?:\s+actual)? | angulo | theta | rumbo | heading | bearing |
-    yaw | roll | pitch | posee | poseen |
-    coordenadas? | coordenades? |
-    odom(?:etria|etry)? | odom\b | amcl | tf\b | frame\b | base[_\s-]?link | map\b
-)\b
-""")
 #------------------------ New Patterns  ------------------------#
 
 """Here you can define new patterns using regex."""
@@ -213,20 +200,18 @@ POSE_WORDS_RE = re.compile(r"""
 #Here we define the functions, with the corresponding patterns, that we want to execute
 INTENT_RES = {
     "battery":   BATTERY_WORDS_RE,
-    "pose":      POSE_WORDS_RE,
     "navigate":  MOV_VERB_RE,
     "cancel_navigate": CANCEL_NAVIGATION_RE,
 }
 
 #Here we define the priority of the functions to be executed
-INTENT_PRIORITY = ("battery", "pose", "navigate", "cancel_navigate")
+INTENT_PRIORITY = ("battery", "navigate", "cancel_navigate")
 
 # kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
 # need_user_input: True == needs the query to process the action, False == does not need it
 
 INTENT_ROUTING = {
     "battery":         {"kind_group": "first", "kind": "battery",  "need_user_input": False},
-    "pose":            {"kind_group": "first", "kind": "pose",     "need_user_input": False},
     "navigate":        {"kind_group": "second", "kind": "navigate", "need_user_input": True},
     "cancel_navigate": {"kind_group": "first", "kind": "cancel_navigate", "need_user_input": False},
 }

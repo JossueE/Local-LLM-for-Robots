@@ -1,8 +1,8 @@
 import re
 import unicodedata
 from typing import List, Dict, Any, Optional, Iterable
-from .llm_patterns import (COURTESY_RE, BEST_CONNECTOR_RE, NEXOS_RE, SPLIT_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, 
-                           ARTICLE_PREFIX_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING)
+from .llm_patterns import (COURTESY_RE, NEXOS_RE, SPLIT_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING, 
+                           BEST_CONNECTOR_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, ARTICLE_PREFIX_RE)
 
 def norm_text(s: str) -> str:
     """ Normalize text for matching:
