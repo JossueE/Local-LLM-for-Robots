@@ -4,8 +4,8 @@ from config.settings import MAX_MOVE_DISTANCE_LLM, USE_GENERAL_RESPONSES_LLM
 
 
 class Router:
-    def __init__(self, kb, poses, llm, tool_get_batt, tool_get_pose, tool_nav, natural_move_llm):
-        self.kb = kb
+    def __init__(self, general_rag, poses, llm, tool_get_batt, tool_get_pose, tool_nav, natural_move_llm):
+        self.general_rag = general_rag
         self.poses = poses
         self.llm = llm
         self.tool_get_batt = tool_get_batt

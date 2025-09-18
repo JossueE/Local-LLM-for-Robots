@@ -9,9 +9,9 @@ from pathlib import Path
 from piper.voice import PiperVoice, SynthesisConfig
 from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NAME_OF_OUTS_TTS, VOLUME_TTS, SPEED_TTS
 
-class SileroTTS:
+class TTS:
     def __init__(self, model_path:str, model_path_conf:str):
-        print("-> Loading Silero TTS model...")
+        print("-> Loading Whisper TTS model...")
         self.log = logging.getLogger("[Text-to-Speech]")    
         self.voice = PiperVoice.load(model_path = model_path,config_path = model_path_conf )
         self.sample_rate = SAMPLE_RATE_TTS
@@ -119,7 +119,7 @@ if "__main__" == __name__:
     from utils.utils import LoadModel
     
     model = LoadModel()
-    tts = SileroTTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
+    tts = TTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
 
     try: 
         print("Este es el nodo de prueba del Text to Speech 🔊 - Presione Ctrl+C para salir\n")

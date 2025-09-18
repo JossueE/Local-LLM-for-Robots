@@ -8,9 +8,13 @@ llm:
     url: https://huggingface.co/Qwen/Qwen2.5-3B-Instruct-GGUF/resolve/main/qwen2.5-3b-instruct-q4_k_m.gguf?download=true
 
 stt:
-#Silero models
-  - name: stt-silero-es_v1.onnx
-    url: "https://models.silero.ai/models/es/es_v1.onnx"
+#Whisper models
+  - name: base.pt
+    url: "https://openaipublic.azureedge.net/main/whisper/models/ed3a0b6b1c0edf879ad9b11b1af5a0e6ab5db9205f891f668f8b0e6c6326e34e/base.pt"
+
+  - name: small.pt
+    url: "https://openaipublic.azureedge.net/main/whisper/models/9ecf779972d90ba49c06d968637d720dd632c55bbf19d441fb42bf17a411e794/small.pt"
+
 
 tts:
 #Piper Models

@@ -4,7 +4,7 @@ from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
 from stt.speech_to_text import SpeechToText
 from llm.llm import LlmAgent
-from tts.text_to_speech import SileroTTS
+from tts.text_to_speech import TTS
     
 
 class OctybotAgent:
@@ -15,13 +15,13 @@ class OctybotAgent:
         #Speech-to-Text
         self.audio_listener = AudioListener()
         self.wake_word = WakeWord(str(model.ensure_model("wake_word")[0]))
-        self.stt = SpeechToText(str(model.ensure_model("stt")[0]))
+        self.stt = SpeechToText(str(model.ensure_model("stt")[0]), "small") #Other Model "base", id = 1
 
         #LLM
         self.llm = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
 
         #Text-to-Speech
-        self.tts = SileroTTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
+        self.tts = TTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
         
         self.log.info("Octybot Agent Listo ✅")
     
@@ -60,7 +60,7 @@ if "__main__" == __name__:
 
     try:
         llm = OctybotAgent()
-        print("Hola soy tu Agente vistual Octybot:")
+        print("Hola soy tu Agente vistual Octybot 🤖:")
         print("Prueba a decir 'ok robot' y darme una instrucción - Presiona (Ctrl+C para salir):")
         print("(Ejemplos: '¿Dónde estoy?', '¿Cuál es tu batería?', 'Ve a la enfermería', '¿Cuándo fue la Independencia de México y cuál es mi batería?')")
         while True:

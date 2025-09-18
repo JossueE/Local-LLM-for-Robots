@@ -3,9 +3,9 @@ from typing import Optional, Dict, Any, Callable, List
 import logging, json, os
 
 from .llm_patterns import ORIENT_INTENT_RE
-from config.settings import PATH_KB, PATH_POSES
+from config.settings import PATH_GENERAL_RAG, PATH_POSES
 from llm.llm_intentions import split_and_prioritize, norm_text, extract_place_query
-from llm.llm_data import KB, PosesIndex, Pose, Battery
+from llm.llm_data import GENERAL_RAG, PosesIndex, Pose, Battery
 from llm.llm_client import LLM
 from llm.llm_router import Router
 
@@ -20,10 +20,10 @@ class LlmAgent:
     ) -> None:
         
         self.log = logging.getLogger("LLM")     
-        self.kb = KB(os.path.expanduser(PATH_KB)) 
+        self.general_rag = GENERAL_RAG(os.path.expanduser(PATH_GENERAL_RAG)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.llm = LLM(model_path =  model_path)
-        self.router = Router(self.kb, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
+        self.router = Router(self.general_rag, self.poses, self.llm,  self.tool_get_battery, self.tool_get_current_pose, self.tool_nav_to_place, self.publish_natural_move)
 
         self.last_pose: Optional[Pose] = None or last_pose
         self.last_batt: Optional[Battery] = None or last_batt
@@ -42,7 +42,7 @@ class LlmAgent:
             return [text]
         
         try:
-            actions = split_and_prioritize(text, self.router.kb)
+            actions = split_and_prioritize(text, self.router.general_rag)
             for action in actions:
                 data = action.get("params", {}).get("data")
                 kind = action.get("kind")
@@ -117,7 +117,7 @@ if "__main__" == __name__:
     last_pose=app.set_pose(x=1.0, y=2.0, yaw=90.0),
     last_batt=app.set_battery(percentage=0.67),
 
-    print("Prueba de LLM:")
+    print("Prueba de LLM 🤖:")
     print("Escribe una orden - Presiona (Ctrl+C para salir):")
     print("(Ejemplos: '¿Dónde estoy?', '¿Cuál es tu batería?', 'Ve a la enfermería', '¿Cuándo fue la Independencia de México y cuál es mi batería?')")
     try:

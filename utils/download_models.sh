@@ -64,7 +64,7 @@ mkdir -p "$CACHE_DIR"
 echo "[*] Usando catálogo: $MODELS_FILE"
 echo "[*] Caché: $CACHE_DIR"
 
-# ====== STT (Silero) ======
+# ====== STT ======
 STT_LEN="$(yq -r '(.stt  // []) | length'  "$MODELS_FILE" 2>/dev/null || echo 0)"
 if [[ -n "$STT_LEN" && "$STT_LEN" != "0" ]]; then
   echo "[STT] Descargando modelos STT..."

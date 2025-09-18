@@ -1,36 +1,22 @@
 
 from typing import Optional
+from pathlib import Path
 
 import logging
-import onnx
-import onnxruntime
 import numpy as np
-import torch
 
-from config.settings  import SAMPLE_RATE_STT, CHANNELS_INPUT_STT, DEVICE_SELECTOR_STT, LANGUAGE
+import whisper
+from config.settings  import SAMPLE_RATE_STT, LANGUAGE, SELF_VOCABULARY_STT
 
 class SpeechToText:
-    def __init__(self, model_path:str) -> None:
+    def __init__(self, model_path:str, model_name:str) -> None:
         
         self.log = logging.getLogger("Speech_To_Text")    
-        self.sample_rate = SAMPLE_RATE_STT
-        self.channels = CHANNELS_INPUT_STT
-        self.device =  DEVICE_SELECTOR_STT
-        self.language =  LANGUAGE
 
-        model, self.decoder, utils = torch.hub.load(
-            repo_or_dir="snakers4/silero-models",
-            model="silero_stt",# stt
-            language=self.language,      # depende del modelo disponible
-            device="cpu" if self.device not in ("cuda", "cpu") else self.device,
-        )
+        model_path = Path(model_path)
 
-        onnx_model_path = model_path
-        onnx_model = onnx.load(str(onnx_model_path))
-        onnx.checker.check_model(onnx_model)
-        self.ort_session = onnxruntime.InferenceSession(onnx_model_path)
+        self.model = whisper.load_model(model_name, download_root = model_path.parent)
 
-        self.ort_in_name = self.ort_session.get_inputs()[0].name 
     
     def worker_lopp(self, audio_bytes: bytes) -> Optional[str | None]:
         """With this we can see if we recieve text or none"""
@@ -50,10 +36,9 @@ class SpeechToText:
 
     def stt_from_bytes (self, audio_bytes: bytes) -> Optional[str]:
         """
-        Convert bytes Int16→tensor float32 normalizado y ejecuta Silero.
+        Convert bytes Int16→tensor float32 normalizado y ejecuta Whisper.
         """
-        if not audio_bytes:
-            return None
+        if not audio_bytes: return None
 
         # Int16 → float32 [-1, 1]
         pcm = np.frombuffer(audio_bytes, dtype=np.int16)
@@ -62,14 +47,20 @@ class SpeechToText:
 
         x = pcm.astype(np.float32) / 32768.0
 
-        onnx_in = x[np.newaxis, :]
+        if SAMPLE_RATE_STT != 16000:
+            self.log.info(f"Whisper Solo Funciona a 16 Khz, estás enviando información a {SAMPLE_RATE_STT}hz")
 
-        outs = self.ort_session.run(None, {self.ort_in_name: onnx_in})
-        # Usa el decoder oficial de Silero sobre los logits
-        text = self.decoder(torch.Tensor(outs[0])[0])
-        
-        #text = text.strip()
-        return text or None
+        result = self.model.transcribe(
+            x,
+            temperature = 0.0, 
+            fp16=False, 
+            language = LANGUAGE, 
+            task="transcribe",
+            initial_prompt = SELF_VOCABULARY_STT,
+            carry_initial_prompt=True
+            )
+
+        return(result["text"])or None
     
  #———— Example Usage ————
 if __name__ == "__main__":
@@ -82,8 +73,8 @@ if __name__ == "__main__":
     model = LoadModel()
     audio_listener = AudioListener()
     ww = WakeWord(str(model.ensure_model("wake_word")[0]))
-    stt = SpeechToText(str(model.ensure_model("stt")[0]))
-
+    stt = SpeechToText(str(model.ensure_model("stt")[0]), model_name="small") #Base = 1 id and "base"
+    print(str(model.ensure_model("stt")))
     audio_listener.start_stream()
     
     try:

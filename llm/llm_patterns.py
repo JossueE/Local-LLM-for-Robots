@@ -26,17 +26,64 @@ TAIL_NEXOS_TRIM_RE = re.compile(r'\s+(?:y|luego|despues|entonces)\b.*$', flags=r
 
 #------------------------ Courtesy words ------------------------#
 
-COURTESY_RE = re.compile(
-    r"\b(?:"
-    r"por\s+favor|porfa(?:vor|s)?|porfis|"
-    r"gracias(?:\s+de\s+antemano)?|muchas\s+gracias|please|"
-    r"disculp(?:a|ame)|perdon(?:ame)?|"
-    r"hola|buen(?:os|as)\s+(?:dias|tardes|noches)|"
-    r"me\s+puedes\s+decir|me\s+podrias\s+decir|puedes\s+decirme|podrias\s+decirme|"
-    r"puedes|podrias|"
-    r"dime|cuentame|indica(?:me)?"
-    r")\b"
+COURTESY_RE = re.compile(r"""
+(?ix)                                   # i: ignorecase, x: verbose
+(?<!\w)                                  # borde izquierdo (no carácter de palabra)
+(?:
+
+  # --- SALUDOS / LLAMADAS DE ATENCIÓN ---
+  hola|
+  buen(?:os|as)?\s+d[ií]as|buenas?\s+tardes|buenas?\s+noches|buen\s+d[ií]a|
+  que\s+tal|
+  oye|oiga|oigan|
+  con\s+permiso|
+
+  # --- “POR FAVOR” Y VARIANTES ---
+  por\s+favor|de\s+favor|favor\s+de|
+  porfa(?:vor|s)?|porfis|porfai|por\s+fice|
+  please|pl[ií]s|
+
+  # --- GRACIAS Y CIERRES CORTESÍA ---
+  muchas?\s+gracias|mil\s+gracias|
+  gracias(?:\s+de\s+antemano)?|
+  se\s+agradece|
+  saludos(?:\s+cordiales)?|
+
+  # --- DISCULPAS ---
+  disculp(?:a|e|en|ame|eme)|
+  perd[óo]n(?:a|e|en|ame|eme)?|
+
+  # --- ATENUADORES / SUAVIZADORES ---
+  (?:si\s+)?fueras?\s+tan\s+amable(?:\s+de)?|
+  ser[íi]as?\s+tan\s+amable(?:\s+de)?|
+  ser[íi]a\s+posible\s+que|
+  te\s+importar[íi]a|
+  si\s+no\s+es\s+molestia|
+  cuando\s+(?:puedas?|gustes?|tengas?\s+tiempo)|
+
+  # --- PATRONES DE PETICIÓN COMUNES ---
+  # me podrías/puedes + verbo (decir/explicar/ayudar/indicar/repetir/confirmar)
+  (?:me\s+)?podr[íi]as?\s+(?:decir|explicar|ayudar|indicar|repetir|confirmar)(?:me|nos)?|
+  (?:me\s+)?puedes?\s+(?:decir|explicar|ayudar|indicar|repetir|confirmar)(?:me|nos)?|
+
+  # me ayudas/apoyas con|a ...
+  me\s+(?:ayudas?|apoyas?)\s+(?:con|a)\b|
+
+  # te encargo + sustantivo/acción
+  te\s+encargo\b|
+
+  # verbos solos típicos de trato cortés (imperativos muy comunes)
+  d[ií]me|d[ií]game|
+  cu[ée]ntame|
+  ind[íi]came|ind[íi]queme|
+
+  # deseos/formulaciones suaves
+  quisier[ai](?:\s+saber)?|
+  me\s+gustar[íi]a\s+saber
+
 )
+(?!\w)                                  # borde derecho
+""", re.IGNORECASE | re.VERBOSE)
 
 #------------------------ Movement verbs - Navigation  ------------------------#
 
@@ -45,7 +92,8 @@ ORIENT_INTENT_RE = re.compile(r"""
 \b(
     donde\s+(?:queda|esta)        
   | orienta(?:r|te|rte)?          
-  | apunta(?:r)?                  
+  | apunta(?:r)?   
+  | in+di+ca(?:r|me|te)?                
   | se+n+ala(?:r|me|te)?          
 )\b
 """)
@@ -173,12 +221,12 @@ INTENT_RES = {
 #Here we define the priority of the functions to be executed
 INTENT_PRIORITY = ("battery", "pose", "navigate", "cancel_navigate")
 
-# kind_group: "corto" (short) == first or "largo" (long) == second determine wich works are executed first
-# needs_clause: True == needs the query to process the action, False == does not need it
+# kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
+# need_user_input: True == needs the query to process the action, False == does not need it
 
 INTENT_ROUTING = {
-    "battery":         {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
-    "pose":            {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
-    "navigate":        {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
-    "cancel_navigate": {"kind_group": "corto", "kind": "cancel_navigate", "needs_clause": False},
+    "battery":         {"kind_group": "first", "kind": "battery",  "need_user_input": False},
+    "pose":            {"kind_group": "first", "kind": "pose",     "need_user_input": False},
+    "navigate":        {"kind_group": "second", "kind": "navigate", "need_user_input": True},
+    "cancel_navigate": {"kind_group": "first", "kind": "cancel_navigate", "need_user_input": False},
 }

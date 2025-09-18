@@ -46,7 +46,7 @@
 ### Setup
 ```bash
 sudo apt update
-sudo apt install -y python3-dev python3-venv build-essential portaudio19-dev curl unzip
+sudo apt install -y python3-dev python3-venv build-essential portaudio19-dev curl unzip ffmpeg
 sudo snap install yq
 ```
 
@@ -97,7 +97,7 @@ Define which models Octybot uses (LLM, STT, TTS, wake-word) along with their URL
 To re-write or define a new **LLM - System Prompt**  
 
 ### 🌎 Data for Commun Questions and Places in a Map
-All general questions live in `config/kb.json`. Define the **New Question** in `triggers` and define the `answer`.
+All general questions live in `config/general_rag.json`. Define the **New Question** in `triggers` and define the `answer`.
 
 <h2 id="quick-start">⚡ Quick Start</h2>
 
@@ -148,11 +148,11 @@ python -m tts.text_to_speech
 #### Agent intents (`handle(data, tipo)`)
 | `tipo`     | What it does | Input `data` | Output shape |
 |---|---|---|---|
-| `rag` | Returns `data` as-is (external RAG already resolved). |  Pre-composed **string** from your RAG - `kb.json`| `str` |
+| `rag` | Returns `data` as-is (external RAG already resolved). |  Pre-composed **string** from your RAG - `general_rag.json`| `str` |
 | `general` | Free-form Q&A via `llm.answer_general`. | Question | `str` |
 | `battery` | Reads `%` via `tool_get_batt()`. | Reads `Battery` status| `str` like `Mi batería es: 84.0%` (or no-reading msg) |
 | `pose` | Reads AMCL pose via `tool_get_pose()`. | Reads `Pose` status | `str` (no pose) **or** JSON `{"x","y","yaw_deg","frame"}` |
-| `navigate` | Navigate to a named place or generate a short motion. Tries `tool_nav(data)` first (KB/`poses.json`): if found, replies **"Voy"** (execute) or **"Por allá"** (indicate/simulate). If not found, falls back to `llm.plan_motion(data)` → `_clamp_motion(...)` → `natural_move_llm(...)`. | Pre-composed string from your RAG - poses.json and `str` Natural-language place or motion command (e.g., `ve a la enfermería`, `gira 90° y avanza 0.5 m`). | Usually `str`. On fallback may return a **tuple**: `(mensaje, '{"yaw": <deg>, "distance": <m>}' )`. |
+| `navigate` | Navigate to a named place or generate a short motion. Tries `tool_nav(data)` first (GENERAL_RAG/`poses.json`): if found, replies **"Voy"** (execute) or **"Por allá"** (indicate/simulate). If not found, falls back to `llm.plan_motion(data)` → `_clamp_motion(...)` → `natural_move_llm(...)`. | Pre-composed string from your RAG - poses.json and `str` Natural-language place or motion command (e.g., `ve a la enfermería`, `gira 90° y avanza 0.5 m`). | Usually `str`. On fallback may return a **tuple**: `(mensaje, '{"yaw": <deg>, "distance": <m>}' )`. |
 
 > If you consume the agent’s reply topic, handle both cases for `navigate`: always speak/log the **string**; optionally route the **JSON** telemetry if present.
 
@@ -192,14 +192,14 @@ INTENT_RES = {
 #Here we define the priority of the functions to be executed
 INTENT_PRIORITY = ("time", "battery", "pose", "navigate") #<- NEW
 
-# kind_group: "corto" (short) == first or "largo" (long) == second determine wich works are executed first
-# needs_clause: True == needs the query to process the action, False == does not need it
+# kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
+# need_user_input: True == needs the query to process the action, False == does not need it
 
 INTENT_ROUTING = {
-    "time":     {"kind_group": "corto", "kind": "time",     "needs_clause": False},
-    "battery":  {"kind_group": "corto", "kind": "battery",  "needs_clause": False},
-    "pose":     {"kind_group": "corto", "kind": "pose",     "needs_clause": False},
-    "navigate": {"kind_group": "largo", "kind": "navigate", "needs_clause": True},
+    "time":     {"kind_group": "first", "kind": "time",     "need_user_input": False},
+    "battery":  {"kind_group": "first", "kind": "battery",  "need_user_input": False},
+    "pose":     {"kind_group": "first", "kind": "pose",     "need_user_input": False},
+    "navigate": {"kind_group": "second", "kind": "navigate", "need_user_input": True},
 }
 ```
 ---
@@ -230,7 +230,7 @@ Pass the tool to the `Router` constructor and handle it in `llm_router.py`.
 
 # llm.py (LLM_main.__init__)
 self.router = Router(
-    self.kb, self.poses, self.llm,
+    self.general_rag, self.poses, self.llm,
     self.tool_get_battery, self.tool_get_current_pose,
     self.tool_nav_to_place, self.publish_natural_move,
     self.tool_get_time,  # ← NEW
@@ -241,7 +241,7 @@ self.router = Router(
 
 # llm_router.py
 class Router:
-  def __init__(self, kb, poses, llm,
+  def __init__(self, general_rag, poses, llm,
                 tool_battery, tool_pose, tool_nav, tool_natural_move,
                 tool_time):                      # ← NEW
     . . .
@@ -276,6 +276,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 - [llama.cpp](https://github.com/ggerganov/llama.cpp)
 - [Vosk](https://alphacephei.com/vosk/)
-- [Silero Models](https://github.com/snakers4/silero-models)
 - [Qwen Models](https://huggingface.co/Qwen)
 - The ROS2 community

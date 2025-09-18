@@ -31,13 +31,13 @@ def extract_place_query(t: str) -> str:
         # sin conector: corta la "cola" desde un nexo
         place = TAIL_NEXOS_TRIM_RE.sub('', t).strip()
 
-    # opcional: quita artículo inicial (si tu KB NO guarda artículos)
+    # opcional: quita artículo inicial (si tu GENERAL_RAG NO guarda artículos)
     place = ARTICLE_PREFIX_RE.sub('', place).strip(" .,:;!?\"'")
 
     return place
 
 def best_hit(res) -> Dict[str, Any]:
-    """ From the result of kb.loockup (dict or list of dicts), return the best one (highest score)"""
+    """ From the result of general_rag.loockup (dict or list of dicts), return the best one (highest score)"""
     if isinstance(res, list) and res:
         return max((x for x in res if isinstance(x, dict)), key=lambda x: x.get('score', 0.0), default={})
     return res if isinstance(res, dict) else {}
@@ -54,11 +54,11 @@ def detect_intent(t: str, order: Optional[Iterable[str]] = None, normalizer=None
             return name
     return None
 
-def split_and_prioritize(text: str, kb) -> List[Dict[str, Any]]:
+def split_and_prioritize(text: str, general_rag) -> List[Dict[str, Any]]:
     """
     From a text, split it into clauses (by connectors) and classify each clause
     into an action type: "battery", "pose", "navigate", "general", or
-    "rag" (if a high-confidence KB answer is found).
+    "rag" (if a high-confidence GENERAL_RAG answer is found).
     Return a list of actions with parameters, prioritizing short answers first.
 
     E.g. "Por favor ve a la cocina y luego dime tu batería" ->
@@ -72,20 +72,20 @@ def split_and_prioritize(text: str, kb) -> List[Dict[str, Any]]:
 
     accions = []
     for c in clauses:
-        # 1) Respuestas cortas por KB si hay alta confianza
-        var = best_hit(kb.loockup(c))
+        # 1) Respuestas cortas por GENERAL_RAG si hay alta confianza
+        var = best_hit(general_rag.loockup(c))
         if var.get('answer') and var.get('score', 0.0) >= 0.75:
-            accions.append(("corto", "rag", {"data": var['answer'].strip()}))
+            accions.append(("first", "rag", {"data": var['answer'].strip()}))
             continue
         intent = detect_intent(c, order=INTENT_PRIORITY, normalizer=norm_text)
         spec = INTENT_ROUTING.get(intent)
 
         if spec:
-            params = {"data": c} if spec.get("needs_clause") else {}
+            params = {"data": c} if spec.get("need_user_input") else {}
             accions.append((spec["kind_group"], spec["kind"], params))
         else:
-            accions.append(("largo", "general", {"data": c}))
+            accions.append(("second", "general", {"data": c}))
 
     # Primero cortas, luego largas (orden estable preservado)
-    accions.sort(key=lambda x: 0 if x[0] == "corto" else 1)
+    accions.sort(key=lambda x: 0 if x[0] == "first" else 1)
     return [{"kind": k, "params": p} for _, k, p in accions]

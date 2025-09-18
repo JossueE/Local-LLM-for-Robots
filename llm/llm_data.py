@@ -6,7 +6,7 @@ from rapidfuzz import fuzz as rf_fuzz
 HAS_RF = True
 
 
-from config.settings import FUZZY_LOGIC_ACCURACY_KB, FUZZY_LOGIC_ACCURACY_POSE
+from config.settings import FUZZY_LOGIC_ACCURACY_GENERAL_RAG, FUZZY_LOGIC_ACCURACY_POSE
 from llm.llm_intentions import norm_text, extract_place_query
 
 @dataclass
@@ -22,14 +22,14 @@ class Pose:
         self.frame_id = frame_id
         self.name = name
 
-class KB:
+class GENERAL_RAG:
     def __init__(self, path: str):
         self.items: List[Dict[str,str]] = []
         self.load(path)
     
     def load(self, path: str) -> None:
-        """ Load the KB from a JSON file or line-separated JSON objects """
-        print("[llm_data] Cargando KB", flush=True)
+        """ Load the GENERAL_RAG from a JSON file or line-separated JSON objects """
+        print("[llm_data] Cargando GENERAL_RAG", flush=True)
         try:
             with open(path, "r", encoding="utf-8") as f:
                 txt = f.read().strip()
@@ -55,9 +55,9 @@ class KB:
             print("[llm_data] No se pudo abrir", flush=True)
     
     def loockup(self, query: str) -> Dict[str, Any]:
-        """ Simple exact or fuzzy match in the KB. Returns dict with 'answer' and 'score' (0.0–1.0) """
+        """ Simple exact or fuzzy match in the GENERAL_RAG. Returns dict with 'answer' and 'score' (0.0–1.0) """
         if not self.items:
-            return {"error":"kb_vacia","answer":"","score":0.0}
+            return {"error":"general_rag_vacia","answer":"","score":0.0}
         query = norm_text(query)
         best, best_s = None, 0.0
 
@@ -70,7 +70,7 @@ class KB:
                 s = fuzzy
             if s > best_s:
                 best, best_s = item, s
-        if best and best_s >= FUZZY_LOGIC_ACCURACY_KB:
+        if best and best_s >= FUZZY_LOGIC_ACCURACY_GENERAL_RAG:
             return {"answer": best.get('a',''), "score": round(best_s,3)}
         return {"answer":"","score": round(best_s,3)}
 
