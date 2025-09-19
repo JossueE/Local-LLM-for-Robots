@@ -4,9 +4,7 @@ from typing import Callable, Dict
 
 
 class Router:
-    def __init__(self, general_rag, poses, llm, get_info):
-        self.general_rag = general_rag
-        self.poses = poses
+    def __init__(self, llm, get_info):
         self.llm = llm
         self.get_info = get_info
 

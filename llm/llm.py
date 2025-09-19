@@ -21,8 +21,8 @@ class LlmAgent:
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.llm = LLM(model_path =  model_path)
         self.get_info = GetInfo(self.poses)
-        self.router = Router(self.general_rag, self.poses, self.llm, self.get_info)
-
+        self.router = Router(self.llm, self.get_info)
+        
         self.log.info("LLM initialized - Octybot listo ✅ ")
 
     def ask(self, text: str) -> None:
@@ -35,7 +35,7 @@ class LlmAgent:
             return [text]
         
         try:
-            actions = split_and_prioritize(text, self.router.general_rag)
+            actions = split_and_prioritize(text, self.general_rag)
             for action in actions:
                 data = action.get("params", {}).get("data")
                 kind = action.get("kind")
