@@ -7,7 +7,7 @@ from llm.llm_intentions import split_and_prioritize
 from llm.llm_data import GENERAL_RAG, PosesIndex
 from llm.llm_client import LLM
 from llm.llm_router import Router
-from llm.llm_publishers import PublishInfo
+from llm.llm_tools import GetInfo
 
 
 class LlmAgent:
@@ -20,8 +20,8 @@ class LlmAgent:
         self.general_rag = GENERAL_RAG(os.path.expanduser(PATH_GENERAL_RAG)) 
         self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.llm = LLM(model_path =  model_path)
-        self.publish_info = PublishInfo(self.poses)
-        self.router = Router(self.general_rag, self.poses, self.llm, self.publish_info)
+        self.get_info = GetInfo(self.poses)
+        self.router = Router(self.general_rag, self.poses, self.llm, self.get_info)
 
         self.log.info("LLM initialized - Octybot listo ✅ ")
 
@@ -58,7 +58,7 @@ if "__main__" == __name__:
 
     model =  LoadModel()
     app = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
-    last_batt=app.publish_info.set_battery(percentage=0.67),
+    last_batt=app.get_info.set_battery(percentage=0.67),
 
     print("Prueba de LLM 🤖:")
     print("Escribe una orden - Presiona (Ctrl+C para salir):")

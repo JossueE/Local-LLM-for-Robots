@@ -205,7 +205,7 @@ INTENT_RES = {
 }
 
 #Here we define the priority of the functions to be executed
-INTENT_PRIORITY = ("battery", "navigate", "cancel_navigate")
+INTENT_PRIORITY = ("battery", "cancel_navigate", "navigate")
 
 # kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
 # need_user_input: True == needs the query to process the action, False == does not need it

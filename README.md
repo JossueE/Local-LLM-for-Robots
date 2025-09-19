@@ -202,7 +202,7 @@ INTENT_ROUTING = {
 ```
 ---
 
-##### 2) Implement the tool in `llm_publishers.py` (class PublishInfo)
+##### 2) Implement the tool in `llm_tools.py` (class GetInfo)
 Tools that should be spoken by **TTS should return a string**
 (if you return a dict, your loop will JSON-dump it).
 

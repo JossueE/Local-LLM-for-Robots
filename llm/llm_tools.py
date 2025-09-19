@@ -7,7 +7,7 @@ from llm.llm_patterns import ORIENT_INTENT_RE
 from config.settings import MAX_MOVE_DISTANCE_LLM
 from llm.llm_intentions import norm_text, extract_place_query
 
-class PublishInfo:
+class GetInfo:
     def __init__(
         self,
         poses,
