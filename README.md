@@ -210,7 +210,7 @@ Tools that should be spoken by **TTS should return a string**
 def tool_get_time(self) -> str:
     from datetime import datetime
     now = datetime.now()
-    return f"Son las {now.hour:02d}:{now.minute:02d}"
+    return now.hour:02d, now.minute:02d 
 ```
 
 - Add the new function to the `handle` in `llm_router.py`
@@ -224,16 +224,25 @@ Pass the tool to the `Router` constructor and handle it in `llm_router.py`.
 
 # llm_router.py
 class Router:
+  . . .
+  self.get_info = get_info
+  self.handlers: Dict[str, Callable[[str], str]] = {
+    "rag": self.data_return,
+    "general": self.general_response_llm,
+    "battery": self.battery_publisher,
+    "navigate": self.navigation_publisher,
+    "time": self.publish_time,             #<- NEW
+  }
     . . .
+    #------------ Handler or Router ------------------- 
+    def handle(self, data: str, tipo: str) -> str:
+       . . .
 
-  def handle(self, data: str | None, kind: str):
-    if kind == "battery":
-        return self.publish_info.tool_battery()
-    if kind == "time":                       # ← NEW
-        return self.publish_info.tool_get_time()
-    if kind == "navigate":
-        return self.tool_get_time.tool_nav(data)
-    return self.llm.reply(data or "")
+    #-------------The Publishers-------------------------
+    def publish_time(self, data: str)-> str:                 #<- NEW
+      hours, minutes = self.get_info.tool_get_time() 
+      return f"Son las {hours}:{minutes}"
+
 ```
 
 
