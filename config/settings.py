@@ -18,7 +18,7 @@ CONTEXT_LLM = 1024 #The size of the context that your model is going to receive
 THREADS_LLM = os.cpu_count() or 8 #Threads that has available your model 
 N_BACH_LLM = 512 #The size of the info that gpu or cpu is going to process
 GPU_LAYERS_LLM = 0 #How many layers your model is going to use in GPU, for CPU use "0"
-MAX_MOVE_DISTANCE_LLM = 10.0 #Max distance in meters of the robot movement
+MAX_MOVE_DISTANCE_LLM = 2.0 #Max distance in meters of the robot movement
 CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recommended to change unless you change the model
 
 """Information - data"""
@@ -29,7 +29,6 @@ PATH_POSES = "config/data/poses.json"
 
 """Audio Publisher"""
 AUDIO_PUBLISHER_DEVICE_ID = -1 #This is the default output
-AUDIO_PUBLISHER_CHANELS = 1 # "mono" or "stereo"
 AUDIO_PUBLISHER_FRAMES_PER_BUFFER = 256
 AUDIO_PUBLISHER_DEBUG = True #Show in terminal the debug process
 

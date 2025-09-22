@@ -14,6 +14,7 @@ class Router:
             "battery": self.battery_publisher,
             "navigate": self.navigation_publisher,
             "cancel_navigate": self.cancel_navigate_publisher,
+            "maps": self.get_maps
         }
 
     #------------ Handler or Router -------------------    
@@ -51,8 +52,13 @@ class Router:
     def cancel_navigate_publisher(self, data: str)-> str: 
         return "Cancelando Navegación"
     
+    def get_maps(self, data: str)-> str: 
+        return self.get_info.tool_get_maps()
+
+    #------------------------- Default Handler -----------------------
     def default_handler(self, data: str)-> str: 
         return "Lo siento lo que me has pedido no lo tengo en mi base de conocimiento"
+    
 
 
             

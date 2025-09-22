@@ -191,6 +191,14 @@ BATTERY_WORDS_RE = re.compile(r"""
 )\b
 """)
 
+#------------------------ Mapas ------------------------#
+MAPS_WORDS_RE = re.compile(r"""
+(?xi)
+\b(
+    lista|mapas|lista+mapas
+)\b
+""")
+
 #------------------------ New Patterns  ------------------------#
 
 """Here you can define new patterns using regex."""
@@ -202,10 +210,11 @@ INTENT_RES = {
     "battery":   BATTERY_WORDS_RE,
     "navigate":  MOV_VERB_RE,
     "cancel_navigate": CANCEL_NAVIGATION_RE,
+    "maps": MAPS_WORDS_RE
 }
 
 #Here we define the priority of the functions to be executed
-INTENT_PRIORITY = ("battery", "cancel_navigate", "navigate")
+INTENT_PRIORITY = ("battery", "cancel_navigate", "navigate", "maps")
 
 # kind_group: "first" (short) == first or "second" (long) == second determine wich works are executed first
 # need_user_input: True == needs the query to process the action, False == does not need it
@@ -214,4 +223,5 @@ INTENT_ROUTING = {
     "battery":         {"kind_group": "first", "kind": "battery",  "need_user_input": False},
     "navigate":        {"kind_group": "second", "kind": "navigate", "need_user_input": True},
     "cancel_navigate": {"kind_group": "first", "kind": "cancel_navigate", "need_user_input": False},
+    "maps":            {"kind_group": "second", "kind": "maps", "need_user_input": False}
 }

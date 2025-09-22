@@ -1,5 +1,5 @@
 # Catalog that supports Octybot
-#WARNING: The name that your are going to asign, needs to be the same as the file that you want to call.
+#WARNING: The name that your are going to assign, needs to be the same as the file that you want to call.
 # The download file is in utils folder as download_models.sh and the ensure_model or validation is in utils.py
 
 llm:

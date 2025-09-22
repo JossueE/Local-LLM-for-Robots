@@ -41,9 +41,7 @@ env/
 *.pt
 *.bin
 *.ckpt
-**/weights/
-**/checkpoints/
-**/assets/raw/
+
 
 # Generated media
 *.mp4

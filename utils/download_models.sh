@@ -4,8 +4,7 @@ set -euo pipefail
 # ====== rutas fijas (relativas al propio script) ======
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 MODELS_FILE="$SCRIPT_DIR/../config/models.yml"   # => src/LLM/config/models.yml
-CACHE_DIR="${OCTOPY_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/Local-LLM-for-Robots}"
-LANG="${OCTOPY_LANG:-es}"   # es|en|ru...
+CACHE_DIR="${$HOME/.cache}/Local-LLM-for-Robots}"
 
 # ====== helpers ======
 have_cmd(){ command -v "$1" >/dev/null 2>&1; }

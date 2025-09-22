@@ -60,7 +60,7 @@ class AudioListener:
             self.stream.close()
             self.stream = None
 
-    def deleate(self):
+    def deleate(self):                                                    #MAL ESCRITO
         """ Clean up the audio interface and stream."""
         if self.stream is not None:
             self.stop_stream()

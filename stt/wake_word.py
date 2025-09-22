@@ -6,8 +6,10 @@ import vosk
 import threading
 from collections import deque
 
-from config.settings import  (MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, AUDIO_LISTENER_SAMPLE_RATE, 
-                              VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS)
+from config.settings import (
+    MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, 
+    AUDIO_LISTENER_SAMPLE_RATE, VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS
+)
 
 
 class WakeWord:

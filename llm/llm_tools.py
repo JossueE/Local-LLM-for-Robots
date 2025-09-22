@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Dict, Any, Optional, Callable
-import math, json, logging
+import math, json, logging, requests
 
-from llm.llm_data import Pose, Battery
+from llm.llm_data import Battery
 from llm.llm_patterns import ORIENT_INTENT_RE
 from config.settings import MAX_MOVE_DISTANCE_LLM
 from llm.llm_intentions import norm_text, extract_place_query
@@ -11,14 +11,12 @@ class GetInfo:
     def __init__(
         self,
         poses,
-        last_pose: Optional[Pose] = None,
         last_batt: Optional[Battery] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> None:
         
         self.log = logging.getLogger("Publish") 
         self.poses = poses
-        self.last_pose: Optional[Pose] = None or last_pose
         self.last_batt: Optional[Battery] = None or last_batt
 
         self.on_nav_cmd = on_nav_cmd or (lambda payload: print(f"[nav_cmd] {json.dumps(payload, ensure_ascii=False)}"))
@@ -72,3 +70,22 @@ class GetInfo:
             return "Avanzando"
         return "No encontré destino, ni instucción de movimiento."
     
+    def tool_get_maps(self) -> list:
+        try:
+            response = requests.get("http://0.0.0.0:9009/maps/maps", json={}, params={}, timeout=2.0)
+            response_body = response.json()
+
+            # Check if the 'data' key exists and is a list
+            if 'data' in response_body and isinstance(response_body['data'], list):
+                # Use a list comprehension to extract the 'name' from each dictionary in the 'data' list
+                message = [item.get('name') for item in response_body['data'] if isinstance(item, dict) and 'name' in item]
+            else:
+                print("Error: 'data' key not found or not a list in the response.")
+                message = []
+
+        except requests.exceptions.Timeout:
+            message = "The request timed out after 2 seconds."
+        except requests.exceptions.RequestException as ex:
+            message = f"Server NOT available. {ex}"
+
+        return message
