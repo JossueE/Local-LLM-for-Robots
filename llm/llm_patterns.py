@@ -192,12 +192,44 @@ BATTERY_WORDS_RE = re.compile(r"""
 """)
 
 #------------------------ Mapas ------------------------#
+
+MAPS_COUNT_RE = re.compile(r"""
+(?xi)
+\b(
+    # --- Formulaciones explícitas de cantidad/conteo/número ---
+    (?:cantidad|conteo|n[uú]mero|numero)\s+(?:de\s+)?(?:los\s+|las\s+)?mapas
+
+    # --- Preguntas tipo "¿cuántos mapas ... ?" ---
+  | cu[aá]nt(?:os|as)\s+mapas
+    (?:\s+(?:tengo|tenemos|poseo|poseemos|hay|quedan|existen|est[aá]n\s+cargados|disponibles))?
+)\b
+""")
+
 MAPS_WORDS_RE = re.compile(r"""
 (?xi)
 \b(
-    lista|mapas|lista+mapas
+    # --- Listados ---
+    (?:listas?|listad(?:o|os))\s+(?:de\s+)?(?:los\s+|las\s+)?mapas
+  | (?:inventario|conjunto)\s+(?:de\s+)?(?:los\s+|las\s+)?mapas
+
+    # --- Cantidad / conteo ---
+  | (?:cantidad|conteo|n[uú]mero|numero)\s+(?:de\s+)?(?:los\s+|las\s+)?mapas
+  | cu[aá]nt(?:os|as)\s+mapas(?:\s+(?:tengo|tenemos|poseo|poseemos|hay|quedan|existen|cargados|disponibles))?
+
+    # --- Posesión / existencia ---
+  | mapas\s+que\s+(?:tengo|tenemos|poseo|poseemos|hay|quedan|existen|est[aá]n\s+cargados|disponibles)
+
+    # --- “Todos los mapas” y variantes ---
+  | (?:todos?\s+(?:los\s+)?)mapas(?:\s+(?:disponibles|registrados|guardados|cargados))?
+
+    # --- Pedidos directos (opcionales) ---
+  | (?:ver|mostrar|muestra|ens[eé]ñ(?:a|ame)|dame)\s+(?:la\s+)?(?:lista\s+de\s+)?mapas
+
+    # --- Palabra sola (fallback robusto) ---
+  | mapas
 )\b
 """)
+
 
 #------------------------ New Patterns  ------------------------#
 
@@ -223,5 +255,5 @@ INTENT_ROUTING = {
     "battery":         {"kind_group": "first", "kind": "battery",  "need_user_input": False},
     "navigate":        {"kind_group": "second", "kind": "navigate", "need_user_input": True},
     "cancel_navigate": {"kind_group": "first", "kind": "cancel_navigate", "need_user_input": False},
-    "maps":            {"kind_group": "second", "kind": "maps", "need_user_input": False}
+    "maps":            {"kind_group": "second", "kind": "maps", "need_user_input": True}
 }

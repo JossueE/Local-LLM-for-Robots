@@ -53,7 +53,17 @@ class Router:
         return "Cancelando Navegación"
     
     def get_maps(self, data: str)-> str: 
-        return self.get_info.tool_get_maps()
+        maps = self.get_info.tool_get_maps_from_backend()
+        if not maps:
+            return "Lo lamento, no cuentas con mapas cargados"
+        
+        elif self.get_info.tool_classify_maps_intention(data):
+            num_maps = len(maps)
+            return f"Tienes {num_maps} mapas cargados"
+        
+        else:
+            return "Tus mapas son: " + ", ".join(str(m) for m in maps)
+            
 
     #------------------------- Default Handler -----------------------
     def default_handler(self, data: str)-> str: 

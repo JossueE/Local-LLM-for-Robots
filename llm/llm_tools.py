@@ -3,7 +3,7 @@ from typing import Dict, Any, Optional, Callable
 import math, json, logging, requests
 
 from llm.llm_data import Battery
-from llm.llm_patterns import ORIENT_INTENT_RE
+from llm.llm_patterns import ORIENT_INTENT_RE, MAPS_COUNT_RE
 from config.settings import MAX_MOVE_DISTANCE_LLM
 from llm.llm_intentions import norm_text, extract_place_query
 
@@ -70,7 +70,9 @@ class GetInfo:
             return "Avanzando"
         return "No encontré destino, ni instucción de movimiento."
     
-    def tool_get_maps(self) -> list:
+    # ------------------- Maps ------------------------
+    
+    def tool_get_maps_from_backend(self) -> list:
         try:
             response = requests.get("http://0.0.0.0:9009/maps/maps", json={}, params={}, timeout=2.0)
             response_body = response.json()
@@ -89,3 +91,12 @@ class GetInfo:
             message = f"Server NOT available. {ex}"
 
         return message
+
+    def tool_classify_maps_intention(self, text: str) -> Dict[str,Any]:
+        """ Navigate to a place by name, 
+            If simulate=True, only simulate the navigation (no movement commands)
+            If simulate=False, emit a nav command via callback"""
+        # auto simulate por intención
+        t = norm_text(text)
+        is_count = any(w in t for w in MAPS_COUNT_RE.findall(t)) 
+        return True if is_count else False
