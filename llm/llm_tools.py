@@ -1,22 +1,20 @@
 from __future__ import annotations
 from typing import Dict, Any, Optional, Callable
-import math, json, logging, requests
+import math, json, logging, requests, os
 
-from llm.llm_data import Battery
+from llm.llm_data import Battery, PosesIndex
 from llm.llm_patterns import ORIENT_INTENT_RE, MAPS_COUNT_RE
-from config.settings import MAX_MOVE_DISTANCE_LLM
+from config.settings import MAX_MOVE_DISTANCE_LLM, PATH_POSES
 from llm.llm_intentions import norm_text, extract_place_query
 
 class GetInfo:
     def __init__(
         self,
-        poses,
         last_batt: Optional[Battery] = None,
         on_nav_cmd: Optional[Callable[[Dict[str, Any]], None]] = None,
     ) -> None:
-        
         self.log = logging.getLogger("Publish") 
-        self.poses = poses
+        self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.last_batt: Optional[Battery] = None or last_batt
 
         self.on_nav_cmd = on_nav_cmd or (lambda payload: print(f"[nav_cmd] {json.dumps(payload, ensure_ascii=False)}"))

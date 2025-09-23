@@ -26,7 +26,6 @@
 - [Configuration](#configuration)
 - [Quick Start](#quick-start)
 - [Usage](#usage)
-- [Project Structure](#project-structure)
 - [Contributing](#contributing) 
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
@@ -87,8 +86,8 @@ You’re done when you see:
 > [!WARNING] 
 > LLMs and audio models can be large. Ensure you have enough **disk space** and **RAM/VRAM** for your chosen settings.
 
-### 🔧 General Settings (`config/config.py`)
-All runtime settings live in **`config/config.py`**. They are plain Python constants—edit the file and restart your nodes to apply changes.
+### 🔧 General Settings (`config/settings.py`)
+All runtime settings live in **`config/settings.py`**. They are plain Python constants—edit the file and restart your nodes to apply changes.
 
 ### 📦 Model catalog (`config/models.yml`)
 Define which models Octybot uses (LLM, STT, TTS, wake-word) along with their URLs and sample rates.

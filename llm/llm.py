@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import List
 import logging, json, os
 
-from config.settings import PATH_GENERAL_RAG, PATH_POSES
+from config.settings import PATH_GENERAL_RAG
 from llm.llm_intentions import split_and_prioritize
-from llm.llm_data import GENERAL_RAG, PosesIndex
+from llm.llm_data import GENERAL_RAG
 from llm.llm_client import LLM
 from llm.llm_router import Router
 from llm.llm_tools import GetInfo
@@ -18,9 +18,8 @@ class LlmAgent:
         
         self.log = logging.getLogger("LLM")     
         self.general_rag = GENERAL_RAG(os.path.expanduser(PATH_GENERAL_RAG)) 
-        self.poses = PosesIndex(os.path.expanduser(PATH_POSES)) 
         self.llm = LLM(model_path =  model_path)
-        self.get_info = GetInfo(self.poses)
+        self.get_info = GetInfo()
         self.router = Router(self.llm, self.get_info)
         
         self.log.info("LLM initialized - Octybot listo ✅ ")
@@ -55,9 +54,9 @@ if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
 
     from utils.utils import LoadModel
-
     model =  LoadModel()
     app = LlmAgent(model_path = str(model.ensure_model("llm")[0]))
+    
     last_batt=app.get_info.set_battery(percentage=0.67),
 
     print("Prueba de LLM 🤖:")
