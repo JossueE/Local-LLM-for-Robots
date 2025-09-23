@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Dict, Any, Optional, Callable
-import math, json, logging, requests, os
+import math, json, logging, requests, os, subprocess
 
 from llm.llm_data import Battery, PosesIndex
 from llm.llm_patterns import ORIENT_INTENT_RE, MAPS_COUNT_RE
@@ -57,13 +57,24 @@ class GetInfo:
     
     def publish_natural_move(self, yaw:float , dist:float, flag:bool, max_dist_m: float = MAX_MOVE_DISTANCE_LLM) -> str:
         """ Emit a natural_move command via callback """
-        adjusted_dist = max(-max_dist_m, min(max_dist_m, float(dist)))
         if flag:
             yaw = math.radians(yaw)
+        
+        adjusted_dist = max(-max_dist_m, min(max_dist_m, float(dist)))
+        adjusted_yaw = max(-12.57, min(12.57, float(yaw)))
+
         payload = {"yaw":yaw, "distance":adjusted_dist, "flag":flag}
         self.on_nav_cmd({"type": "natural_move", **payload})
-        if dist > max_dist_m:
+
+        if adjusted_dist != 0:
+            resultado = subprocess.run(['ros2', 'run', 'robot_core', 'drive_calibrator.py', 'l', str(adjusted_dist)], capture_output=True, text=True)
+        elif adjusted_yaw != 0:
+            resultado = subprocess.run(['ros2', 'run', 'robot_core', 'drive_calibrator.py', 'a', str(adjusted_yaw)], capture_output=True, text=True)
+        self.log.info(resultado)
+        if -max_dist_m > dist or dist > max_dist_m:
             return f"Estoy avanzando, pero recuerda que no puedo avanzar más de {max_dist_m} metros"
+        elif -12.57 > yaw or yaw > 12.57:
+            return f"Estoy girando, pero recuerda que no puedo dar más de 2 vueltas sobre mi propio eje"
         elif yaw != 0 or adjusted_dist != 0:
             return "Avanzando"
         return "No encontré destino, ni instucción de movimiento."

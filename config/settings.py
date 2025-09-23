@@ -18,7 +18,7 @@ CONTEXT_LLM = 1024 #The size of the context that your model is going to receive
 THREADS_LLM = os.cpu_count() or 8 #Threads that has available your model 
 N_BACH_LLM = 512 #The size of the info that gpu or cpu is going to process
 GPU_LAYERS_LLM = 0 #How many layers your model is going to use in GPU, for CPU use "0"
-MAX_MOVE_DISTANCE_LLM = 2.0 #Max distance in meters of the robot movement
+MAX_MOVE_DISTANCE_LLM = 5.0 #Max distance in meters of the robot movement
 CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recommended to change unless you change the model
 
 """Information - data"""
@@ -46,7 +46,7 @@ SAMPLE_RATE_STT = 16000 #Whisper works at this sample_rate doesn't change unless
 #IMPORTANT the system is prepare to work without this variable, but we have it for noisy environments, as a protection method
 LISTEN_SECONDS_STT = 5.0 #The time of the phrase that the tts is going to be active after de wake_word detection
 MIN_SILENCE_MS_TO_DRAIN_STT = 50 # 500 ms of time required to drain the buffer, if you want 1 second, put 100
-SELF_VOCABULARY_STT = "Octybot, ve a la enfermería, PM2"
+SELF_VOCABULARY_STT = "Octybot, ve a la enfermería, PM2" 
 
 """Wake-Word"""
 ACTIVATION_PHRASE_WAKE_WORD = "ok robot" #The Activation Word that the model is going to detect
