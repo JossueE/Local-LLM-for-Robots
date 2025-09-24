@@ -67,10 +67,10 @@ class GetInfo:
         self.on_nav_cmd({"type": "natural_move", **payload})
 
         if adjusted_dist != 0:
-            resultado = subprocess.run(['ros2', 'run', 'rp_nav2', 'drive_calibrator.py', 'linear', str(adjusted_dist)], capture_output=True, text=True)
+            subprocess.Popen(['ros2', 'run', 'rp_nav2', 'drive_calibrator.py', 'linear', str(adjusted_dist)], start_new_session=True)
         elif adjusted_yaw != 0:
-            resultado = subprocess.run(['ros2', 'run', 'rp_nav2', 'drive_calibrator.py', 'angular', str(adjusted_yaw)], capture_output=True, text=True)
-        self.log.info(resultado)
+            subprocess.Popen(['ros2', 'run', 'rp_nav2', 'drive_calibrator.py', 'angular', str(adjusted_yaw)], start_new_session=True)
+
         if -max_dist_m > dist or dist > max_dist_m:
             return f"Estoy avanzando, pero recuerda que no puedo avanzar más de {max_dist_m} metros"
         elif -12.57 > yaw or yaw > 12.57:
