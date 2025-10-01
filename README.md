@@ -9,9 +9,9 @@
 ---
 ## 📝 Flowchart
 <div style="overflow:auto; border:1px solid #eaecef; padding:6px;">
-  <object data="Diagrama de Flujo.svg" type="image/svg+xml" width="4400">
+  <object data="Local-LLM-for-Robots.svg" type="image/svg+xml" width="4400">
     <!-- Fallback para visores viejos -->
-    <img src="/docs/Diagrama de Flujo.svg" alt="Flowchart" />
+    <img src="/docs/Local-LLM-for-Robots.svg" alt="Flowchart" />
   </object>
 </div>
 
