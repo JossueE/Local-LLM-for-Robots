@@ -1,134 +1,330 @@
 {
-    "knowledge": [
-      {
-        "triggers": [
-          "cómo te llamas",
-          "cuál es tu nombre",
-          "tienes apellido",
-          "su nombre es"
-        ],
-        "answer": "Mi nombre es Octybot"
-      },
-      {
-        "triggers": [
-          "Quién eres?",
-          "¿Qué eres?"
-        ],
-        "answer": "Soy Octybot, tu amigo robot."
-      },
-      {
-        "triggers": [
-          "quién te creó"
-        ],
-        "answer": "Jossue, el ingeniero chido"
-      },
-      {
-        "triggers": [
-          "¿Qué es Octopy?",
-          "¿A qué se dedica Octopy?"
-        ],
-        "answer": "Somos una empresa mexicana de tecnología que crea soluciones a medida, integrando software, hardware, inteligencia artificial y robótica."
-      },
-      {
-        "triggers": [
-          "¿Qué los hace diferentes de otras empresas de tecnología?",
-          "¿Por qué debería elegirlos?"
-        ],
-        "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el hardware y software a tus necesidades."
-      },
-      {
-        "triggers": [
-          "¿Quiénes son sus clientes?",
-          "¿Con qué tipo de empresas trabajan?"
-        ],
-        "answer": "Trabajamos con agencias, marcas, gobierno y cualquier empresa que busque innovar tecnológicamente."
-      },
-      {
-        "triggers": [
-          "¿Qué tipos de robots ofrecen?",
-          "¿Cuáles son sus modelos de robots?"
-        ],
-        "answer": "Tenemos tres modelos principales: Marko, para marketing en punto de venta; Octybot, para ser anfitrión en eventos; y Centinel, para vigilancia y seguridad."
-      },
-      {
-        "triggers": [
-          "¿Qué es el robot Marko y para qué sirve?",
-          "Háblame de Marko"
-        ],
-        "answer": "Es un robot promotor autónomo. Interactúa con clientes, entrega productos y recolecta datos demográficos en el punto de venta."
-      },
-      {
-        "triggers": [
-          "¿Cómo puedo tener a Marko en mi negocio?",
-          "¿Venden o rentan a Marko?"
-        ],
-        "answer": "Ofrecemos ambas opciones: puedes comprarlo de forma directa o rentarlo a largo plazo, por uno o dos años."
-      },
-      {
-        "triggers": [
-          "¿Cuánto cuesta el robot Marko?",
-          "¿Cuál es el precio de Marko?"
-        ],
-        "answer": "El costo base es de $499,999 pesos más IVA. El precio final depende del nivel de personalización que requieras."
-      },
-      {
-        "triggers": [
-          "¿Qué hace el robot Octybot?",
-          "¿Para qué sirve Octybot?"
-        ],
-        "answer": "Es un anfitrión para eventos. Da la bienvenida, ofrece información, interactúa con los asistentes y puede entregar muestras o folletos."
-      },
-      {
-        "triggers": [
-          "¿Cómo funciona la renta de un Octybot?"
-        ],
-        "answer": "Se renta por día o por evento. Nuestro servicio siempre incluye un operador especializado para garantizar su funcionamiento perfecto."
-      },
-      {
-        "triggers": [
-          "¿Cuál es el precio de la renta de Octybot?",
-          "¿Cuánto cuesta rentar un Octybot?"
-        ],
-        "answer": "El servicio de renta por día inicia desde $29,950 pesos."
-      },
-      {
-        "triggers": [
-          "¿Qué es y qué hace el robot Centinel?",
-          "Háblame de Centinel"
-        ],
-        "answer": "Es un robot de vigilancia autónoma para seguridad perimetral. Usa una cámara 360° e inteligencia artificial para detectar intrusos y alertar en tiempo real."
-      },
-      {
-        "triggers": [
-          "¿Puedo comprar un robot Centinel?",
-          "¿Cuál es su precio de Centinel?"
-        ],
-        "answer": "Sí, está disponible para venta. Para darte una cotización precisa, te pedimos contactar a un ejecutivo para entender tus necesidades de seguridad."
-      },
-      {
-        "triggers": [
-          "¿Qué es DatIA Demographics?"
-        ],
-        "answer": "Es nuestro software de visión por computadora que cuenta y analiza el flujo de personas, segmentándolas anónimamente por género y edad."
-      },
-      {
-        "triggers": [
-          "¿Cómo se relaciona el software DatIA con los robots?"
-        ],
-        "answer": "Lo integramos en nuestros robots, como Marko, para que además de promover, puedan recolectar datos valiosos del consumidor en tiempo real."
-      },
-      {
-        "triggers": [
-          "Me interesa uno de sus productos, ¿cuál es el siguiente paso?",
-          "¿Cómo los contacto?"
-        ],
-        "answer": "Lo ideal es conversar con un ejecutivo. Nos enfocamos en entender tu necesidad para poder ofrecerte la solución tecnológica adecuada."
-      },
-      {
-        "triggers": [
-          "¿Por qué no publican todos los precios?"
-        ],
-        "answer": "Porque nuestras soluciones son personalizadas. Preferimos hablar contigo para darte una cotización exacta según tus requerimientos específicos."
-      }
-    ]
-  }
+  "knowledge": [
+    {
+      "triggers": [
+        "cómo te llamas",
+        "cuál es tu nombre",
+        "tienes apellido",
+        "su nombre es",
+        "dime tu nombre",
+        "me dices tu nombre",
+        "y tu nombre es?",
+        "te pusieron algún nombre?",
+        "tu nombre?",
+        "nombre?",
+        "podrías decirme tu nombre",
+        "eres Octybot, cierto?"
+      ],
+      "answer": "Mi nombre es Octybot"
+    },
+    {
+      "triggers": [
+        "Quién eres?",
+        "¿Qué eres?",
+        "y tú quién eres",
+        "preséntate",
+        "con quién hablo",
+        "eres un robot?",
+        "eres una persona?",
+        "eres un bot?",
+        "me dices qué eres?",
+        "eres una IA?",
+        "eres inteligencia artificial?",
+        "qué tipo de bot eres?",
+        "eres humano?",
+        "describete"
+      ],
+      "answer": "Soy Octybot, tu amigo robot."
+    },
+    {
+      "triggers": [
+        "quién te creó",
+        "quién te hizo",
+        "quién te desarrolló",
+        "quién te programó",
+        "quién es tu creador",
+        "quiénes son tus creadores",
+        "quién te fabricó",
+        "quién está detrás de ti?",
+        "quién es el responsable de ti?",
+        "de dónde saliste?",
+        "tienes un creador?"
+      ],
+      "answer": "Jossue, el ingeniero chido"
+    },
+    {
+      "triggers": [
+        "¿Qué es Octopy?",
+        "¿A qué se dedica Octopy?",
+        "qué hace Octopy",
+        "explícame qué es Octopy",
+        "háblame de la empresa Octopy",
+        "quiénes son Octopy",
+        "información sobre Octopy",
+        "a qué se dedica la empresa",
+        "cuál es el giro de Octopy?",
+        "qué tipo de compañía es Octopy?",
+        "dame un resumen de la empresa",
+        "Octopy a qué se dedica?"
+      ],
+      "answer": "Somos una empresa mexicana de tecnología que crea soluciones a medida, integrando software, hardware, inteligencia artificial y robótica."
+    },
+    {
+      "triggers": [
+        "¿Qué los hace diferentes de otras empresas de tecnología?",
+        "¿Por qué debería elegirlos?",
+        "cuál es su ventaja competitiva",
+        "qué los hace especiales",
+        "por qué son mejores que la competencia",
+        "cuál es su propuesta de valor",
+        "en qué se diferencian de otros",
+        "qué ofrecen que otros no",
+        "por qué contratarlos a ustedes y no a otros?",
+        "qué gano yo si los elijo?",
+        "cuál es su diferenciador clave?",
+        "qué los hace únicos en el mercado?"
+      ],
+      "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el hardware y software a tus necesidades."
+    },
+    {
+      "triggers": [
+        "¿Quiénes son sus clientes?",
+        "¿Con qué tipo de empresas trabajan?",
+        "para quién trabajan",
+        "menciona algunos de sus clientes",
+        "qué perfiles de clientes tienen",
+        "ejemplos de sus clientes",
+        "le venden a gobierno?",
+        "tienen casos de éxito?",
+        "con qué marcas importantes han trabajado?",
+        "quién ha contratado sus servicios?",
+        "a qué industrias sirven?"
+      ],
+      "answer": "Trabajamos con agencias, marcas, gobierno y cualquier empresa que busque innovar tecnológicamente."
+    },
+    {
+      "triggers": [
+        "¿Qué tipos de robots ofrecen?",
+        "¿Cuáles son sus modelos de robots?",
+        "qué robots tienen",
+        "qué robots fabrican",
+        "cuáles son sus robots disponibles",
+        "qué modelos de robots manejan",
+        "venden robots?",
+        "qué clases de robots tienen",
+        "cuál es su catálogo de robots?",
+        "qué soluciones robóticas ofrecen?",
+        "muéstrame su línea de robots",
+        "cuántos modelos de robots tienen?"
+      ],
+      "answer": "Tenemos tres modelos principales: Marko, para marketing en punto de venta; Octybot, para ser anfitrión en eventos; y Centinel, para vigilancia y seguridad."
+    },
+    {
+      "triggers": [
+        "¿Qué es el robot Marko y para qué sirve?",
+        "Háblame de Marko",
+        "qué hace el robot Marko",
+        "para qué es Marko",
+        "cuáles son las funciones de Marko",
+        "información sobre el robot Marko",
+        "descríbeme a Marko",
+        "explícame sobre Marko",
+        "características del robot Marko",
+        "especificaciones de Marko",
+        "para qué tipo de negocio sirve Marko?",
+        "cómo ayuda Marko a las ventas?"
+      ],
+      "answer": "Es un robot promotor autónomo. Interactúa con clientes, entrega productos y recolecta datos demográficos en el punto de venta."
+    },
+    {
+      "triggers": [
+        "¿Cómo puedo tener a Marko en mi negocio?",
+        "¿Venden o rentan a Marko?",
+        "Marko está a la venta?",
+        "puedo rentar a Marko?",
+        "cómo adquiero un robot Marko",
+        "cuáles son los modelos de adquisición para Marko",
+        "se puede comprar o solo rentar Marko?",
+        "me interesa Marko, cómo lo consigo",
+        "cuál es el esquema de comercialización de Marko?",
+        "qué planes de renta tienen para Marko?",
+        "se puede hacer leasing de Marko?",
+        "Marko es un producto o un servicio?"
+      ],
+      "answer": "Ofrecemos ambas opciones: puedes comprarlo de forma directa o rentarlo a largo plazo, por uno o dos años."
+    },
+    {
+      "triggers": [
+        "¿Cuánto cuesta el robot Marko?",
+        "¿Cuál es el precio de Marko?",
+        "qué precio tiene Marko",
+        "cuánto vale Marko",
+        "costo de Marko",
+        "precio del robot Marko",
+        "me das el costo de Marko por favor",
+        "cuánto tengo que invertir en Marko?",
+        "costo de adquisición de Marko",
+        "dame el precio de Marko ya",
+        "valor del robot Marko"
+      ],
+      "answer": "El costo base es de $499,999 pesos más IVA. El precio final depende del nivel de personalización que requieras."
+    },
+    {
+      "triggers": [
+        "¿Qué hace el robot Octybot?",
+        "¿Para qué sirve Octybot?",
+        "háblame del robot Octybot",
+        "cuáles son las funciones de Octybot el robot",
+        "para qué se usa el robot Octybot",
+        "información sobre el robot anfitrión",
+        "qué es Octybot para eventos",
+        "características del robot Octybot",
+        "cómo funciona Octybot en un evento?",
+        "qué puede hacer Octybot en una recepción?",
+        "beneficios de usar a Octybot"
+      ],
+      "answer": "Es un anfitrión para eventos. Da la bienvenida, ofrece información, interactúa con los asistentes y puede entregar muestras o folletos."
+    },
+    {
+      "triggers": [
+        "¿Cómo funciona la renta de un Octybot?",
+        "puedo rentar un Octybot para un evento",
+        "cuánto cuesta rentar un Octybot",
+        "cómo es el servicio de renta de Octybot",
+        "qué incluye la renta del robot",
+        "se puede rentar por un día?",
+        "manejan renta de robots para eventos?",
+        "proceso para rentar un Octybot",
+        "precio de renta por día",
+        "qué necesito para rentar un robot para mi evento?",
+        "disponibilidad de Octybot para renta"
+      ],
+      "answer": "Se renta por día o por evento. Nuestro servicio siempre incluye un operador especializado para garantizar su funcionamiento perfecto."
+    },
+    {
+      "triggers": [
+        "¿Qué es y qué hace el robot Centinel?",
+        "Háblame de Centinel",
+        "para qué sirve Centinel",
+        "qué hace el robot de seguridad",
+        "cuáles son las capacidades de Centinel",
+        "información sobre el robot de vigilancia",
+        "cómo funciona Centinel",
+        "explícame sobre Centinel",
+        "características del robot Centinel",
+        "especificaciones técnicas de Centinel",
+        "qué tecnología de detección usa Centinel?",
+        "Centinel puede reemplazar a un guardia?"
+      ],
+      "answer": "Es un robot de vigilancia autónoma para seguridad perimetral. Usa una cámara 360° e inteligencia artificial para detectar intrusos y alertar en tiempo real."
+    },
+    {
+      "triggers": [
+        "¿Puedo comprar un robot Centinel?",
+        "¿Cuál es su precio de Centinel?",
+        "venden el robot Centinel",
+        "cuánto cuesta Centinel",
+        "cómo puedo comprar un Centinel",
+        "me interesa un Centinel, cuál es el precio",
+        "dan cotizaciones para Centinel?",
+        "quiero una cotización para Centinel",
+        "cuál es el proceso de compra de un Centinel?",
+        "Centinel se renta o solo se vende?",
+        "cómo puedo adquirir un robot de vigilancia?"
+      ],
+      "answer": "Sí, está disponible para venta. Para darte una cotización precisa, te pedimos contactar a un ejecutivo para entender tus necesidades de seguridad."
+    },
+    {
+      "triggers": [
+        "¿Qué es DatIA Demographics?",
+        "qué es DatIA",
+        "para qué sirve el software DatIA",
+        "qué hace DatIA Demographics",
+        "háblame de su software de visión",
+        "explícame qué es DatIA",
+        "información sobre DatIA",
+        "qué métricas puede medir DatIA?",
+        "cómo funciona la tecnología de DatIA?",
+        "DatIA cumple con leyes de privacidad?",
+        "su software de análisis demográfico"
+      ],
+      "answer": "Es nuestro software de visión por computadora que cuenta y analiza el flujo de personas, segmentándolas anónimamente por género y edad."
+    },
+    {
+      "triggers": [
+        "¿Cómo se relaciona el software DatIA con los robots?",
+        "los robots usan DatIA?",
+        "qué robots tienen integrado DatIA?",
+        "para qué le sirve DatIA a un robot?",
+        "cómo funciona DatIA en los robots",
+        "DatIA es parte del hardware de los robots?",
+        "cómo se conectan DatIA y los robots",
+        "qué valor agregado le da DatIA a los robots?",
+        "puedo tener un robot sin el software DatIA?",
+        "DatIA viene incluido en la compra del robot?",
+        "para qué Marko necesita DatIA?"
+      ],
+      "answer": "Lo integramos en nuestros robots, como Marko, para que además de promover, puedan recolectar datos valiosos del consumidor en tiempo real."
+    },
+    {
+      "triggers": [
+        "Me interesa uno de sus productos, ¿cuál es el siguiente paso?",
+        "¿Cómo los contacto?",
+        "quiero más información",
+        "cómo puedo ponerme en contacto con ustedes",
+        "cuál es su teléfono o email",
+        "quiero una cotización",
+        "necesito hablar con un vendedor",
+        "me interesa, qué hago ahora",
+        "quiero agendar una llamada",
+        "pueden contactarme por favor?",
+        "dónde están ubicados?",
+        "cómo puedo ver una demostración?",
+        "necesito asesoría"
+      ],
+      "answer": "Lo ideal es conversar con un ejecutivo. Nos enfocamos en entender tu necesidad para poder ofrecerte la solución tecnológica adecuada."
+    },
+    {
+      "triggers": [
+        "Tienen un catálogo con precios?",
+        "Para saber el precio, ¿es necesario hablar con un vendedor?",
+        "¿No manejan precios fijos?",
+        "Me puedes dar un rango de precios al menos?",
+        "¿Por qué debo solicitar una cotización para todo?",
+        "Si no publican los precios, ¿es porque son muy caros?",
+        "Quisiera ver sus precios antes de llamar.",
+        "por qué el modelo de precios es bajo cotización?",
+        "no hay un precio de lista?",
+        "es muy variable el precio final?",
+        "por qué no son transparentes con los precios?"
+      ],
+      "answer": "Porque nuestras soluciones son personalizadas. Preferimos hablar contigo para darte una cotización exacta según tus requerimientos específicos."
+    },
+    {
+      "triggers": [
+        "hola",
+        "buenos dias",
+        "buenas tardes",
+        "buenas noches",
+        "hey",
+        "que tal",
+        "holi",
+        "saludos",
+        "buen día"
+      ],
+      "answer": "¡Hola! Soy Octybot. ¿En qué puedo ayudarte hoy?"
+    },
+    {
+      "triggers": [
+        "como estás",
+        "qué tal estás",
+        "cómo te va",
+        "cómo te encuentras",
+        "todo bien?",
+        "que tal",
+        "estás bien?"
+      ],
+      "answer": "¡Funcionando a la perfección! Mis circuitos están listos para responder todas tus preguntas sobre robótica y tecnología."
+    }
+  ]
+}
