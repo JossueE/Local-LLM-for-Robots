@@ -33,6 +33,7 @@
 ---
 
 <h2 id="installation">🛠️ Installation</h2>
+
 > [!IMPORTANT]
 > This implementation was tested with Ubuntu 22.04 and Python 3.10.12 
 
