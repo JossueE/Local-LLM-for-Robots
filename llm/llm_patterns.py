@@ -1,4 +1,46 @@
 import re
+#-------------------------------------------------------------#
+# Minimal Regex Cheat-Sheet (Python)
+
+# Anchors & Boundaries
+# ^ / $ → start / end of string.
+# \b → word boundary (works well with accents in Python 3).
+# (?<!\w) / (?!\w) → negative lookbehind/lookahead: no word char on the left/right.
+# Example: (?<!\w)hola(?!\w) matches the standalone word "hola", not "holanda".
+
+# Groups
+# ( ... ) → capturing group.
+# (?: ... ) → non-capturing group (faster, no backreferences).
+# (?P<name> ... ) → named capturing group (better readability).
+# Example: (?P<dest>.+?) captures the destination into the group named "dest".
+
+# Alternation
+# A|B|C → “A or B or C”.
+# Order alternatives from more specific to more general to avoid over-matching.
+# Example: luego|despues|entonces
+
+# Quantifiers
+# ? (0–1), * (0–∞), + (1–∞), {m,n} (range).
+# +?, *?, ?? → lazy (minimal) versions.
+# Example: (.+?) (?=\s+(y|luego|…)|\s*$) → capture minimally up to connector or end (like BEST_CONNECTOR_RE).
+
+# Character Classes
+# \s (whitespace), \w (letter/digit/_), \d (digit).
+# [abc] (one of a/b/c), [^abc] (anything except a/b/c).
+# Accents: use sets like a[áa] or normalize the text first if you want to simplify.
+
+# Lookarounds (zero-width, non-consuming)
+# (?= ... ) → positive lookahead (must be followed by ...).
+# (?! ... ) → negative lookahead (must NOT be followed by ...).
+# (?<= ... ) / (?<! ... ) → positive/negative lookbehind (to the left).
+# Example: (?=\s+(?:y|luego|…)\b|\s*$) marks the end of the target without consuming it.
+
+# Flags / Modes
+# re.I or (?i) → ignore case.
+# re.X or (?x) → verbose mode (allow comments and newlines inside the pattern).
+# You can combine them: (?xi) or re.IGNORECASE | re.VERBOSE.
+# Example: re.compile(r""" ... """, re.I | re.X)
+
 
 #------------------------ Nexos ------------------------#
 
@@ -192,6 +234,20 @@ BATTERY_WORDS_RE = re.compile(r"""
 """)
 
 #------------------------ Mapas ------------------------#
+
+"""
+Here we have an example of how to define two actions within the same category. 
+In this case, we can check how many maps we have, and which maps are currently loaded. 
+
+To do this, we define the main trigger — in this case, MAPS_WORDS_RE — which contains 
+all the information for the "maps" category. Then we define MAPS_COUNT_RE, 
+which specifies the pattern for detecting requests about how many maps we have. 
+
+In our function "tool_classify_maps_intention" (implemented in llm_tools.py), 
+we add the logic to classify between categories. This serves as the minimal example. 
+
+A similar approach is used with the NAVIGATION category.
+"""
 
 MAPS_COUNT_RE = re.compile(r"""
 (?xi)

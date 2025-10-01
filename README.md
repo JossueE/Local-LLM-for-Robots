@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 
-**Local-LLM-for-Robots** is a python package that fuses a local Large Language Model with a full offline speech pipeline so robots can understand and respond to natural language without the cloud.
+**Local-LLM-for-Robots** is a python package that fuses a local Large Language Model with a full offline speech pipeline so robots can understand and respond to natural language without the cloud. This repo includes everything about the `Wake Word (activation word)` -> `STT (speech-to-text)` -> `LLM Module` -> `TTS (text-to-speech)` every module is organize in different folders. But If you want more details about the `LLM Module`, you can check the `README.md`that is into the `/llm` folder.
 
 ---
 ## 📝 Flowchart
@@ -34,18 +34,27 @@
 
 <h2 id="installation">🛠️ Installation</h2>
 > [!IMPORTANT]
-> Ensure ROS2 Humble and Python ≥3.10 are installed before continuing.
+> This implementation was tested with Ubuntu 22.04 and Python 3.10.12 
 
 ### Prerequisites
-- Ubuntu 22.04
-- Python 3.10.12 
-- Git, CMake, colcon
+- Git, CMake
 - (Optional) NVIDIA CUDA for GPU acceleration
 
 ### Setup
 ```bash
 sudo apt update
-sudo apt install -y python3-dev python3-venv build-essential portaudio19-dev curl unzip ffmpeg
+
+# --- General installations ---
+sudo apt install -y python3-dev python3-venv build-essential curl unzip
+
+# --- STT (Speech-to-Text) ---
+sudo apt install -y portaudio19-dev ffmpeg
+
+# --- TTS (Text-to-Speech) ---
+# ffmpeg is already installed above, uncomment if you prefer to keep it separate
+# sudo apt install -y ffmpeg
+
+# --- LLM (YAML manipulation) ---
 sudo snap install yq
 ```
 
@@ -144,16 +153,25 @@ python -m tts.text_to_speech
 
 ### LLM Module
 
-#### Agent intents (`handle(data, tipo)`)
-| `tipo`     | What it does | Input `data` | Output shape |
-|---|---|---|---|
-| `rag` | Returns `data` as-is (external RAG already resolved). |  Pre-composed **string** from your RAG - `general_rag.json`| `str` |
-| `general` | Free-form Q&A via `llm.answer_general`. | Question | `str` |
-| `battery` | Reads `%` via `tool_get_batt()`. | Reads `Battery` status| `str` like `Mi batería es: 84.0%` (or no-reading msg) |
-| `pose` | Reads AMCL pose via `tool_get_pose()`. | Reads `Pose` status | `str` (no pose) **or** JSON `{"x","y","yaw_deg","frame"}` |
-| `navigate` | Navigate to a named place or generate a short motion. Tries `tool_nav(data)` first (GENERAL_RAG/`poses.json`): if found, replies **"Voy"** (execute) or **"Por allá"** (indicate/simulate). If not found, falls back to `llm.plan_motion(data)` → `_clamp_motion(...)` → `natural_move_llm(...)`. | Pre-composed string from your RAG - poses.json and `str` Natural-language place or motion command (e.g., `ve a la enfermería`, `gira 90° y avanza 0.5 m`). | Usually `str`. On fallback may return a **tuple**: `(mensaje, '{"yaw": <deg>, "distance": <m>}' )`. |
+This is a **Minimal Example** of what you can do with this package.  
+Here you will find examples of how to run commands in the terminal, trigger actions based on pattern matches, retrieve information from an endpoint, and more.  
 
-> If you consume the agent’s reply topic, handle both cases for `navigate`: always speak/log the **string**; optionally route the **JSON** telemetry if present.
+> [!TIP]  
+> When integrating this into your system, consider using the power of the LLM **only when truly necessary**.  
+> In most cases, tasks can be solved with regular expressions, consuming information from a RAG, running commands in the terminal, or calling an endpoint.
+
+#### Agent Intents (`handle(data, tipo)`)
+| `tipo`     | What it does | Input `data` | Output shape | What it represents |
+|------------|--------------|---------------|--------------|--------------------|
+| `rag`      | Returns `data` as-is (external RAG already resolved). | Pre-composed **string** from your RAG (e.g., `general_rag.json`) | `str` | Consult information from a RAG or dataset. |
+| `general`  | Free-form Q&A via `llm.answer_general`. | Question | `str` | Minimal example of how to implement the LLM for general queries. |
+| `battery`  | Reads battery percentage via `tool_get_batt()`. | Reads **Battery** status | `str` like `Mi batería es: 84.0%` (or a “no reading” message) | Retrieve system information. |
+| `maps`     | Reads maps via `tool_get_maps_from_backend()` and classifies between “return maps” and “the number of maps”. | Reads **Maps** from an endpoint | Either the number of maps or the list of maps | Minimal example of consuming an API. |
+| `navigate` | Navigates to a named place or generates a short motion. Attempts `tool_nav(data)` first (RAG/`poses.json`): if found, replies **"Voy"** (execute) or **"Por allá"** (indicate/simulate). If not found, falls back to `llm.plan_motion(data)` → `_clamp_motion(...)` → `natural_move_llm(...)`. | Pre-composed string from your RAG (`poses.json`) or a natural-language command (e.g., `ve a la enfermería`, `gira 90° y avanza 0.5 m`). | Usually `str`. On fallback may return a **tuple**: `(mensaje, '{"yaw": <deg>, "distance": <m>}' )`. | Represents full integration: minimal example of running terminal commands to execute actions (`publish_natural_move()`). |
+
+> If you consume the agent’s reply topic, handle both cases for `navigate`:  
+> - Always log or speak the **string**.  
+> - Optionally route the **JSON** telemetry if present.  
 
 ---
 

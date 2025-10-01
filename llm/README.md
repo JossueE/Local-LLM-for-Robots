@@ -165,6 +165,7 @@ All data lives in `config/data/` as **JSON**.
 
 > [!TIP]
 > When adding values, **store them in lowercase** (and normalize inputs to lowercase) to ensure consistent matching.
+> The system is prepared to receive unnormalized text, but I recommend normalizing it for greater reliability.
 
 ### General Q&A (RAG)
 Add entries to `config/data/general_rag.json`:
