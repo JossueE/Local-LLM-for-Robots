@@ -29,7 +29,10 @@ class Router:
         return data
     
     def general_response_llm(self, data: str)-> str: 
-        if USE_GENERAL_RESPONSES_LLM: return self.llm.answer_general(data) 
+        if USE_GENERAL_RESPONSES_LLM: 
+            return self.llm.answer_general(data) 
+        else: 
+            return self.default_handler(data)
     
     def battery_publisher(self, data: str)-> str: 
         battery = self.get_info.tool_get_battery() 
