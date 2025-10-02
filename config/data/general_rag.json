@@ -299,32 +299,6 @@
         "por qué no son transparentes con los precios?"
       ],
       "answer": "Porque nuestras soluciones son personalizadas. Preferimos hablar contigo para darte una cotización exacta según tus requerimientos específicos."
-    },
-    {
-      "triggers": [
-        "hola",
-        "buenos dias",
-        "buenas tardes",
-        "buenas noches",
-        "hey",
-        "que tal",
-        "holi",
-        "saludos",
-        "buen día"
-      ],
-      "answer": "¡Hola! Soy Octybot. ¿En qué puedo ayudarte hoy?"
-    },
-    {
-      "triggers": [
-        "como estás",
-        "qué tal estás",
-        "cómo te va",
-        "cómo te encuentras",
-        "todo bien?",
-        "que tal",
-        "estás bien?"
-      ],
-      "answer": "¡Funcionando a la perfección! Mis circuitos están listos para responder todas tus preguntas sobre robótica y tecnología."
     }
   ]
 }

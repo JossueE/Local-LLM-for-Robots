@@ -42,7 +42,6 @@ class GENERAL_RAG:
                         if isinstance(lst, list):
                             for it in lst:
                                 ans = it.get('answer','')
-                                ans = norm_text(ans)
                                 for trig in it.get('triggers',[]):
                                     trig = norm_text(trig)
                                     items.append({'q': trig, 'a': ans})
