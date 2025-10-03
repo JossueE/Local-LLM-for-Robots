@@ -49,7 +49,7 @@ class GetInfo:
         pose = self.poses.loockup(key)
         if 'error' in pose: return {"error":"destino_no_encontrado","q": key}
         # auto simulate por intención
-        t = norm_text(text)
+        t = norm_text(text, True)
         is_orient = any(w in t for w in ORIENT_INTENT_RE.findall(t)) 
         simulate = True if is_orient else False
         self.publish_nav_cmd(pose, simulate)
@@ -106,6 +106,6 @@ class GetInfo:
             If simulate=True, only simulate the navigation (no movement commands)
             If simulate=False, emit a nav command via callback"""
         # auto simulate por intención
-        t = norm_text(text)
+        t = norm_text(text, True)
         is_count = any(w in t for w in MAPS_COUNT_RE.findall(t)) 
         return True if is_count else False

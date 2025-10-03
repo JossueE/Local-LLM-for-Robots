@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Optional, Iterable
 from .llm_patterns import (COURTESY_RE, NEXOS_RE, SPLIT_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING, 
                            BEST_CONNECTOR_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, ARTICLE_PREFIX_RE)
 
-def norm_text(s: str) -> str:
+def norm_text(s: str, courtesy_flag: bool) -> str:
     """ Normalize text for matching:
     - lowercase
     - remove accents
@@ -14,13 +14,14 @@ def norm_text(s: str) -> str:
 
     s = unicodedata.normalize('NFD', s).encode('ascii', 'ignore').decode("ascii")
     s = re.sub(r'[^a-z0-9 ]+',' ', s.lower())
-    s = COURTESY_RE.sub(' ', s)
+    if courtesy_flag:
+        s = COURTESY_RE.sub(' ', s)
     return re.sub(r'\s+',' ', s).strip()
 
 def extract_place_query(t: str) -> str:
     """ From a text with a navigation intent, extract the place name or description.
     E.g. "ve a la cocina y luego para en el salón" -> "cocina" """
-    t = norm_text(t)
+    t = norm_text(t, True)
     # quita prefijo al inicio (ve/dirígete/dónde queda/etc.)
     t = MOVE_PREFIX_RE.sub('', t, count=1).strip()
 
@@ -47,7 +48,7 @@ def detect_intent(t: str, order: Optional[Iterable[str]] = None, normalizer=None
     If 'order' is given, use that order (otherwise use INTENT_PRIORITY).
     If 'normalizer' is given, use it to normalize the text before matching (otherwise use norm_text).
     Return the name of the first matching intent, or None if no match. """
-    nt = normalizer(t) if normalizer else t
+    nt = normalizer(t, True) if normalizer else t
     for name in (order or INTENT_PRIORITY):
         rex = INTENT_RES.get(name)
         if rex and rex.search(nt):
@@ -65,13 +66,17 @@ def split_and_prioritize(text: str, general_rag) -> List[Dict[str, Any]]:
     [{"kind": "battery", "params": {}},
      {"kind": "navigate", "params": {"data": "ve a la cocina"}}]    
     """
-    t = norm_text(text)
+    t = norm_text(text, True)
 
     parts = SPLIT_RE.split(t)
     clauses = [p.strip() for p in parts if p and not NEXOS_RE.fullmatch(p.strip())]
 
+    if not clauses:
+        clauses.append(norm_text(text, False))
+
     accions = []
     for c in clauses:
+        print(c, flush=True)
         # 1) Respuestas cortas por GENERAL_RAG si hay alta confianza
         var = best_hit(general_rag.loockup(c))
         if var.get('answer') and var.get('score', 0.0) >= 0.75:

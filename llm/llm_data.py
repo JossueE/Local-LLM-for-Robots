@@ -37,14 +37,16 @@ class GENERAL_RAG:
             try:
                 obj = json.loads(txt)
                 items: List[Dict[str,str]] = []
+                
                 if isinstance(obj, dict):
                     for _, lst in obj.items():
                         if isinstance(lst, list):
                             for it in lst:
                                 ans = it.get('answer','')
                                 for trig in it.get('triggers',[]):
-                                    trig = norm_text(trig)
-                                    items.append({'q': trig, 'a': ans})
+                                    trig = norm_text(trig, False)
+                                    if trig:
+                                        items.append({'q': trig, 'a': ans})
                 elif isinstance(obj, list):
                     items = obj
                 self.items = items
@@ -58,12 +60,12 @@ class GENERAL_RAG:
     def loockup(self, query: str) -> Dict[str, Any]:
         """ Simple exact or fuzzy match in the GENERAL_RAG. Returns dict with 'answer' and 'score' (0.0–1.0) """
         if not self.items:
-            return {"error":"general_rag_vacia","answer":"","score":0.0}
-        query = norm_text(query)
+            return {"error":"general_rag_vacia","answer":"","score":FUZZY_LOGIC_ACCURACY_GENERAL_RAG}
+        query = norm_text(query, False)
         best, best_s = None, 0.0
 
         for item in self.items:
-            q = norm_text(item.get('q',''))
+            q = norm_text(item.get('q',''), False)
             if q in query or query in q:
                 s = 1.0
             else:
@@ -93,7 +95,7 @@ class PosesIndex:
                 pose = Pose(x=p.get('x'), y=p.get('y'), yaw=p.get('yaw_deg',0.0), frame_id=p.get('frame','map'), name=p.get('name',''))
                 keys = [p.get('name','')] + p.get('aliases',[])
                 for k in keys:
-                    nk = norm_text(k)
+                    nk = norm_text(k, True)
                     if nk:
                         self.by_key[nk] = pose
         except Exception:
@@ -102,7 +104,7 @@ class PosesIndex:
 
     def loockup(self, name: str) -> Dict[str,Any]:
         """ Exact or fuzzy match of a place name to a Pose. Returns the Pose as dict, or {'error':'no_encontrado'} """
-        key = norm_text(extract_place_query(name) or name)
+        key = norm_text(extract_place_query(name) or name, True)
         #print(f"[llm_tools] {self.by_key}", flush=True)
         if key in self.by_key:
             p = self.by_key[key]
