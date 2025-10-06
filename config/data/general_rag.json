@@ -96,13 +96,15 @@
         "hacerme con",
         "vender un robot",
         "en cuanto sale",
-        "venta"
+        "venta",
+        "me venden"
 
       ],
       "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [
+        "cuanto dinero tendría que pagar por un robot",
         "cuanto cuesta la renta",
         "cuanto valdria la renta",
         "cuanto valdría rentar",
@@ -143,25 +145,12 @@
         "por qué contratarlos a ustedes y no a otros?",
         "qué gano yo si los elijo?",
         "cuál es su diferenciador clave?",
-        "qué los hace únicos en el mercado?"
+        "qué los hace únicos en el mercado?",
+        "por que debería trabajar con ustedes",
+        "que los hace diferentes"
+
       ],
       "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el hardware y software a tus necesidades."
-    },
-    {
-      "triggers": [
-        "¿Quiénes son sus clientes?",
-        "¿Con qué tipo de empresas trabajan?",
-        "para quién trabajan",
-        "menciona algunos de sus clientes",
-        "qué perfiles de clientes tienen",
-        "ejemplos de sus clientes",
-        "le venden a gobierno?",
-        "tienen casos de éxito?",
-        "con qué marcas importantes han trabajado?",
-        "quién ha contratado sus servicios?",
-        "a qué industrias sirven?"
-      ],
-      "answer": "Trabajamos con agencias, marcas, gobierno y cualquier empresa que busque innovar tecnológicamente."
     },
     {
       "triggers": [
@@ -176,7 +165,13 @@
         "cuál es su catálogo de robots?",
         "qué soluciones robóticas ofrecen?",
         "muéstrame su línea de robots",
-        "cuántos modelos de robots tienen?"
+        "cuántos modelos de robots tienen?",
+        "con que robots cuentan",
+        "cuáles son sus robots principales",
+        "que modelos tienen",
+        "que robots manejan"
+
+
       ],
       "answer": "Tenemos tres modelos principales: Marko, para marketing en punto de venta; Octybot, para ser anfitrión en eventos; y Centinel, para vigilancia y seguridad."
     },
