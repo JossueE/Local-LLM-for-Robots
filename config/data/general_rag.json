@@ -105,27 +105,11 @@
         "que los hace mejores diferentes",
         "como se diferencian de otros",
         "que tienen ustedes que otros no",
-        "por qué debería",
-        "por que ustedes"
+        "por qué debo debería",
+        "por que ustedes",
+        "que ventajas"
       ],
       "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el robot a tus necesidades."
-    },
-    {
-      "triggers": [
-        "comprar",
-        "adquirir",
-        "conseguir",
-        "obtener",
-        "comerciar",
-        "conseguir",
-        "hacerme con",
-        "vender un robot",
-        "en cuanto sale",
-        "venta",
-        "me venden"
-
-      ],
-      "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [
@@ -155,7 +139,7 @@
         "que costo tiene la renta"
 
       ],
-      "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos, pero estamos abiertos a negociar."
+      "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos. Pero también contamos con ventas, puedes ponerte en contacto con el equipo para llegar a un acuerdo."
     },
     {
       "triggers": [
