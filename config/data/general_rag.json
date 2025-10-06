@@ -2,8 +2,8 @@
   "knowledge": [
     {
       "triggers": [
-        "cómo te llamas",
-        "cuál es tu nombre",
+        "como te llamas",
+        "cual es tu nombre",
         "tienes apellido",
         "su nombre es",
         "dime tu nombre",
@@ -11,28 +11,33 @@
         "y tu nombre es?",
         "te pusieron algún nombre?",
         "tu nombre?",
-        "nombre?",
+        "nombre",
         "podrías decirme tu nombre",
-        "eres Octybot, cierto?"
+        "eres Octybot, cierto?",
+        "tienes algun apodo",
+        "como te puedo decir"
       ],
       "answer": "Mi nombre es Octybot"
     },
     {
       "triggers": [
-        "Quién eres?",
-        "¿Qué eres?",
+        "quien eres",
+        "que eres",
         "y tú quién eres",
         "preséntate",
         "con quién hablo",
-        "eres un robot?",
+        "eres un robot",
         "eres una persona?",
-        "eres un bot?",
+        "eres un bot",
         "me dices qué eres?",
-        "eres una IA?",
+        "eres una IA",
         "eres inteligencia artificial?",
-        "qué tipo de bot eres?",
-        "eres humano?",
-        "describete"
+        "qué tipo de bot eres",
+        "eres humano",
+        "describete",
+        "identificate",
+        "a que le estoy hablando"
+
       ],
       "answer": "Soy Octybot, tu amigo robot."
     },
@@ -48,24 +53,35 @@
         "quién está detrás de ti?",
         "quién es el responsable de ti?",
         "de dónde saliste?",
-        "tienes un creador?"
+        "tienes un creador?",
+        "por quien fuiste creado",
+        "quien es tu padre",
+        "quien te dio la vida",
+        "gracias a quien existes",
+        "como se llama la persona que te desarrolló"
       ],
       "answer": "Jossue, el ingeniero chido"
     },
     {
       "triggers": [
-        "¿Qué es Octopy?",
-        "¿A qué se dedica Octopy?",
-        "qué hace Octopy",
-        "explícame qué es Octopy",
-        "háblame de la empresa Octopy",
-        "quiénes son Octopy",
-        "información sobre Octopy",
+        "qué es octopi",
+        "hablame de Octopi",
+        "charlemos sobre de Octopi",
+        "hablemos sobre de Octopi",
+        "platicame de Octopi",
+        "a qué se dedica Octopi",
+        "qué hace Octopi",
+        "platicame acerca de octopi",
+        "explícame qué es octopi",
+        "háblame de la empresa octopi",
+        "quiénes son octopi",
+        "información sobre octopi",
         "a qué se dedica la empresa",
-        "cuál es el giro de Octopy?",
-        "qué tipo de compañía es Octopy?",
+        "cuál es el giro de octopi",
+        "qué tipo de compañía es octopi",
         "dame un resumen de la empresa",
-        "Octopy a qué se dedica?"
+        "octopi a qué se dedica",
+        "háblame acerca de la empresa que"
       ],
       "answer": "Somos una empresa mexicana de tecnología que crea soluciones a medida, integrando software, hardware, inteligencia artificial y robótica."
     },
@@ -74,11 +90,46 @@
         "cuanto cuesta la renta",
         "cuanto valdria la renta",
         "cuanto valdría rentar",
+        "cuanto me costaría rentar con ustedes",
         "con cuanto dinero me alcanza ",
         "en cuanto me sale rentar",
-        "cuanto me cobran rentar"
+        "cuanto me cobran rentar",
+        "en cuanto me podría salir la renta",
+        "cuanto me cobrarían por rentar", 
+        "cuanto vale la renta",
+        "cuanto dinero me costaría rentar",
+        "cuanto piden por rentar",
+        "el precio de una renta",
+        "a partir de qué precio está la renta",
+        "que tan cara es la renta",
+        "como en cuanto anda la renta",
+        "que precio tiene la renta",
+        "cuanto seria de la renta de un robot",
+        "cual es el precio de la renta",
+        "que vale la renta del robot",
+        "que precio tiene la renta",
+        "a como esta la renta del robot",
+        "cuanto pagaria por la renta",
+        "que costo tiene la renta"
+
       ],
       "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos, pero estamos abiertos a negociar."
+    },
+    {
+      "triggers": [
+        "cuánto cuesta el robot",
+        "cuál es el precio del robot",
+        "qué cuesta el robot",
+        "en cuanto sale el robot",
+        "cuánto vale el robot",
+        "costo del robot",
+        "precio del robot",
+        "cuánto tengo que invertir",
+        "costo de adquisición",
+        "dame el precio del robot",
+        "valor del robot"
+      ],
+      "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [
@@ -164,24 +215,6 @@
         "Marko es un producto o un servicio?"
       ],
       "answer": "Ofrecemos ambas opciones: puedes comprarlo de forma directa o rentarlo a largo plazo, por uno o dos años."
-    },
-    {
-      "triggers": [
-        "¿Cuánto cuesta el robot Marko?",
-        "¿Cuál es el precio de Marko?",
-        "qué precio tiene Marko",
-        "qué cuesta el robot",
-        "en cuanto sale el robot",
-        "cuánto vale Marko",
-        "costo de Marko",
-        "precio del robot Marko",
-        "me das el costo de Marko por favor",
-        "cuánto tengo que invertir en Marko?",
-        "costo de adquisición de Marko",
-        "dame el precio de Marko ya",
-        "valor del robot Marko"
-      ],
-      "answer": "El costo base es de 499 mil 999 pesos más IVA. El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [
