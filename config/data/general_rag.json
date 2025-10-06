@@ -87,6 +87,33 @@
     },
     {
       "triggers": [
+        "qué los hace diferentes de otras empresas de tecnología",
+        "por que escogerlos a ustedes",
+        "Por qué debería elegirlos",
+        "cuál es su ventaja competitiva",
+        "qué los hace especiales",
+        "por qué son mejores que la competencia",
+        "cuál es su propuesta de valor",
+        "en qué se diferencian de otros",
+        "qué ofrecen que otros no",
+        "por qué contratarlos a ustedes y no a otros?",
+        "qué gano yo si los elijo?",
+        "cuál es su diferenciador clave?",
+        "qué los hace únicos en el mercado?",
+        "por que debería trabajar con ustedes",
+        "que los hace diferentes",
+        "que los hace mejores diferentes",
+        "como se diferencian de otros",
+        "que tienen ustedes que otros no",
+        "por que debería rentarles un robot",
+        "por qué debería comprarles"
+
+
+      ],
+      "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el robot a tus necesidades."
+    },
+    {
+      "triggers": [
         "comprar",
         "adquirir",
         "conseguir",
@@ -131,26 +158,6 @@
 
       ],
       "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos, pero estamos abiertos a negociar."
-    },
-    {
-      "triggers": [
-        "¿Qué los hace diferentes de otras empresas de tecnología?",
-        "¿Por qué debería elegirlos?",
-        "cuál es su ventaja competitiva",
-        "qué los hace especiales",
-        "por qué son mejores que la competencia",
-        "cuál es su propuesta de valor",
-        "en qué se diferencian de otros",
-        "qué ofrecen que otros no",
-        "por qué contratarlos a ustedes y no a otros?",
-        "qué gano yo si los elijo?",
-        "cuál es su diferenciador clave?",
-        "qué los hace únicos en el mercado?",
-        "por que debería trabajar con ustedes",
-        "que los hace diferentes"
-
-      ],
-      "answer": "Somos fabricantes y desarrolladores directos, no revendedores. Esto nos permite personalizar completamente el hardware y software a tus necesidades."
     },
     {
       "triggers": [
