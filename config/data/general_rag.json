@@ -87,6 +87,22 @@
     },
     {
       "triggers": [
+        "comprar",
+        "adquirir",
+        "conseguir",
+        "obtener",
+        "comerciar",
+        "conseguir",
+        "hacerme con",
+        "vender un robot",
+        "en cuanto sale",
+        "venta"
+
+      ],
+      "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
+    },
+    {
+      "triggers": [
         "cuanto cuesta la renta",
         "cuanto valdria la renta",
         "cuanto valdría rentar",
@@ -113,19 +129,6 @@
 
       ],
       "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos, pero estamos abiertos a negociar."
-    },
-    {
-      "triggers": [
-        "comprar",
-        "adquirir",
-        "conseguir",
-        "obtener",
-        "comerciar",
-        "conseguir",
-        "hacerme con"
-
-      ],
-      "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [
