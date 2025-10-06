@@ -91,7 +91,6 @@
         "cuanto valdria la renta",
         "cuanto valdría rentar",
         "cuanto me costaría rentar con ustedes",
-        "con cuanto dinero me alcanza ",
         "en cuanto me sale rentar",
         "cuanto me cobran rentar",
         "en cuanto me podría salir la renta",
@@ -117,17 +116,14 @@
     },
     {
       "triggers": [
-        "cuánto cuesta el robot",
-        "cuál es el precio del robot",
-        "qué cuesta el robot",
-        "en cuanto sale el robot",
-        "cuánto vale el robot",
-        "costo del robot",
-        "precio del robot",
-        "cuánto tengo que invertir",
-        "costo de adquisición",
-        "dame el precio del robot",
-        "valor del robot"
+        "comprar",
+        "adquirir",
+        "conseguir",
+        "obtener",
+        "comerciar",
+        "conseguir",
+        "hacerme con"
+
       ],
       "answer": "El costo base de venta es de 499 mil 999 pesos más IVA. Pero también contamos con rentas, solo di okey robot cuanto cuesta la renta. Además, El precio final depende del nivel de personalización que requieras."
     },
