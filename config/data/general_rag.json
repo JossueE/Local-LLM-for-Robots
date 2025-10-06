@@ -71,6 +71,17 @@
     },
     {
       "triggers": [
+        "cuanto cuesta la renta",
+        "cuanto valdria la renta",
+        "cuanto valdría rentar",
+        "con cuanto dinero me alcanza ",
+        "en cuanto me sale rentar",
+        "cuanto me cobran rentar"
+      ],
+      "answer": "La renta de nuestros robot comienza en 25 mil pesos mexicanos, pero estamos abiertos a negociar."
+    },
+    {
+      "triggers": [
         "¿Qué los hace diferentes de otras empresas de tecnología?",
         "¿Por qué debería elegirlos?",
         "cuál es su ventaja competitiva",
