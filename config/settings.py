@@ -22,7 +22,7 @@ MAX_MOVE_DISTANCE_LLM = 5.0 #Max distance in meters of the robot movement
 CHAT_FORMAT_LLM = "chatml-function-calling" #NOT recommended to change unless you change the model
 
 """Information - data"""
-FUZZY_LOGIC_ACCURACY_GENERAL_RAG = 0.75 
+FUZZY_LOGIC_ACCURACY_GENERAL_RAG = 0.80
 FUZZY_LOGIC_ACCURACY_POSE = 0.70
 PATH_GENERAL_RAG = "config/data/general_rag.json"
 PATH_POSES = "config/data/poses.json"

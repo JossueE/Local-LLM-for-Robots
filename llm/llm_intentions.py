@@ -1,6 +1,7 @@
 import re
 import unicodedata
 from typing import List, Dict, Any, Optional, Iterable
+from config.settings import FUZZY_LOGIC_ACCURACY_GENERAL_RAG
 from .llm_patterns import (COURTESY_RE, NEXOS_RE, SPLIT_RE, INTENT_RES, INTENT_PRIORITY, INTENT_ROUTING, 
                            BEST_CONNECTOR_RE, MOVE_PREFIX_RE, TAIL_NEXOS_TRIM_RE, ARTICLE_PREFIX_RE)
 
@@ -79,7 +80,7 @@ def split_and_prioritize(text: str, general_rag) -> List[Dict[str, Any]]:
         print(c, flush=True)
         # 1) Respuestas cortas por GENERAL_RAG si hay alta confianza
         var = best_hit(general_rag.loockup(c))
-        if var.get('answer') and var.get('score', 0.0) >= 0.75:
+        if var.get('answer') and var.get('score', 0.0) >= FUZZY_LOGIC_ACCURACY_GENERAL_RAG:
             accions.append(("first", "rag", {"data": var['answer'].strip()}))
             continue
         intent = detect_intent(c, order=INTENT_PRIORITY, normalizer=norm_text)
