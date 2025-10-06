@@ -142,7 +142,7 @@ ORIENT_INTENT_RE = re.compile(r"""
 
 MOV_VERB_CORE = r"""
 (?: 
-    ve(?:\s+a)? | vete | vayan | vamos | vamonos | ir(?:se)? | | ir(?:te)? |
+    ve(?:\s+a)? | vete | vayan | vamos | vamonos | ir(?:se)? | ir(?:te)? |
     anda(?:r)? | camina(?:r)? | marcha(?:r)? | pasa(?:r)? | cruza(?:r)? |
     a[bv]anza(?:r)? | avanz[ao]? | abanza | retrocede(?:r)? | regresa(?:r)? | vuelve(?:r)? |
     mueve(?:te)? | mover(?:se)? | desplaza(?:te|r)? |
