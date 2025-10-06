@@ -1,5 +1,5 @@
 from __future__ import annotations
-from config.settings import USE_GENERAL_RESPONSES_LLM
+from config.settings import USE_LLM
 from typing import Callable, Dict
 
 
@@ -29,7 +29,7 @@ class Router:
         return data
     
     def general_response_llm(self, data: str)-> str: 
-        if USE_GENERAL_RESPONSES_LLM: 
+        if USE_LLM: 
             return self.llm.answer_general(data) 
         else: 
             
@@ -46,12 +46,15 @@ class Router:
         if place.get("ok"): 
             return "Por allá" if place.get("simulate") else "Voy" 
         else: 
-            plan = self.llm.plan_motion(data) 
-            if plan: 
-                yaw, dist, flag = plan.get("yaw", 0.0), plan.get("distance", 0.0), plan.get("flag", False)
-                m = self.get_info.publish_natural_move(yaw, dist, flag)
-                return m
-            return "No encontré ese destino ni entiendo la orden."
+            if USE_LLM:
+                plan = self.llm.plan_motion(data) 
+                if plan: 
+                    yaw, dist, flag = plan.get("yaw", 0.0), plan.get("distance", 0.0), plan.get("flag", False)
+                    m = self.get_info.publish_natural_move(yaw, dist, flag)
+                    return m
+                return "No encontré ese destino ni entiendo la orden."
+            else:
+                return "Lo siento, el sistema de Navegación con LLM no se encuentra activado, revisa tu configuración"
         
     def cancel_navigate_publisher(self, data: str)-> str: 
         return "Cancelando Navegación"

@@ -13,7 +13,7 @@ AUDIO_LISTENER_SAMPLE_RATE = 16000
 AUDIO_LISTENER_FRAMES_PER_BUFFER = 1000
 
 """LLM"""
-USE_GENERAL_RESPONSES_LLM = False #If you disable this flag, and the question is not in the Categories we don't call the general knowledge.
+USE_LLM = True #If you disable this flag, and the question is not in the Categories we don't call the general knowledge.
 CONTEXT_LLM = 1024 #The size of the context that your model is going to receive
 THREADS_LLM = os.cpu_count() or 8 #Threads that has available your model 
 N_BACH_LLM = 512 #The size of the info that gpu or cpu is going to process
