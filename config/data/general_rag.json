@@ -124,6 +124,7 @@
         "¿Qué es el robot Marko y para qué sirve?",
         "Háblame de Marko",
         "qué hace el robot Marko",
+        "qué sabes de Marko",
         "para qué es Marko",
         "cuáles son las funciones de Marko",
         "información sobre el robot Marko",
@@ -158,6 +159,8 @@
         "¿Cuánto cuesta el robot Marko?",
         "¿Cuál es el precio de Marko?",
         "qué precio tiene Marko",
+        "qué cuesta el robot",
+        "en cuanto sale el robot",
         "cuánto vale Marko",
         "costo de Marko",
         "precio del robot Marko",
@@ -167,7 +170,7 @@
         "dame el precio de Marko ya",
         "valor del robot Marko"
       ],
-      "answer": "El costo base es de $499,999 pesos más IVA. El precio final depende del nivel de personalización que requieras."
+      "answer": "El costo base es de 499 mil 999 pesos más IVA. El precio final depende del nivel de personalización que requieras."
     },
     {
       "triggers": [

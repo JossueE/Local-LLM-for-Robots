@@ -92,6 +92,7 @@ def split_and_prioritize(text: str, general_rag) -> List[Dict[str, Any]]:
             accions.append(("second", "general", {"data": c}))
 
     # Primero cortas, luego largas (orden estable preservado)
+    print(clauses, flush=True)
     print(accions, flush=True)
     accions.sort(key=lambda x: 0 if x[0] == "first" else 1)
     return [{"kind": k, "params": p} for _, k, p in accions]
