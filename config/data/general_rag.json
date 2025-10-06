@@ -2,8 +2,8 @@
   "knowledge": [
     {
       "triggers": [
-        "como te llamas",
-        "cual es tu nombre",
+        "te llamas",
+        "es tu nombre",
         "tienes apellido",
         "su nombre es",
         "dime tu nombre",
@@ -15,7 +15,7 @@
         "podrías decirme tu nombre",
         "eres Octybot, cierto?",
         "tienes algun apodo",
-        "como te puedo decir"
+        "te puedo decir"
       ],
       "answer": "Mi nombre es Octybot"
     },
