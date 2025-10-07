@@ -57,7 +57,7 @@ class GENERAL_RAG:
             self.items = []
             print("[llm_data] No se pudo abrir", flush=True)
     
-    def loockup(self, query: str) -> Dict[str, Any]:
+    def lookup(self, query: str) -> Dict[str, Any]:
         """ Simple exact or fuzzy match in the GENERAL_RAG. Returns dict with 'answer' and 'score' (0.0–1.0) """
         if not self.items:
             return {"error":"general_rag_vacia","answer":"","score":FUZZY_LOGIC_ACCURACY_GENERAL_RAG}
@@ -65,19 +65,15 @@ class GENERAL_RAG:
         best, best_s = None, 0.0
 
         for item in self.items:
-            q = norm_text(item.get('q',''), False)
-            if q in query or query in q:
-                s = 1.0
-            else:
-                fuzzy = (rf_fuzz.ratio(query, q)/100.0) if HAS_RF else SequenceMatcher(None, query, q).ratio()
-                s = fuzzy
+            q = item.get('q','')
+            fuzzy = (rf_fuzz.ratio(query, q)/100.0) if HAS_RF else SequenceMatcher(None, query, q).ratio()
+            s = fuzzy
             if s > best_s:
                 best, best_s = item, s
+        print(f"[llm_data] GENERAL_RAG lookup '{query}' -> '{best.get('a','') if best else ''}' ({best_s})", flush=True)
         if best and best_s >= FUZZY_LOGIC_ACCURACY_GENERAL_RAG:
             return {"answer": best.get('a',''), "score": round(best_s,3)}
         return {"answer":"","score": round(best_s,3)}
-
-
 
 
 class PosesIndex:
@@ -102,7 +98,7 @@ class PosesIndex:
             self.by_key = {}
             print("[llm_data] No se pudo cargar las poses", flush=True)
 
-    def loockup(self, name: str) -> Dict[str,Any]:
+    def lookup(self, name: str) -> Dict[str,Any]:
         """ Exact or fuzzy match of a place name to a Pose. Returns the Pose as dict, or {'error':'no_encontrado'} """
         key = norm_text(extract_place_query(name) or name, True)
         #print(f"[llm_tools] {self.by_key}", flush=True)

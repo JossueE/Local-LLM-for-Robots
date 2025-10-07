@@ -8,8 +8,11 @@ from collections import deque
 
 from config.settings import (
     MIN_SILENCE_MS_TO_DRAIN_STT, ACTIVATION_PHRASE_WAKE_WORD, LISTEN_SECONDS_STT, 
-    AUDIO_LISTENER_SAMPLE_RATE, VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS
+    AUDIO_LISTENER_SAMPLE_RATE, VARIANTS_WAKE_WORD, AUDIO_LISTENER_CHANNELS, AVATAR
 )
+
+if AVATAR:
+    from utils.avatar_server import send_mode_sync
 
 
 class WakeWord:
@@ -76,6 +79,7 @@ class WakeWord:
                 self.partial_hits -= 1         
             if (self.listening or self.listening_confirm) and self.partial_hits <= -self.silence_frames_to_drain: #If I'm listening and I pass my umbral of silence
                 self.partial_hits = 0
+                send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
                 if self.listening_confirm and self.size > 0: # If I have the wake_word comfirm and I have something
                     return self.buffer_drain()
                 self.on_say("Hubo una detección pero no se confirmó, limpiando buffer")
@@ -98,10 +102,10 @@ class WakeWord:
         else:
             partial = json.loads(self.rec.PartialResult() or "{}").get("partial", "").lower().strip()
             if partial:
-                if self.matches_wake(partial): #If I got something that looks like partial 
-                    
+                if self.matches_wake(partial): #If I got something that looks like partial     
                     if not self.listening: 
                         self.listening = True
+                        send_mode_sync(mode = "USER", as_json=False) if AVATAR else None
                         print("Empiezo a Grabar (primer partial)")
                         drained = self.buffer_add(frame)
                         if drained is not None:

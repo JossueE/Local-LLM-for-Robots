@@ -27,3 +27,6 @@ openai-whisper
 #Wake Word
 vosk==0.3.45
 
+#avatar
+websockets>=15.0.1
+

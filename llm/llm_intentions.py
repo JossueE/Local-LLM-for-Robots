@@ -39,7 +39,7 @@ def extract_place_query(t: str) -> str:
     return place
 
 def best_hit(res) -> Dict[str, Any]:
-    """ From the result of general_rag.loockup (dict or list of dicts), return the best one (highest score)"""
+    """ From the result of general_rag.lookup (dict or list of dicts), return the best one (highest score)"""
     if isinstance(res, list) and res:
         return max((x for x in res if isinstance(x, dict)), key=lambda x: x.get('score', 0.0), default={})
     return res if isinstance(res, dict) else {}
@@ -79,7 +79,7 @@ def split_and_prioritize(text: str, general_rag) -> List[Dict[str, Any]]:
     for c in clauses:
         print(c, flush=True)
         # 1) Respuestas cortas por GENERAL_RAG si hay alta confianza
-        var = best_hit(general_rag.loockup(c))
+        var = best_hit(general_rag.lookup(c))
         if var.get('answer') and var.get('score', 0.0) >= FUZZY_LOGIC_ACCURACY_GENERAL_RAG:
             accions.append(("first", "rag", {"data": var['answer'].strip()}))
             continue
