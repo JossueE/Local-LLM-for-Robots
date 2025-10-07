@@ -72,6 +72,7 @@ class WakeWord:
         if self.listening or self.listening_confirm: #If I'm listening or If I got a confirmation i save the info
             drained = self.buffer_add(frame)  
             if drained is not None:
+                send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
                 return drained
         
         if not self.vad.is_speech(frame, self.sample_rate): # If I hear silence
