@@ -72,7 +72,7 @@ def send_mode_sync(mode: str, url: str = URL_DEFAULT, as_json: bool = True, time
     asyncio.run(send_mode(mode, url=url, as_json=as_json, timeout=timeout))
 
 
-def _parse_args():
+def parse_args():
     p = argparse.ArgumentParser(description="WS Hub USER/TTS (broadcast JSON)")
     sub = p.add_subparsers(dest="cmd", required=True)
 
@@ -88,14 +88,8 @@ def _parse_args():
     return p.parse_args()
 
 
-def _main():
-    args = _parse_args()
-    if args.cmd == "server":
-        asyncio.run(run_server(host=args.host, port=args.port))
-    else:
-        # por defecto enviamos JSON, usa --text para texto plano
-        send_mode_sync(args.mode, url=args.url, as_json=not args.text)
-
+def main():
+    asyncio.run(run_server())
 
 if __name__ == "__main__":
-    _main()
+    main()
