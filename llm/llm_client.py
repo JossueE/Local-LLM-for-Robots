@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any
 from typing import Any
 from llama_cpp import Llama
 
-from config.settings import CONTEXT_LLM,THREADS_LLM,N_BACH_LLM,GPU_LAYERS_LLM,CHAT_FORMAT_LLM
+from config.settings import CONTEXT_LLM,THREADS_LLM,N_BACH_LLM,GPU_LAYERS_LLM,CHAT_FORMAT_LLM,USE_LLM
 from config.llm_system_prompt_def import NAVIGATE_SYSTEM_PROMPT, GENERAL_SYSTEM_PROMPT
 
 class LLM:
@@ -25,7 +25,7 @@ class LLM:
 
     def ensure(self):
         """ Initialize the LLM instance if not already done """
-        if self._llm is None:
+        if self._llm is None and USE_LLM:
             if not os.path.exists(self.model_path):
                 raise FileNotFoundError(f"Modelo no encontrado: {self.model_path}")
             kwargs = dict(
