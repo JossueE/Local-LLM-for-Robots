@@ -21,7 +21,8 @@
 
 ---
 ## 🎥 Small Demo
-Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the demo functions.
+Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the wake-word and trigger the full interaction pipeline.
+
 [![Watch the demo on YouTube](https://img.youtube.com/vi/PP4M3LmFDbM/hqdefault.jpg)](https://youtu.be/PP4M3LmFDbM)
 
 When the **wake word is detected**, the avatar changes color and responds with speech.
