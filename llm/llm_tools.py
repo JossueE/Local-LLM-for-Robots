@@ -46,7 +46,7 @@ class GetInfo:
             If simulate=True, only simulate the navigation (no movement commands)
             If simulate=False, emit a nav command via callback"""
         key = extract_place_query(text)
-        pose = self.poses.loockup(key)
+        pose = self.poses.lookup(key)
         if 'error' in pose: return {"error":"destino_no_encontrado","q": key}
         # auto simulate por intención
         t = norm_text(text, True)
