@@ -12,7 +12,9 @@ from config.settings import (
 )
 
 if AVATAR:
-    from utils.avatar_server import send_mode_sync
+    import webbrowser, subprocess, sys
+    from pathlib import Path
+    from avatar.avatar_server import send_mode_sync
 
 
 class WakeWord:
@@ -52,7 +54,12 @@ class WakeWord:
         self.buffer = deque() 
         self.size = 0
         self.max = int(self.listen_seconds * self.sample_rate * AUDIO_LISTENER_CHANNELS * 2) #2 bytes per int16 sample
-    
+
+        #Initialize Avatar Server if needed
+        if AVATAR:
+            subprocess.Popen([sys.executable, "-m", "avatar.avatar_server"], stdin=subprocess.DEVNULL, stdout = subprocess.PIPE, stderr = subprocess.PIPE, text=True)
+            webbrowser.open(Path("avatar/OctoV.html").resolve().as_uri() , new=0, autoraise=True)
+
     def wake_word_detector(self, frame:bytes) -> None | bytes:
         
         """Process one 10 ms PCM int16 mono frame for wake-word detection.

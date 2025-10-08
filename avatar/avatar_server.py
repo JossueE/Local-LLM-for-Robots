@@ -88,8 +88,8 @@ def parse_args():
     return p.parse_args()
 
 
-def main():
+def start():
     asyncio.run(run_server())
 
 if __name__ == "__main__":
-    main()
+    start()

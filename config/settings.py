@@ -53,4 +53,4 @@ ACTIVATION_PHRASE_WAKE_WORD = "ok robot" #The Activation Word that the model is 
 VARIANTS_WAKE_WORD =  ["ok robot", "okay robot", "hey robot"] #variations
 
 """"Use Avatar"""
-AVATAR = False #If you want to use the avatar
+AVATAR = True #If you want to use the avatar
