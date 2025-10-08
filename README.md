@@ -32,6 +32,7 @@ Here’s a **small demo of the Avatar system in action** — showing how the vis
 When the **wake word is detected**, the avatar changes color and responds with speech.
 > [!NOTE]
 > This avatar system was originally developed by [TheBIGduke](https://github.com/TheBIGduke/OctoV) 
+
 ![Avatar Demo](docs/avatar/avatar.gif)
 
 ---
