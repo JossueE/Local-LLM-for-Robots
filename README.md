@@ -23,7 +23,11 @@
 ## 🎥 Small Demo
 Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the wake-word and trigger the full interaction pipeline.
 
-[![Watch the demo on YouTube](https://img.youtube.com/vi/PP4M3LmFDbM/hqdefault.jpg)](https://youtu.be/PP4M3LmFDbM)
+<p align="center">
+  <a href="https://youtu.be/PP4M3LmFDbM" target="_blank">
+    <img src="https://img.youtube.com/vi/PP4M3LmFDbM/hqdefault.jpg" width="720" alt="Avatar Demo YouTube">
+  </a>
+</p>
 
 When the **wake word is detected**, the avatar changes color and responds with speech.
 ![Avatar Demo](docs/avatar/avatar.gif)
