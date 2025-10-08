@@ -277,6 +277,7 @@ class Router:
 ```
 ---
 #### Avatar
+This avatar system was originally developed by [TheBIGduke](https://github.com/TheBIGduke/OctoV) 
 
 Enable a simple on-screen “avatar” to visualize the pipeline (wake-word → STT → LLM → TTS).
 
