@@ -30,6 +30,8 @@ Here’s a **small demo of the Avatar system in action** — showing how the vis
 </p>
 
 When the **wake word is detected**, the avatar changes color and responds with speech.
+> [!NOTE]
+> This avatar system was originally developed by [TheBIGduke](https://github.com/TheBIGduke/OctoV) 
 ![Avatar Demo](docs/avatar/avatar.gif)
 
 ---
@@ -277,9 +279,6 @@ class Router:
 ```
 ---
 #### Avatar
-> [!IMPORTANT]
-> This avatar system was originally developed by [TheBIGduke](https://github.com/TheBIGduke/OctoV) 
-
 Enable a simple on-screen “avatar” to visualize the pipeline (wake-word → STT → LLM → TTS).
 
 ##### 1) Turn it on
