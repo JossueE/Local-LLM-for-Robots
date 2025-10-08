@@ -24,7 +24,6 @@ OctoV is an immersive, real-time audio visualizer built with **Three.js**. It ca
 ## Table of Contents
 
 - [Requirements](#requirements)
-- [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
@@ -46,26 +45,6 @@ OctoV is an immersive, real-time audio visualizer built with **Three.js**. It ca
 - A modern web browser with support for WebGL and the Web Audio API (e.g., Chrome, Firefox, Edge).
 - A local web server for development (recommended to avoid CORS issues).
 - (Optional) A WebSocket server for remote mode switching.
-
----
-
-## Installation
-
-This project is a single HTML file and does not require a complex installation process.
-
-1. **Get the Code:**  
-   Download or clone the repository to your local machine.
-    ```bash
-    git clone https://github.com/your-username/OctoV.git
-    ```
-
-2. **Set up a Local Server (Recommended):**  
-   For the best experience and to avoid browser security restrictions, serve the `OctoV.html` file from a local web server. The Live Server extension for VS Code is an excellent option.
-
-   Or use Python's built-in server:
-    ```bash
-    python -m http.server
-    ```
 
 ---
 

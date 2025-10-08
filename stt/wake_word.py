@@ -58,7 +58,7 @@ class WakeWord:
         #Initialize Avatar Server if needed
         if AVATAR:
             subprocess.Popen([sys.executable, "-m", "avatar.avatar_server"], stdin=subprocess.DEVNULL, stdout = subprocess.PIPE, stderr = subprocess.PIPE, text=True)
-            webbrowser.open(Path("avatar/OctoV.html").resolve().as_uri() , new=0, autoraise=True)
+            webbrowser.open(Path("avatar/OctoV.html").resolve().as_uri(), new=0, autoraise=True)
 
     def wake_word_detector(self, frame:bytes) -> None | bytes:
         

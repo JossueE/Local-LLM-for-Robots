@@ -20,6 +20,13 @@
 </p>
 
 ---
+## 🎥 Small Demo
+Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the demo functions.
+[![Watch the demo on YouTube](https://img.youtube.com/vi/PP4M3LmFDbM/hqdefault.jpg)](https://youtu.be/PP4M3LmFDbM)
+
+when the **wake word is detected**, the avatar changes color and responds with speech.
+![Avatar Demo](docs/avatar/avatar.gif)
+---
 
 ## 📚 Table of Contents
 - [Installation](#installation)
@@ -262,6 +269,56 @@ class Router:
       return f"Son las {hours}:{minutes}"
 
 ```
+---
+#### Avatar
+
+Enable a simple on-screen “avatar” to visualize the pipeline (wake-word → STT → LLM → TTS).
+
+##### 1) Turn it on
+
+Open `config/settings.py` and set:
+
+```python
+AVATAR = True
+```
+##### 2) Give it access to your I/O
+The avatar uses your microphone and speakers.
+For setup notes (devices, permissions, troubleshooting), see the `avatar/README.md`
+
+##### 3) Start the avatar
+From your project root, either:
+
+**Run the full pipeline** (recommended):
+```python
+python -m main
+```
+Or **run only the Wake Word** test (for a quick check):
+```python
+python -m stt.wake_word
+```
+---
+##### What you should see
+
+- **Wake-word detected →** the ball/badge turns active (listening).
+- **STT running →** partial/Final transcripts appear.
+- **TTS speaking →** the indicator switches back while audio plays.
+
+Overview (idle state):
+![Avatar – Idle](docs/avatar/normal.png)
+
+Wake-word Detection:
+![Avatar – Wake Word Full](docs/avatar/STT.png)
+
+TTS speaking state:
+![Avatar – TTS Speaking](docs/avatar/TTS.png)
+
+
+
+This will open a local HTML page (the avatar UI). Try the full flow: say “ok robot, ¿cómo te llamas?” and watch the indicators change.
+
+Then run this to validate if the system works, an html file is going to be oppened and you migth see this. try to follow the full pipeline as ok robot como te llamas. You can see How your ball change of color when you saw ok robot and then is set again to the other color when it start to speek. 
+
+
 
 
 <h2 id="contributing">🤝 Contributing</h2>
