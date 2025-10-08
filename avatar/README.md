@@ -24,13 +24,10 @@ OctoV is an immersive, real-time audio visualizer built with **Three.js**. It ca
 ## Table of Contents
 
 - [Requirements](#requirements)
-- [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
-- [Project Structure](#project-structure)
 - [API Reference](#api-reference)
 - [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
 
 ---
 
@@ -46,26 +43,6 @@ OctoV is an immersive, real-time audio visualizer built with **Three.js**. It ca
 - A modern web browser with support for WebGL and the Web Audio API (e.g., Chrome, Firefox, Edge).
 - A local web server for development (recommended to avoid CORS issues).
 - (Optional) A WebSocket server for remote mode switching.
-
----
-
-## Installation
-
-This project is a single HTML file and does not require a complex installation process.
-
-1. **Get the Code:**  
-   Download or clone the repository to your local machine.
-    ```bash
-    git clone https://github.com/your-username/OctoV.git
-    ```
-
-2. **Set up a Local Server (Recommended):**  
-   For the best experience and to avoid browser security restrictions, serve the `OctoV.html` file from a local web server. The Live Server extension for VS Code is an excellent option.
-
-   Or use Python's built-in server:
-    ```bash
-    python -m http.server
-    ```
 
 ---
 
@@ -220,16 +197,6 @@ Send a JSON message like `{"source": "USER"}` or `{"source": "TTS"}` to the WebS
 
 ---
 
-## Project Structure
-
-```
-OctoV/
-├── OctoV.html      # Main application file (contains all HTML, CSS, and JavaScript)
-└── README.md       # This file
-```
-
----
-
 ## API Reference
 
 ### Custom Events
@@ -301,19 +268,6 @@ If you're not seeing visualization when system audio plays:
 2. Verify the monitor device exists: `pactl list short sources | grep monitor`
 3. Ensure audio is actually playing through the monitored output
 4. Check the browser console for any error messages
-
----
-
-## Contributing
-
-Contributions are welcome!
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature-name`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add some amazing feature'`).
-5. Push to the branch (`git push origin feature/your-feature-name`).
-6. Open a Pull Request.
 
 ---
 
