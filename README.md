@@ -24,8 +24,9 @@
 Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the demo functions.
 [![Watch the demo on YouTube](https://img.youtube.com/vi/PP4M3LmFDbM/hqdefault.jpg)](https://youtu.be/PP4M3LmFDbM)
 
-when the **wake word is detected**, the avatar changes color and responds with speech.
+When the **wake word is detected**, the avatar changes color and responds with speech.
 ![Avatar Demo](docs/avatar/avatar.gif)
+
 ---
 
 ## 📚 Table of Contents
