@@ -45,7 +45,7 @@ SAVE_WAV_TTS = False
 SAMPLE_RATE_STT = 16000 #Whisper works at this sample_rate doesn't change unless it is necessary
 #IMPORTANT the system is prepare to work without this variable, but we have it for noisy environments, as a protection method
 LISTEN_SECONDS_STT = 5.0 #The time of the phrase that the tts is going to be active after de wake_word detection
-MIN_SILENCE_MS_TO_DRAIN_STT = 50 # 500 ms of time required to drain the buffer, if you want 1 second, put 100. Its divided by 10 cause we sample at 10ms
+MIN_SILENCE_MS_TO_DRAIN_STT = 30 # 500 ms of time required to drain the buffer, if you want 1 second, put 100. Its divided by 10 cause we sample at 10ms
 SELF_VOCABULARY_STT = "Octybot, ve a la enfermería, DatIA Demographics" 
 
 """Wake-Word"""
