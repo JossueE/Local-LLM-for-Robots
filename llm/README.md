@@ -51,6 +51,13 @@ llm:
   - name: New Model Name
     url: New Url
 ```
+Run the downloader to add new models:
+
+```bash
+cd Local-LLM-for-Robots 
+bash utils/download_models.sh
+```
+
 In `llm/llm.py` (or `main.py`), pick by index from `ensure_model("llm")`:
 
 ```python

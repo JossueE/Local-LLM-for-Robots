@@ -97,6 +97,7 @@ To re-write or define a new **LLM - System Prompt**
 All general questions live in `config/general_rag.json`. Define the **New Question** in `triggers` and define the `answer`.
 
 <h2 id="quick-start">⚡ Quick Start</h2>
+
 ```bash
 cd Local-LLM-for-Robots 
 source .venv/bin/activate
