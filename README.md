@@ -57,50 +57,22 @@ When the **wake word is detected**, the avatar changes color and responds with s
 - Git, CMake
 - (Optional) NVIDIA CUDA for GPU acceleration
 
-### Setup
-```bash
-sudo apt update
-
-# --- General installations ---
-sudo apt install -y python3-dev python3-venv build-essential curl unzip
-
-# --- STT (Speech-to-Text) ---
-sudo apt install -y portaudio19-dev ffmpeg
-
-# --- TTS (Text-to-Speech) ---
-# ffmpeg is already installed above, uncomment if you prefer to keep it separate
-# sudo apt install -y ffmpeg
-
-# --- LLM (YAML manipulation) ---
-sudo snap install yq
-```
-
+### Cloning the Repo
 ```bash
 # Clone the repository
 git clone https://github.com/JossueE/Local-LLM-for-Robots.git 
 cd Local-LLM-for-Robots
+```
+### Setup
+```bash
+bash installer.sh
+```
+Check if the models were downloaded right or download new models:
+
+```bash
 bash utils/download_models.sh
-
 ```
-```bash
-# Create a virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-```
-> [!TIP]
-> Whit (.venv) Active
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-```
-
-Check if the models were downloaded right:
-
-```bash
-cd Local-LLM-for-Robots && bash utils/download_models.sh
-```
-The script installs everything into your cache (`~/.cache/octopy`, or `$OCTOPY_CACHE` if set).
+The script installs everything into your cache (`~/.cache/Local-LLM-for-Robots`, or `$OCTOPY_CACHE` if set).
 You’re done when you see:
 ```bash
 "OK. Modelos listos en: $CACHE_DIR ✅ "
@@ -125,21 +97,20 @@ To re-write or define a new **LLM - System Prompt**
 All general questions live in `config/general_rag.json`. Define the **New Question** in `triggers` and define the `answer`.
 
 <h2 id="quick-start">⚡ Quick Start</h2>
+```bash
+cd Local-LLM-for-Robots 
+source .venv/bin/activate
+```
 
 ### Launch the full pipeline (Wake-Word → STT → LLM → TTS)
 
 Start everything with:
-
 ```bash
 python -m main
 ```
 Now say `ok robot` — the system will start listening and run the pipeline.
 
 ### Run a Single Module’s Tests
-
-```bash
-cd Local-LLM-for-Robots 
-```
 
 LLM Module
 ```bash
@@ -318,8 +289,6 @@ python -m stt.wake_word
 This will open a local HTML page (the avatar UI). Try the full flow: say **“ok robot, ¿cómo te llamas?”** and watch the indicators change.
 
 Then run this to validate if the system works, an html file is going to be oppened and you migth see this. try to follow the full pipeline as ok robot como te llamas. You can see How your ball change of color when you saw ok robot and then is set again to the other color when it start to speek. 
-
-
 
 
 <h2 id="contributing">🤝 Contributing</h2>
