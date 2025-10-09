@@ -291,7 +291,7 @@ AVATAR = True
 ```
 ##### 2) Give it access to your I/O
 The avatar uses your microphone and speakers.
-For setup notes (devices, permissions, troubleshooting), see the `avatar/README.md`
+For setup notes (devices, permissions, troubleshooting), see the [**README.md**](avatar/README.md)
 
 ##### 3) Start the avatar
 From your project root, either:
@@ -306,23 +306,16 @@ python -m stt.wake_word
 ```
 ---
 ##### What you should see
+- **Idle Mode →**  The ball (or badge) appears **blue** and remains static — no deformation.
+- **Wake-word detected →** The ball turns **gold**, indicating it’s actively **listening**.
+- **STT running →** The ball **deforms dynamically**, following the **waveforms** of your voice input.
+- **TTS speaking →** The ball returns to **blue** and **moves** according to the **output audio waveform**.
 
-- **Wake-word detected →** the ball/badge turns active (listening).
-- **STT running →** partial/Final transcripts appear.
-- **TTS speaking →** the indicator switches back while audio plays.
+> [!TIP]
+> If the ball doesn’t deform, you’ll see a message in the web interface.
+> This usually means there’s a configuration issue — please check the [**README.md**](avatar/README.md) for setup details.
 
-Overview (idle state):
-![Avatar – Idle](docs/avatar/normal.png)
-
-Wake-word Detection:
-![Avatar – Wake Word Full](docs/avatar/STT.png)
-
-TTS speaking state:
-![Avatar – TTS Speaking](docs/avatar/TTS.png)
-
-
-
-This will open a local HTML page (the avatar UI). Try the full flow: say “ok robot, ¿cómo te llamas?” and watch the indicators change.
+This will open a local HTML page (the avatar UI). Try the full flow: say **“ok robot, ¿cómo te llamas?”** and watch the indicators change.
 
 Then run this to validate if the system works, an html file is going to be oppened and you migth see this. try to follow the full pipeline as ok robot como te llamas. You can see How your ball change of color when you saw ok robot and then is set again to the other color when it start to speek. 
 
