@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 
-**Local-LLM-for-Robots** is a python package that fuses a local Large Language Model with a full offline speech pipeline so robots can understand and respond to natural language without the cloud. This repo includes everything about the `Wake Word (activation word)` -> `STT (speech-to-text)` -> `LLM Module` -> `TTS (text-to-speech)` every module is organize in different folders. But If you want more details about the `LLM Module`, you can check the `README.md`that is into the `/llm` folder.
+**Local-LLM-for-Robots** is a python package that fuses a local Large Language Model with a full offline speech pipeline, so robots can understand and respond using natural language without the cloud. This repo includes everything about the `Wake Word (activation word)` -> `STT (speech-to-text)` -> `LLM Module` -> `TTS (text-to-speech)`. Every module is organized in different folders. Therefore, if you want more details about the `LLM Module`, you can check the `README.md` that is into the `/llm` folder.
 
 ---
 ## 📝 Flowchart
@@ -20,8 +20,8 @@
 </p>
 
 ---
-## 🎥 Small Demo
-Here’s a **small demo of the Avatar system in action** — showing how the visualization reacts when you say the wake-word and trigger the full interaction pipeline.
+## 🎥 Short Demo
+Here’s a **short demo of the Avatar system in action** — showing how the visualization reacts when saying the wake-word and triggers the full interaction pipeline.
 
 <p align="center">
   <a href="https://youtu.be/PP4M3LmFDbM" target="_blank">
@@ -29,7 +29,7 @@ Here’s a **small demo of the Avatar system in action** — showing how the vis
   </a>
 </p>
 
-When the **wake word is detected**, the avatar changes color and responds with speech.
+When the **wake word is detected**, the avatar changes its color and responds with speech.
 > [!NOTE]
 > This avatar system was originally developed by [TheBIGduke](https://github.com/TheBIGduke/OctoV) 
 
@@ -51,28 +51,30 @@ When the **wake word is detected**, the avatar changes color and responds with s
 <h2 id="installation">🛠️ Installation</h2>
 
 > [!IMPORTANT]
-> This implementation was tested with Ubuntu 22.04 and Python 3.10.12 
+> This implementation was tested on Ubuntu 22.04 with Python 3.10.12 
 
 ### Prerequisites
 - Git, CMake
 - (Optional) NVIDIA CUDA for GPU acceleration
 
-### Cloning the Repo
+### Cloning this Repo
 ```bash
 # Clone the repository
 git clone https://github.com/JossueE/Local-LLM-for-Robots.git 
 cd Local-LLM-for-Robots
 ```
 ### Setup
+
+For automatic installation and setup, run the installer:
 ```bash
 bash installer.sh
 ```
-Check if the models were downloaded right or download new models:
+To check if the models were correctly downloaded or to download new models:
 
 ```bash
 bash utils/download_models.sh
 ```
-The script installs everything into your cache (`~/.cache/Local-LLM-for-Robots`, or `$OCTOPY_CACHE` if set).
+The script installs everything into your cache directory (`~/.cache/Local-LLM-for-Robots`, or `$OCTOPY_CACHE` if set).
 You’re done when you see:
 ```bash
 "OK. Modelos listos en: $CACHE_DIR ✅ "
@@ -85,7 +87,7 @@ You’re done when you see:
 > LLMs and audio models can be large. Ensure you have enough **disk space** and **RAM/VRAM** for your chosen settings.
 
 ### 🔧 General Settings (`config/settings.py`)
-All runtime settings live in **`config/settings.py`**. They are plain Python constants—edit the file and restart your nodes to apply changes.
+All runtime settings live in **`config/settings.py`**. They are plain Python constants—edit the file and restart your scripts to apply changes.
 
 ### 📦 Model catalog (`config/models.yml`)
 Define which models Octybot uses (LLM, STT, TTS, wake-word) along with their URLs and sample rates.
@@ -143,11 +145,11 @@ python -m tts.text_to_speech
 ### LLM Module
 
 This is a **Minimal Example** of what you can do with this package.  
-Here you will find examples of how to run commands in the terminal, trigger actions based on pattern matches, retrieve information from an endpoint, and more.  
+Here you will find examples of how to run commands in terminal, trigger actions based on pattern matches, retrieve information from an endpoint, and more.  
 
 > [!TIP]  
 > When integrating this into your system, consider using the power of the LLM **only when truly necessary**.  
-> In most cases, tasks can be solved with regular expressions, consuming information from a RAG, running commands in the terminal, or calling an endpoint.
+> In most cases, tasks can be solved with regular expressions, consuming information from a RAG, either running commands in terminal or calling an endpoint.
 
 #### Agent Intents (`handle(data, tipo)`)
 | `tipo`     | What it does | Input `data` | Output shape | What it represents |
@@ -166,7 +168,7 @@ Here you will find examples of how to run commands in the terminal, trigger acti
 
 #### Add a New Intent / Tool
 The flow is: **patterns → intent detection → router → tool implementation**.
-Your text is normalized (`norm_text`) before matching (lowercase, accents removed, courtesy words stripped), so keep patterns simple.
+Your text is normalized (`norm_text`) before matching (lowercase, accents removed, courtesy words stripped), so keep patterns as simple as possible.
 
 ---
 ##### 1) Declare patterns in `llm_patterns.py` 
@@ -294,6 +296,13 @@ Then run this to validate if the system works, an html file is going to be oppen
 
 <h2 id="contributing">🤝 Contributing</h2>
 Contributions are welcome! Please fork the repository and submit a pull request. For major changes, open an issue first to discuss what you would like to change.
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature-name`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some amazing feature'`).
+5. Push to the branch (`git push origin feature/your-feature-name`).
+6. Open a Pull Request.
 
 ---
 
