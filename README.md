@@ -190,7 +190,7 @@ Here you will find examples of how to run commands in terminal, trigger actions 
 > If you consume the agent’s reply topic, handle both cases for `navigate`:  
 > - Always log or speak the **text message** (the user-facing string).
 > - Optionally process the JSON telemetry if it’s present.
->In other words, your subscriber must gracefully support both formats:
+> In other words, your subscriber must gracefully support both formats:
 > - Sometimes the agent will only send a plain, human-readable string (e.g., “Heading to the kitchen.”).
 > - Other times, it may include structured telemetry data (e.g., goal coordinates, ETA, path length).
 
