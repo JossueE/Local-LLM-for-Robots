@@ -65,12 +65,39 @@ cd Local-LLM-for-Robots
 ```
 ### Setup
 
-For automatic installation and setup, run the installer:
+#### For automatic installation and setup, run the installer:
 ```bash
 bash installer.sh
 ```
-To check if the models were correctly downloaded or to download new models:
 
+#### For manual installation and setup:
+
+```bash
+sudo apt update
+
+# --- General installations ---
+sudo apt install -y python3-dev python3-venv build-essential curl unzip
+
+# --- STT (Speech-to-Text) ---
+sudo apt install -y portaudio19-dev ffmpeg
+
+# --- TTS (Text-to-Speech) ---
+# ffmpeg is already installed above, uncomment if you prefer to keep it separate
+# sudo apt install -y ffmpeg
+
+# --- LLM (YAML manipulation) ---
+sudo snap install yq
+```
+```bash
+# Create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+```
+```bash
+# Install dependencies
+pip install -r requirements.txt
+```
+To check if the models were correctly downloaded or to download models:
 ```bash
 bash utils/download_models.sh
 ```
@@ -161,8 +188,11 @@ Here you will find examples of how to run commands in terminal, trigger actions 
 | `navigate` | Navigates to a named place or generates a short motion. Attempts `tool_nav(data)` first (RAG/`poses.json`): if found, replies **"Voy"** (execute) or **"Por allá"** (indicate/simulate). If not found, falls back to `llm.plan_motion(data)` → `_clamp_motion(...)` → `natural_move_llm(...)`. | Pre-composed string from your RAG (`poses.json`) or a natural-language command (e.g., `ve a la enfermería`, `gira 90° y avanza 0.5 m`). | Usually `str`. On fallback may return a **tuple**: `(mensaje, '{"yaw": <deg>, "distance": <m>}' )`. | Represents full integration: minimal example of running terminal commands to execute actions (`publish_natural_move()`). |
 
 > If you consume the agent’s reply topic, handle both cases for `navigate`:  
-> - Always log or speak the **string**.  
-> - Optionally route the **JSON** telemetry if present.  
+> - Always log or speak the **text message** (the user-facing string).
+> - Optionally process the JSON telemetry if it’s present.
+>In other words, your subscriber must gracefully support both formats:
+> - Sometimes the agent will only send a plain, human-readable string (e.g., “Heading to the kitchen.”).
+> - Other times, it may include structured telemetry data (e.g., goal coordinates, ETA, path length).
 
 ---
 
