@@ -54,6 +54,7 @@ class WakeWord:
         self.buffer = deque() 
         self.size = 0
         self.max = int(self.listen_seconds * self.sample_rate * AUDIO_LISTENER_CHANNELS * 2) #2 bytes per int16 sample
+        self.max_2 = int(1 * self.sample_rate * AUDIO_LISTENER_CHANNELS * 2) #2 bytes per int16 sample
 
         #Initialize Avatar Server if needed
         if AVATAR:
@@ -133,6 +134,10 @@ class WakeWord:
             self.size += len(frame)
         if self.size > self.max and self.listening_confirm:
             return self.buffer_drain()
+        if self.size > self.max_2 and self.listening and not self.listening_confirm:
+            self.on_say("Límite de tiempo alcanzado, enviando a STT")
+            self.buffer_clear()
+            send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
         return None
 
     def buffer_clear(self) -> None:
@@ -150,6 +155,7 @@ class WakeWord:
         Operates atomically under `self.lock`.
         """
         self.on_say("Envío Información a STT")
+
         with self.lock:
             data = b"".join(self.buffer)
             self.buffer.clear()

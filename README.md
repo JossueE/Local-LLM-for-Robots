@@ -8,13 +8,14 @@
 
 ---
 ## 📝 Flowchart
-<div style="overflow:auto; border:1px solid #eaecef; padding:6px;">
-  <object data="Local-LLM-for-Robots.svg" type="image/svg+xml" width="4400">
-    <!-- Fallback para visores viejos -->
-    <img src="/docs/Local-LLM-for-Robots.svg" alt="Flowchart" />
-  </object>
-</div>
-
+<figure style="margin:0; text-align:center; border:1px solid #eaecef; padding:6px; border-radius:6px;">
+  <img src="Images/Introduction/NUCLEO-H563ZI.jpg"
+       alt="Placa NUCLEO-H563ZI"
+       style="max-width:100%; height:auto;" />
+  <figcaption style="font-size:0.9em; color:#6a737d; margin-top:4px;">
+    NUCLEO-H563ZI (STM32) — vista general de la placa.
+  </figcaption>
+</figure>
 <p align="right">
   <a href="https://lucid.app/lucidchart/50ed3019-62f3-460d-a3e3-071d72727e35/view">Open in real size</a>
 </p>
