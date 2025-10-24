@@ -50,7 +50,6 @@ class WakeWord:
         self.frame_samples = int(self.sample_rate / 1000 * self.frame_ms)  # int16 mono
 
         #Audio buffer for Output
-        self.lock = threading.Lock()
         self.buffer = deque() 
         self.size = 0
         self.max = int(self.listen_seconds * self.sample_rate * AUDIO_LISTENER_CHANNELS * 2) #2 bytes per int16 sample
@@ -129,13 +128,13 @@ class WakeWord:
 
     
     def buffer_add(self, frame: bytes) -> None | bytes:
-        with self.lock:
-            self.buffer.append(frame)
-            self.size += len(frame)
+        
+        self.buffer.append(frame)
+        self.size += len(frame)
         if self.size > self.max and self.listening_confirm:
             return self.buffer_drain()
         if self.size > self.max_2 and self.listening and not self.listening_confirm:
-            self.on_say("Límite de tiempo alcanzado, enviando a STT")
+            self.on_say("Límite de tiempo alcanzado")
             self.buffer_clear()
             send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
         return None
@@ -145,9 +144,10 @@ class WakeWord:
         print("Limpiando Buffer")
         self.listening = False
         self.listening_confirm = False
-        with self.lock:
-            self.buffer.clear()
-            self.size = 0
+        
+        self.buffer.clear()
+        self.size = 0
+        return
     
     def buffer_drain(self) -> bytes:
         """
@@ -156,9 +156,8 @@ class WakeWord:
         """
         self.on_say("Envío Información a STT")
 
-        with self.lock:
-            data = b"".join(self.buffer)
-            self.buffer.clear()
+        data = b"".join(self.buffer)
+        self.buffer.clear()
 
         print("Limpio el Buffer")
         self.size = 0
