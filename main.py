@@ -42,10 +42,9 @@ class OctybotAgent:
             audio_capture = self.audio_listener.read_frame(self.wake_word.frame_samples)
             wake_word_buffer =  self.wake_word.wake_word_detector(audio_capture)
             text_transcribed = self.stt.worker_lopp(wake_word_buffer)
-            
-        if text_transcribed:
-            for out in self.llm.ask(text_transcribed):
-                get_audio = self.tts.synthesize(out)
+        
+        for out in self.llm.ask(text_transcribed):
+            get_audio = self.tts.synthesize(out)
             self.tts.play_audio_with_amplitude(get_audio)
     
     def stop(self):
