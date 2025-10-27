@@ -45,7 +45,7 @@ class WakeWord:
 
         #VAD parameters
         # 10 ms → less latency (160 samples - 16 kHz)
-        self.vad = webrtcvad.Vad(1)  # Aggressiveness mode (0-3)
+        self.vad = webrtcvad.Vad(3)  # Aggressiveness mode (0-3)
         self.frame_ms = 10
         self.frame_samples = int(self.sample_rate / 1000 * self.frame_ms)  # int16 mono
 
@@ -120,6 +120,7 @@ class WakeWord:
                         if drained is not None:
                             return drained
                     self.partial_hits += 1
+
                     if self.partial_hits >= self.required_hits:
                         self.log.info(f"[PARTIAL] Wake word: {partial!r}")
                         self.partial_hits = 0
@@ -135,7 +136,7 @@ class WakeWord:
         if self.size > self.max and self.listening_confirm:
             return self.buffer_drain()
         if self.size > self.max_2 and self.listening and not self.listening_confirm:
-            self.on_say("Límite de tiempo alcanzado, enviando a STT")
+            self.on_say("Límite de tiempo alcanzado sin confirmación, limpiando buffer")
             self.buffer_clear()
             send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
         return None

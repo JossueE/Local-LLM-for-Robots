@@ -95,6 +95,7 @@ class TTS:
 
             idx += chunk_size
         self.stop_tts
+        return True
 
     def start_stream(self):
         """ Start the audio stream if not already started."""
