@@ -77,19 +77,23 @@ class WakeWord:
         or `deactivate_whisper()`.
         - Requires: `self.sample_rate`, `self.vad`, `self.rec`, `self.matches_wake()`.
         """
-        if self.listening or self.listening_confirm: #If I'm listening or If I got a confirmation i save the info
+        flag = True if self.vad.is_speech(frame, self.sample_rate) else False
+
+        if (self.listening or self.listening_confirm) and flag: #If I'm listening or If I got a confirmation i save the info
             drained = self.buffer_add(frame)  
             if drained is not None:
                 send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
                 return drained
         
-        if not self.vad.is_speech(frame, self.sample_rate): # If I hear silence
+        if not flag: # If I hear silence
             if self.partial_hits > -self.silence_frames_to_drain:  # I count how much silence I have
                 self.partial_hits -= 1         
             if (self.listening or self.listening_confirm) and self.partial_hits <= -self.silence_frames_to_drain: #If I'm listening and I pass my umbral of silence
                 self.partial_hits = 0
                 send_mode_sync(mode = "TTS", as_json=False) if AVATAR else None
                 if self.listening_confirm and self.size > 0: # If I have the wake_word comfirm and I have something
+                    print(self.size, flush=True)
+                    print(MIN_SILENCE_MS_TO_DRAIN_STT, flush=True)
                     return self.buffer_drain()
                 self.on_say("Hubo una detección pero no se confirmó, limpiando buffer")
                 self.buffer_clear()
@@ -116,7 +120,7 @@ class WakeWord:
                         self.listening = True
                         send_mode_sync(mode = "USER", as_json=False) if AVATAR else None
                         print("Empiezo a Grabar (primer partial)")
-                        drained = self.buffer_add(frame)
+                        drained = self.buffer_add(frame) if flag else None
                         if drained is not None:
                             return drained
                     self.partial_hits += 1

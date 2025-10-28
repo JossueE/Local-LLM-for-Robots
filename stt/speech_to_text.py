@@ -57,7 +57,13 @@ class SpeechToText:
             language = LANGUAGE, 
             task="transcribe",
             initial_prompt = SELF_VOCABULARY_STT,
-            carry_initial_prompt=True
+            carry_initial_prompt=True,
+            condition_on_previous_text = False,
+            word_timestamps = True,
+            hallucination_silence_threshold = 0.8,
+            no_speech_threshold = 0.5,
+            compression_ratio_threshold=2.4,
+            beam_size=1
             )
 
         return(result["text"])or None
