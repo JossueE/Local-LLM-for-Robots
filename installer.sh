@@ -94,5 +94,5 @@ main() {
   create_venv_and_install
   post_instructions
 }
-  mkdir -p "$DEST"
+
 main "$@"
