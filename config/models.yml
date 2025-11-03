@@ -15,14 +15,13 @@ stt:
   - name: small.pt
     url: "https://openaipublic.azureedge.net/main/whisper/models/9ecf779972d90ba49c06d968637d720dd632c55bbf19d441fb42bf17a411e794/small.pt"
 
-
 tts:
 #Piper Models
-  - name: es_MX-claude-high.onnx
-    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx?download=true
+  - name: es_419-Octybot-medium.onnx
+    #url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx?download=true
     
-  - name: es_MX-claude-high.onnx.json
-    url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json?download=true
+  - name: es_419-Octybot-medium.onnx.json
+    #url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json?download=true
     
 wake_word:
 #Vosk Models

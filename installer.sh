@@ -57,6 +57,25 @@ download_models() {
   ok "Model download/verify step completed."
 }
 
+sync_tts_models() {
+  local DEST="${XDG_CACHE_HOME:-$HOME/.cache}/Local-LLM-for-Robots/tts"
+  local SRC1="utils/es_419-Octybot-medium.onnx"
+  local SRC2="utils/es_419-Octybot-medium.onnx.json"
+  local DST1="$DEST/es_419-Octybot-medium.onnx"
+  local DST2="$DEST/es_419-Octybot-medium.onnx.json"
+
+  # mueve solo si NO están ya en DEST
+  [[ -f "$DST1" ]] || { [[ -f "$SRC1" ]] && mv -- "$SRC1" "$DEST/"; }
+  [[ -f "$DST2" ]] || { [[ -f "$SRC2" ]] && mv -- "$SRC2" "$DEST/"; }
+
+  rm -f "$SRC1" "$SRC2"  # limpia si quedaron
+
+  command -v ok >/dev/null && ok "TTS sync listo en $DEST" || echo "[✓] TTS sync: $DEST"
+}
+
+
+
+
 create_venv_and_install() {
   log "Creating Python virtual environment…"
   python3 -m venv ".venv" || fail "venv creation failed."
@@ -91,6 +110,7 @@ main() {
   ensure_snapd
   install_yq
   download_models
+  sync_tts_models
   create_venv_and_install
   post_instructions
 }

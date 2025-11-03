@@ -38,6 +38,7 @@ When the **wake word is detected**, the avatar changes its color and responds wi
 
 ---
 
+
 ## 📚 Table of Contents
 - [Installation](#installation)
 - [Configuration](#configuration)
