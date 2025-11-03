@@ -18,12 +18,18 @@ fetch(){
 download_file_or_zip(){
   local url="$1"; local out_dir="$2"; local name_hint="${3:-}"
   local fname ext tmp out dname
-  fname="$(basename "${url%%\?*}")"     # nombre real de la URL (sin query)
-  ext="${fname##*.}"
+
+  # Guardas básicos
+  [[ -n "$url" ]] || { echo "url vacía"; return 1; }
+  [[ "$url" == -* ]] && { echo "URL inválida: empieza con '-'"; return 1; }
   mkdir -p "$out_dir"
 
-  if [[ "$ext" == "zip" ]]; then
-    # Si ya existe la carpeta descomprimida, no re-descargar
+  # Nombre "crudo" desde la URL (sin query)
+  fname="$(basename "${url%%\?*}")"
+  ext="${fname##*.}"
+
+  # === Caso ZIP (solo si la URL termina en .zip real) ===
+  if [[ "$ext" == "zip" && "$fname" != "$ext" ]]; then
     dname="${name_hint:-${fname%.zip}}"
     if [[ -d "$out_dir/$dname" ]]; then
       echo "  - ya existe: $out_dir/$dname"
@@ -32,21 +38,32 @@ download_file_or_zip(){
     tmp="$out_dir/${name_hint:-pkg}.zip"
     echo "  - bajando ZIP: $url"
     fetch "$url" "$tmp"
-    have_cmd unzip || die "Necesitas 'unzip' para extraer ZIP (sudo apt-get install -y unzip)"
+    have_cmd unzip || die "Necesitas 'unzip' (sudo apt-get install -y unzip)"
     echo "  - descomprimiendo en $out_dir"
     unzip -q -o "$tmp" -d "$out_dir"
     rm -f "$tmp"
     return 0
   fi
 
-  # Archivos normales: por defecto usa el nombre real (con extensión)
+  # === Nombre de salida por defecto ===
   out="$out_dir/$fname"
 
-  # Si el name_hint trae extensión conocida, respétala
+  # Si viene pista de nombre con extensión conocida, respétala
   case "${name_hint##*.}" in
-    pt|onnx|gguf) out="$out_dir/$name_hint" ;;
+    pt|onnx|gguf|json|bin) out="$out_dir/$name_hint" ;;
   esac
 
+  # Corrección para Google Drive (o cuando basename es 'uc'/'open')
+  if [[ "$url" == *"drive.google.com"* || "$fname" == "uc" || "$fname" == "open" ]]; then
+    [[ -n "$name_hint" ]] && out="$out_dir/$name_hint"
+  fi
+
+  # Si no hay extensión útil y tenemos pista, úsala
+  if [[ "$out" == "$out_dir/$fname" && "$fname" != *.* && -n "$name_hint" ]]; then
+    out="$out_dir/$name_hint"
+  fi
+
+  # Descargar si falta
   if [[ -f "$out" ]]; then
     echo "  - ya existe: $out"
   else
@@ -54,6 +71,7 @@ download_file_or_zip(){
     fetch "$url" "$out"
   fi
 }
+
 
 
 # ====== prerequisitos ======

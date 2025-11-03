@@ -22,6 +22,7 @@ tts:
     
   - name: es_419-Octybot-medium.onnx.json
     url: "https://drive.google.com/uc?export=download&id=1OdOvI7z5GBilV-jRNjmCR8F3G15q2Bx4"
+
     
 wake_word:
 #Vosk Models
