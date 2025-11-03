@@ -18,10 +18,10 @@ stt:
 tts:
 #Piper Models
   - name: es_419-Octybot-medium.onnx
-    #url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx?download=true
+    url: "https://drive.google.com/uc?export=download&id=1XwlJHb9tIEBkZP21uj-HKznvuJ-NSRJS"
     
   - name: es_419-Octybot-medium.onnx.json
-    #url: https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json?download=true
+    url: "https://drive.google.com/uc?export=download&id=1OdOvI7z5GBilV-jRNjmCR8F3G15q2Bx4"
     
 wake_word:
 #Vosk Models
