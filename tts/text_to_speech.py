@@ -1,4 +1,4 @@
-# audio/tts.py
+# tts/text_to_speech.py
 import torch
 import io
 import wave
@@ -11,8 +11,9 @@ from config.settings import  SAMPLE_RATE_TTS, SAVE_WAV_TTS, PATH_TO_SAVE_TTS, NA
 
 class TTS:
     def __init__(self, model_path:str, model_path_conf:str):
-        print("-> Loading Whisper TTS model...")
-        self.log = logging.getLogger("[Text-to-Speech]")    
+        self.log = logging.getLogger("TTS")
+        self.log.info("Loading Whisper TTS model...")
+        self.log = logging.getLogger("TTS")
         self.voice = PiperVoice.load(model_path = model_path,config_path = model_path_conf )
         self.sample_rate = SAMPLE_RATE_TTS
         self.count_of_audios = 0
@@ -26,12 +27,14 @@ class TTS:
             normalize_audio=False, # use raw audio from voice
         )
 
+        try:
+            self.pa = pyaudio.PyAudio()
+        except Exception as e:
+            self.log.error(f"Error while trying to start PyAudio: {e}")
+            self.pa = None
 
-        self.pa = None
         self.stream = None
-        
-
-        self.log.info("Text-To-Speech Inicializado")
+        self.log.info("Text To Speech initialized")
 
     def synthesize(self, text: str):
         """Convert Text to Speech using Piper, return mono audio float32 [-1,1]"""
@@ -75,18 +78,26 @@ class TTS:
 
         self.start_stream()
 
+        if self.stream is None:
+            self.log.error("Audio streaming service couldn't be started")
+            return
+
         # Convert float32 [-1..1] to int16
         audio_int16 = np.clip(audio_data * 32767.0, -32767.0, 32767.0).astype(np.int16)
 
 
-        chunk_size = 1024
+        chunk_size = 4096
         idx = 0
         total_frames = len(audio_int16)
 
         while idx < total_frames:
             chunk_end = min(idx + chunk_size, total_frames)
             chunk = audio_int16[idx:chunk_end]
-            self.stream.write(chunk.tobytes())
+            try:
+                self.stream.write(chunk.tobytes())
+            except OSError as e:
+                self.log.error(f"Error while writing the audio stream: {e}")
+                break
 
             if amplitude_callback:
                 # amplitude = mean absolute value
@@ -94,25 +105,38 @@ class TTS:
                 amplitude_callback(amplitude)
 
             idx += chunk_size
-        self.stop_tts
+
+        self.stop_tts()
         return True
 
     def start_stream(self):
         """ Start the audio stream if not already started."""
-        self.pa = pyaudio.PyAudio()
+        if self.pa is None:
+            self.pa = pyaudio.PyAudio()
 
         if self.stream is None:
-            self.stream = self.pa.open(format=pyaudio.paInt16,
-                         channels=1,
-                         rate=self.sample_rate,
-                         output=True)
+            try:
+                self.stream = self.pa.open(format=pyaudio.paInt16, channels=1, rate=self.sample_rate, output=True)
+            except Exception as e:
+                self.log.error(f"Error while trying to open the output stream: {e}")
 
     def stop_tts(self):
         """Stop the stream"""
-        self.stream.stop_stream()
-        self.stream.close()
-        self.pa.terminate()
-        
+
+        if self.stream is not None:
+            self.stream.stop_stream()
+            self.stream.close()
+            self.stream = None
+    def terminate(self):
+        """ Call this when shutting down the whole app"""
+        self.stop_tts()
+        if self.pa is not None:
+            self.pa.terminate()
+            self.pa = None
+            self.log.info("PyAudio ended successfully")
+
+
+
  #———— Example Usage ————
 if "__main__" == __name__:
     logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
@@ -123,13 +147,13 @@ if "__main__" == __name__:
     tts = TTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
 
     try: 
-        print("Este es el nodo de prueba del Text to Speech 🔊 - Presione Ctrl+C para salir\n")
+        print("Este es el nodo de prueba del Text to Speech - Presione Ctrl+C para salir\n")
         while True:
             text = input("Escribe algo: ")
             get_audio = tts.synthesize(text)
             tts.play_audio_with_amplitude(get_audio)
 
     except KeyboardInterrupt:
-        tts.stop_tts()
+        tts.terminate()
         print(" Saliendo")
         exit(0)

@@ -139,7 +139,7 @@
         "cuanto pagaria por la renta",
         "que costo tiene la renta",
         "cual es el costo de la renta",
-        "cuanto oagaría por n dias de renta",
+        "cuanto pagaría por n dias de renta",
         "cómo funciona la renta de un robot",
         "puedo rentar un robot para un evento",
         "cómo es el servicio de renta de robot",
@@ -161,7 +161,7 @@
         "cómo puedo adquirir un robot",
         "por cuanto tiempo puedo rentar un robot",
         "marco octybot centinel  está a la venta, o lo puedo rentar",
-        "que cantidad de dinero debo pagar para rentar arco octybot centinel"
+        "que cantidad de dinero debo pagar para rentar marco octybot centinel"
 
       ],
       "answer": "La renta de nuestros robots comienza en 25 mil pesos mexicanos. Pero también contamos con ventas. Para darte una cotización precisa, te pedimos contactar a Isabel."
@@ -473,6 +473,12 @@
         "cómo te ha ido la vida" 
       ],
       "answer": "¡Funcionando a la perfección! Mis circuitos están listos para responder todas tus preguntas sobre robótica y tecnología."
+    },
+    {
+      "triggers": [
+        "**error_audio_retry**"
+      ],
+      "answer": "No te escuché muy bien, ¿puedes repetir tu pregunta?"
     }
   ]
 }

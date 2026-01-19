@@ -1,5 +1,5 @@
 import logging
-from utils.utils import LoadModel
+from utils.utils import LoadModel, configure_logging
 from stt.wake_word import WakeWord
 from stt.audio_listener import AudioListener
 from stt.speech_to_text import SpeechToText
@@ -9,7 +9,8 @@ from tts.text_to_speech import TTS
 
 class OctybotAgent:
     def __init__(self):
-        self.log = logging.getLogger("Octybot")
+        configure_logging() # <--- Initialize color logging
+        self.log = logging.getLogger("System")
         model = LoadModel()
         
         #Speech-to-Text
@@ -22,8 +23,11 @@ class OctybotAgent:
 
         #Text-to-Speech
         self.tts = TTS(str(model.ensure_model("tts")[0]), str(model.ensure_model("tts")[1]))
+
+        # Start the audio stream
+        self.audio_listener.start_stream()
         
-        self.log.info("Octybot Agent Listo ✅")
+        self.log.info("System Ready & Listening...")
     
 
     def main(self):
@@ -34,41 +38,36 @@ class OctybotAgent:
             - Pass this info to the llm
             - The llm split the answers 
             - Publish the answer as tts"""
-        
-        self.audio_listener.start_stream()
+
         text_transcribed = None
 
         while text_transcribed == None:
             audio_capture = self.audio_listener.read_frame(self.wake_word.frame_samples)
             wake_word_buffer =  self.wake_word.wake_word_detector(audio_capture)
-            text_transcribed = self.stt.worker_lopp(wake_word_buffer)
+            text_transcribed = self.stt.worker_loop(wake_word_buffer)
             
-        self.audio_listener.stop_stream()
         for out in self.llm.ask(text_transcribed):
             get_audio = self.tts.synthesize(out)
             self.tts.play_audio_with_amplitude(get_audio)
     
     def stop(self):
-        self.audio_listener.deleate()
+        self.audio_listener.terminate()
         self.tts.stop_tts()
+        self.log.warning("System Stopped")
 
-    
 
-            
  #———— Example Usage ————-
 if "__main__" == __name__:
-    logging.basicConfig(level=logging.INFO, format="[%(levelname)s %(asctime)s] [%(name)s] %(message)s")
-
     try:
         llm = OctybotAgent()
-        last_batt=llm.llm.get_info.set_battery(percentage=0.67),
-        print("Hola soy tu Agente vistual Octybot 🤖:")
-        print("Prueba a decir 'ok robot' y darme una instrucción - Presiona (Ctrl+C para salir):")
-        print("(Ejemplos: '¿Dónde estoy?', '¿Cuál es tu batería?', 'Ve a la enfermería', '¿Cuándo fue la Independencia de México y cuál es mi batería?')")
+        print("\n" + "="*50)
+        print(" Octybot Virtual Agent")
+        print(" Say 'Ok Robot' to start...")
+        print(" Press Ctrl+C to exit")
+        print("="*50 + "\n")
+        
         while True:
-            print("> Quieres preguntar algo: ")
             llm.main() 
     except KeyboardInterrupt:
         llm.stop()
-        print("Saliendo")
         exit(0)

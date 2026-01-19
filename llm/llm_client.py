@@ -3,11 +3,12 @@ import threading
 import os
 import json
 from typing import Optional, Dict, Any
-from typing import Any
 from llama_cpp import Llama
 
-from config.settings import CONTEXT_LLM,THREADS_LLM,N_BACH_LLM,GPU_LAYERS_LLM,CHAT_FORMAT_LLM,USE_LLM
-from config.llm_system_prompt_def import NAVIGATE_SYSTEM_PROMPT, GENERAL_SYSTEM_PROMPT
+from config.settings import (
+    CONTEXT_LLM, THREADS_LLM, N_BATCH_LLM, GPU_LAYERS_LLM,
+    CHAT_FORMAT_LLM, USE_LLM, REPEAT_PENALTY_LLM)
+from config.llm_system_prompt_def import GENERAL_SYSTEM_PROMPT
 
 class LLM:
     def __init__(self, model_path:str, system_prompt: str | None = None):
@@ -19,7 +20,7 @@ class LLM:
         self.model_path = model_path
         self.ctx = CONTEXT_LLM         # contexto razonable
         self.threads = THREADS_LLM
-        self.n_batch = N_BACH_LLM   # 256–512 bien en CPU
+        self.n_batch = N_BATCH_LLM   # 256–512 bien en CPU
         self.n_gpu_layers = GPU_LAYERS_LLM  # 0 si no hay CUDA
         self.chat_format = CHAT_FORMAT_LLM.strip()
 
@@ -44,6 +45,10 @@ class LLM:
 
     def answer_general(self, user_prompt: str) -> str:
         """ Answer a general question with the LLM """
+
+        if not USE_LLM:
+            return "El LLM está desactivado en la configuración"
+
         self.ensure()
         general_system = GENERAL_SYSTEM_PROMPT
         messages = [
@@ -53,60 +58,10 @@ class LLM:
         with self._lock:
             out = self._llm.create_chat_completion(
                 messages=messages,
-                temperature=0.2,
+                temperature=0.4,
                 top_p=0.9,
-                max_tokens=100,
+                max_tokens=120,
+                repeat_penalty=REPEAT_PENALTY_LLM,
             )
         msg = out["choices"][0]["message"]
         return (msg.get("content") or "").strip() or "No tengo una respuesta."
-    
-    def plan_motion(self, user_prompt: str) -> Optional[Dict[str, Any]]:
-        """ Given a user prompt, return a dict with 'yaw' (radians) and 'distance' (meters), or None if not understood """
-        self.ensure()
-        system = NAVIGATE_SYSTEM_PROMPT
-        
-        messages = [
-            {"role":"system","content": system},
-            {"role":"user","content": user_prompt},
-        ]
-        tools = [{
-            "type": "function",
-            "function": {
-                "name": "plan_motion",
-                "description": "Devuelve yaw, distance y flag",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "yaw":      {"type": "number", "description": "Rotación, izquierda negativa, derecha positiva."},
-                        "distance": {"type": "number", "description": "Distancia en m."},
-                        "flag":     {"type": "bool", "description": "Si yaw es radianes return False, si yaw es grados return True"}
-                    },
-                    "required": ["yaw", "distance", "flag"]
-                }
-            }
-        }]
-        with self._lock:
-            out = self._llm.create_chat_completion(
-                messages=messages,
-                tools=tools,
-                tool_choice="auto",
-                temperature=0.0,
-                top_p=0.8,
-                max_tokens=64,
-            )
-        msg = out["choices"][0]["message"]
-
-        # llama.cpp puede devolver tool_calls o function_call
-        tc = msg.get("tool_calls") or []
-        if tc:
-            fn = (tc[0].get("function") or {})
-            if fn.get("name") == "plan_motion":
-                args = fn.get("arguments") or "{}"
-                return json.loads(args) if isinstance(args, str) else (args or None)
-
-        fc = msg.get("function_call")
-        if fc and fc.get("name") == "plan_motion":
-            args = fc.get("arguments") or "{}"
-            return json.loads(args) if isinstance(args, str) else (args or None)
-
-        return None
